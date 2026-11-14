@@ -1,20 +1,24 @@
-# Carrinho IESB — pacote para revisão do grupo
+# Carrinho IESB — Marcos 1 e 2 no mesmo notebook
 
-Este pacote reúne o código atual dos Marcos 1 e 2. **Ainda não é uma entrega completa para avaliação.** Leia `O_QUE_FALTA.md` antes de apresentar os notebooks como prontos.
+Use **[carrinho_iesb_unificado.ipynb](carrinho_iesb_unificado.ipynb)**. Ele reúne o grafo, o A*, as ferramentas e o agente Qwen, com distâncias aproximadas em metros e tempo de deslocamento a velocidade constante.
 
-## Arquivos
+[Abrir o notebook único no Google Colab](https://colab.research.google.com/github/0K3NJ1/carrinho-iesb-novo/blob/main/carrinho_iesb_unificado.ipynb)
 
-- `Marco_1/busca_iesb.ipynb`: mapa, A* e três consultas de rota. Roda sem carregar o LLM.
-- `Marco_2/agente_iesb.ipynb`: mapa, A*, Qwen, ferramentas e seis perguntas de avaliação inicial.
-- `MAPA_DO_GRAFO.md`: convenções e dúvidas da leitura da planta.
-- `referencias/planta_terreo_iesb.png`: planta usada para montar o grafo.
-- `AUTORES_PREENCHER.md`: modelo para o grupo registrar os responsáveis.
+## Uso
 
-## Testar no Google Colab
+1. Na primeira célula de código, escolha `ORIGEM`, `DESTINO` e `VELOCIDADE_KMH` (padrão: 10.0; pode trocar para 15.0).
+2. Execute de cima para baixo. A seção 5 já mostra caminho, metros, segundos, minutos e comparação entre 10 e 15 km/h, sem carregar o LLM.
+3. Para executar o agente Qwen, continue a partir da seção 6; ela instala transformers e baixa o modelo público. No Colab, selecione GPU T4 se disponível.
+4. Depois de mudar as variáveis, execute novamente as células seguintes, pois as funções usam essa configuração como padrão.
 
-1. Abra o notebook desejado pelo GitHub ou faça upload do arquivo `.ipynb` no Colab.
-2. No Marco 2, escolha uma GPU T4 se estiver disponível. A primeira célula de código instala `transformers`; o download do Qwen ocorre ao executar a célula do modelo.
-3. Execute **Ambiente de execução → Reiniciar sessão e executar tudo**. Guarde a saída e anote erros. Uma execução em sessão nova é exigida pelo enunciado.
-4. Não coloque tokens nem chaves de API nas células. Este notebook usa um modelo público e não contém token.
+As 69 ligações têm estimativas explícitas baseadas nas dimensões gerais da planta e em hipóteses declaradas. Veja [MAPA_DO_GRAFO.md](MAPA_DO_GRAFO.md). O tempo usa `distância_m * 3.6 / velocidade_kmh`, sem paradas ou aceleração. Não é tempo observado nem modelo treinado.
 
-O custo atual de cada ligação é **1 trecho**. Uma rota em três trechos não significa três metros. A planta não fornece a distância de cada ligação nem observações de tempo para treinar o modelo de custo do Marco 2.
+Exemplo: Entrada Principal → Eixo - Norte → Pátio/Direito → Mesa 4: **107,5 m**, **38,7 s a 10 km/h**, **25,8 s a 15 km/h**.
+
+## Situação da entrega
+
+O código atual foi unificado, mas os requisitos acadêmicos ainda não estão completos: veja [O_QUE_FALTA.md](O_QUE_FALTA.md). O grafo é uma árvore com 70 nós; não contém rotas alternativas. A heurística continua zero, como na adaptação anterior.
+
+Verificação local em 14/11/2026: sintaxe das células Python, 4.900 pares de origem/destino comparados com Floyd-Warshall, unidades, velocidades inválidas e argumentos repassados às ferramentas. Todos passaram. O Qwen e a execução integral deste notebook novo no Colab ainda não foram verificados. O sucesso anterior do Marco 1 no Colab se refere à versão antiga em trechos.
+
+`Marco_1/` e `Marco_2/` guardam a versão anterior em trechos para consulta histórica; use o notebook unificado para o trabalho atual. `AUTORES_PREENCHER.md` contém os dados a preencher pelo grupo. A planta está em `referencias/planta_terreo_iesb.png`.
