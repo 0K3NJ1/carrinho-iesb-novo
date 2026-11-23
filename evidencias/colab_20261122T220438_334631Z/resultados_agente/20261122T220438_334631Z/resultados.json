@@ -1,0 +1,700 @@
+[
+  {
+    "id": 1,
+    "pergunta": "Como vou da Entrada Principal até a Mesa 2?",
+    "ferramenta": true,
+    "argumentos": true,
+    "chamadas_esperadas": true,
+    "resultado_valido": true,
+    "conteudo_automatico": false,
+    "resposta_fiel": null,
+    "revisao": "pendente",
+    "justificativa_revisao": "",
+    "duracao_s": 5.5677540429999794,
+    "escolhida": "rota_tempo_previsto",
+    "recebidos": {
+      "origem": "Entrada Principal",
+      "destino": "Mesa 2"
+    },
+    "chamadas": [
+      {
+        "pedido": {
+          "name": "rota_tempo_previsto",
+          "arguments": {
+            "origem": "Entrada Principal",
+            "destino": "Mesa 2"
+          }
+        },
+        "resultado": "Caminho: Entrada Principal -> Eixo - Norte -> Pátio/Direito -> Pátio - B -> Mesa 2. Distância aproximada desta rota: 107.5 m. Tempo previsto com atrasos: 41.4 s. Velocidade base fixa: 15 km/h. Cenário SINTÉTICO: tranquilo. Modelo: regressao_linear. Sem validação de tempo no campus; conferir passagem entre móveis."
+      }
+    ],
+    "resposta": "Vou pela seguinte rota: \n- Entrada Principal -> Eixo - Norte -> Pátio/Direito -> Pátio - B -> Mesa 2. Esta rota leva aproximadamente 41 segundos (41.4 s) com atrasos. A velocidade base fixa é de 15 km/h. Este modelo foi calculado com base em uma simulação que considera movimento normal na área. Por favor, confira a passagem entre as máquinas.",
+    "erro": null
+  },
+  {
+    "id": 2,
+    "pergunta": "Qual é a rota de B-04 para I-05?",
+    "ferramenta": true,
+    "argumentos": true,
+    "chamadas_esperadas": true,
+    "resultado_valido": true,
+    "conteudo_automatico": true,
+    "resposta_fiel": null,
+    "revisao": "pendente",
+    "justificativa_revisao": "",
+    "duracao_s": 9.50668966500001,
+    "escolhida": "rota_tempo_previsto",
+    "recebidos": {
+      "origem": "B-04",
+      "destino": "I-05"
+    },
+    "chamadas": [
+      {
+        "pedido": {
+          "name": "rota_tempo_previsto",
+          "arguments": {
+            "origem": "B-04",
+            "destino": "I-05"
+          }
+        },
+        "resultado": "Caminho: B-04 -> Corredor Bloco B - 01/04 -> Corredor Bloco B - 02/05 -> Corredor Bloco B - 03/06 -> Corredor Bloco B -> Eixo - Bloco B -> Eixo - Bloco C -> Acesso Lateral I/J -> Corredor I/J -> Corredor I/J - WC I -> Corredor I/J - I-03/06 -> Corredor I/J - I-02/05 -> I-05. Distância aproximada desta rota: 120.0 m. Tempo previsto com atrasos: 51.8 s. Velocidade base fixa: 15 km/h. Cenário SINTÉTICO: tranquilo. Modelo: regressao_linear. Sem validação de tempo no campus; conferir passagem entre móveis."
+      }
+    ],
+    "resposta": "A rota de B-04 para I-05 é:\n\nB-04 -> Corredor Bloco B - 01/04 -> Corredor Bloco B - 02/05 -> Corredor Bloco B - 03/06 -> Corredor Bloco B -> Eixo - Bloco B -> Eixo - Bloco C -> Acesso Lateral I/J -> Corredor I/J -> Corredor I/J - WC I -> Corredor I/J - I-03/06 -> Corredor I/J - I-02/05 -> I-05.\n\nEsta rota possui uma distância aproximada de 120.0 metros. O tempo previsto com atrasos é de 51.8 segundos, considerando a velocidade base fixa de 15 km/h. Este modelo foi calculado com base em dados sintéticos e",
+    "erro": null
+  },
+  {
+    "id": 3,
+    "pergunta": "Saindo da Biblioteca, como chego à C-02?",
+    "ferramenta": true,
+    "argumentos": true,
+    "chamadas_esperadas": true,
+    "resultado_valido": true,
+    "conteudo_automatico": false,
+    "resposta_fiel": null,
+    "revisao": "pendente",
+    "justificativa_revisao": "",
+    "duracao_s": 9.429411794999965,
+    "escolhida": "rota_tempo_previsto",
+    "recebidos": {
+      "origem": "Biblioteca",
+      "destino": "C-02"
+    },
+    "chamadas": [
+      {
+        "pedido": {
+          "name": "rota_tempo_previsto",
+          "arguments": {
+            "origem": "Biblioteca",
+            "destino": "C-02"
+          }
+        },
+        "resultado": "Caminho: Biblioteca -> Eixo - Norte -> Eixo - Design -> Eixo - Bloco C -> Corredor Bloco C -> Corredor Bloco C - 03/06 -> Corredor Bloco C - 02/05 -> C-02. Distância aproximada desta rota: 174.0 m. Tempo previsto com atrasos: 63.5 s. Velocidade base fixa: 15 km/h. Cenário SINTÉTICO: tranquilo. Modelo: regressao_linear. Sem validação de tempo no campus; conferir passagem entre móveis."
+      }
+    ],
+    "resposta": "Para ir da Biblioteca até a C-02, siga este caminho: \n1. Biblioteca -> Eixo - Norte\n2. Eixo - Norte -> Eixo - Design\n3. Eixo - Design -> Eixo - Bloco C\n4. Eixo - Bloco C -> Corredor Bloco C\n5. Corredor Bloco C -> Corredor Bloco C - 03/06\n6. Corredor Bloco C - 03/06 -> Corredor Bloco C - 02/05\n7. Corredor Bloco C - 02/05 -> C-02\n\nA distância aproximada deste trajeto é de cerca de 174 metros. O tempo previsto com atrasos é de aproximadamente 63.5 segundos, considerando uma velocidade base fixa de 15 km/h. Este modelo foi calcul",
+    "erro": null
+  },
+  {
+    "id": 4,
+    "pergunta": "Mostre o caminho de D-01 até WC Feminino Design.",
+    "ferramenta": true,
+    "argumentos": true,
+    "chamadas_esperadas": true,
+    "resultado_valido": true,
+    "conteudo_automatico": true,
+    "resposta_fiel": null,
+    "revisao": "pendente",
+    "justificativa_revisao": "",
+    "duracao_s": 7.385186170999987,
+    "escolhida": "rota_tempo_previsto",
+    "recebidos": {
+      "origem": "D-01",
+      "destino": "WC Feminino Design"
+    },
+    "chamadas": [
+      {
+        "pedido": {
+          "name": "rota_tempo_previsto",
+          "arguments": {
+            "origem": "D-01",
+            "destino": "WC Feminino Design"
+          }
+        },
+        "resultado": "Caminho: D-01 -> Corredor Design - 01/04 -> Corredor Design - 02/05 -> Corredor Design - 03/06 -> Corredor Design -> WC Feminino Design. Distância aproximada desta rota: 39.0 m. Tempo previsto com atrasos: 17.8 s. Velocidade base fixa: 15 km/h. Cenário SINTÉTICO: tranquilo. Modelo: regressao_linear. Sem validação de tempo no campus; conferir passagem entre móveis."
+      }
+    ],
+    "resposta": "O caminho mais rápido de D-01 até WC Feminino Design é:\n\nD-01 -> Corredor Design - 01/04 -> Corredor Design - 02/05 -> Corredor Design - 03/06 -> Corredor Design -> WC Feminino Design.\n\nA distância total dessa rota é de aproximadamente 39.0 metros. O tempo previsto com atrasos é de cerca de 17.8 segundos, considerando uma velocidade base fixa de 15 km/h. Este modelo foi calculado com base em dados sintéticos e sem validar o tempo na planta do IESB. Por favor, confira a passagem entre os móveis.",
+    "erro": null
+  },
+  {
+    "id": 5,
+    "pergunta": "Como ir de J-06 para C-06?",
+    "ferramenta": true,
+    "argumentos": true,
+    "chamadas_esperadas": true,
+    "resultado_valido": true,
+    "conteudo_automatico": false,
+    "resposta_fiel": null,
+    "revisao": "pendente",
+    "justificativa_revisao": "",
+    "duracao_s": 13.181140244000005,
+    "escolhida": "rota_tempo_previsto",
+    "recebidos": {
+      "origem": "J-06",
+      "destino": "C-06"
+    },
+    "chamadas": [
+      {
+        "pedido": {
+          "name": "rota_tempo_previsto",
+          "arguments": {
+            "origem": "J-06",
+            "destino": "C-06"
+          }
+        },
+        "resultado": "Caminho: J-06 -> Corredor I/J - J-03/06 -> Corredor I/J - J-02/05 -> Corredor I/J - J-01/04 -> Corredor I/J -> Acesso Lateral I/J -> Eixo - Bloco C -> Corredor Bloco C -> Corredor Bloco C - 03/06 -> C-06. Distância aproximada desta rota: 66.0 m. Tempo previsto com atrasos: 37.4 s. Velocidade base fixa: 15 km/h. Cenário SINTÉTICO: tranquilo. Modelo: regressao_linear. Sem validação de tempo no campus; conferir passagem entre móveis."
+      }
+    ],
+    "resposta": "Para ir de J-06 para C-06, você pode seguir este caminho:\n\n1. Viajar pelo Corredor I/J - J-03/06\n2. Depois, pela Corrida I/J - J-02/05\n3. Em seguida, pela Corrida I/J - J-01/04\n4. Então, pela Corrida I/J\n5. Depois, pela Acesso Lateral I/J\n6. Subscrever-se ao Eixo - Bloco C\n7. Depois, pelo Corredor Bloco C\n8. Por fim, pelo Corredor Bloco C - 03/06\n9. Finalmente, chegar na C-06.\n\nA distância total dessa rota é de aproximadamente 66.0 metros. O tempo previsto com atrasos é de cerca de 37.4 segundos",
+    "erro": null
+  },
+  {
+    "id": 6,
+    "pergunta": "Calcule a rota da Mesa 1 à Mesa 4.",
+    "ferramenta": true,
+    "argumentos": true,
+    "chamadas_esperadas": true,
+    "resultado_valido": true,
+    "conteudo_automatico": false,
+    "resposta_fiel": null,
+    "revisao": "pendente",
+    "justificativa_revisao": "",
+    "duracao_s": 8.725922910000008,
+    "escolhida": "rota_tempo_previsto",
+    "recebidos": {
+      "origem": "Mesa 1",
+      "destino": "Mesa 4"
+    },
+    "chamadas": [
+      {
+        "pedido": {
+          "name": "rota_tempo_previsto",
+          "arguments": {
+            "origem": "Mesa 1",
+            "destino": "Mesa 4"
+          }
+        },
+        "resultado": "Caminho: Mesa 1 -> Pátio - A -> Pátio - B -> Pátio/Direito -> Mesa 4. Distância aproximada desta rota: 42.0 m. Tempo previsto com atrasos: 22.3 s. Velocidade base fixa: 15 km/h. Cenário SINTÉTICO: tranquilo. Modelo: regressao_linear. Sem validação de tempo no campus; conferir passagem entre móveis."
+      }
+    ],
+    "resposta": "A rota mais rápida da Mesa 1 até a Mesa 4 é através do Pátio - A, seguindo para o Pátio - B, depois para o Pátio/Direito, finalmente chegar à Mesa 4. Esta rota leva aproximadamente 22 segundos considerando atrasos. A velocidade base fixa é de 15 km/h. Este modelo foi calculado com uma precisão de regressão linear. Por favor, confira que haja espaço suficiente entre as máquinas durante a passagem.",
+    "erro": null
+  },
+  {
+    "id": 7,
+    "pergunta": "Qual o caminho de WC Cinema até Anexo Creche?",
+    "ferramenta": true,
+    "argumentos": true,
+    "chamadas_esperadas": true,
+    "resultado_valido": true,
+    "conteudo_automatico": true,
+    "resposta_fiel": null,
+    "revisao": "pendente",
+    "justificativa_revisao": "",
+    "duracao_s": 5.199271565999993,
+    "escolhida": "rota_tempo_previsto",
+    "recebidos": {
+      "origem": "WC Cinema",
+      "destino": "Anexo Creche"
+    },
+    "chamadas": [
+      {
+        "pedido": {
+          "name": "rota_tempo_previsto",
+          "arguments": {
+            "origem": "WC Cinema",
+            "destino": "Anexo Creche"
+          }
+        },
+        "resultado": "Caminho: WC Cinema -> Cinema -> Anexo Creche. Distância aproximada desta rota: 45.0 m. Tempo previsto com atrasos: 17.3 s. Velocidade base fixa: 15 km/h. Cenário SINTÉTICO: tranquilo. Modelo: regressao_linear. Sem validação de tempo no campus; conferir passagem entre móveis."
+      }
+    ],
+    "resposta": "O caminho de WC Cinema até Anexo Creche é:\n\nWC Cinema -> Cinema -> Anexo Creche\n\nA distância aproximada dessa rota é de 45.0 metros. O tempo previsto com atrasos é de 17.3 segundos, considerando uma velocidade base fixa de 15 km/h. Este cenário é SINTÉTICO (trabalho simulado) e não representa realidades físicas.",
+    "erro": null
+  },
+  {
+    "id": 8,
+    "pergunta": "Quero ir do Bloco I até Café Mania. Qual a rota?",
+    "ferramenta": true,
+    "argumentos": true,
+    "chamadas_esperadas": true,
+    "resultado_valido": true,
+    "conteudo_automatico": true,
+    "resposta_fiel": null,
+    "revisao": "pendente",
+    "justificativa_revisao": "",
+    "duracao_s": 8.353960029999996,
+    "escolhida": "rota_tempo_previsto",
+    "recebidos": {
+      "origem": "Bloco I",
+      "destino": "Café Mania"
+    },
+    "chamadas": [
+      {
+        "pedido": {
+          "name": "rota_tempo_previsto",
+          "arguments": {
+            "origem": "Bloco I",
+            "destino": "Café Mania"
+          }
+        },
+        "resultado": "Caminho: Bloco I -> Corredor I/J -> Acesso Lateral I/J -> Eixo - Bloco C -> Eixo - Design -> Eixo - Norte -> Pátio/Direito -> Pátio - B -> Café Mania. Distância aproximada desta rota: 154.5 m. Tempo previsto com atrasos: 64.6 s. Velocidade base fixa: 15 km/h. Cenário SINTÉTICO: tranquilo. Modelo: regressao_linear. Sem validação de tempo no campus; conferir passagem entre móveis."
+      }
+    ],
+    "resposta": "A rota mais próxima para você é:\n\n1. Bloco I -> Corredor I/J\n2. Acesso Lateral I/J -> Eixo - Bloco C\n3. Eixo - Bloco C -> Eixo - Design\n4. Eixo - Design -> Eixo - Norte\n5. Pátio/Direito -> Pátio - B\n6. Pátio - B -> Café Mania\n\nEsta rota leva aproximadamente 154.5 metros. O tempo previsto com atrasos é de 64.6 segundos, considerando uma velocidade base fixa de 15 km/h. Este modelo foi calculado com base em dados sintéticos e sem validar o tempo na planta do IESB. Por favor, confira a passagem entre os móveis.",
+    "erro": null
+  },
+  {
+    "id": 9,
+    "pergunta": "Quais locais estão ligados diretamente ao Pátio/Direito?",
+    "ferramenta": true,
+    "argumentos": true,
+    "chamadas_esperadas": true,
+    "resultado_valido": true,
+    "conteudo_automatico": true,
+    "resposta_fiel": null,
+    "revisao": "pendente",
+    "justificativa_revisao": "",
+    "duracao_s": 3.6272421060000397,
+    "escolhida": "listar_vizinhos",
+    "recebidos": {
+      "local": "Pátio/Direito"
+    },
+    "chamadas": [
+      {
+        "pedido": {
+          "name": "listar_vizinhos",
+          "arguments": {
+            "local": "Pátio/Direito"
+          }
+        },
+        "resultado": "Vizinhos de Pátio/Direito: Eixo - Norte, Pátio - B, Pátio - D, Mesa 4, Sala dos Professores, WC Acessível Pátio, WC Feminino Pátio."
+      }
+    ],
+    "resposta": "Os locais que estão ligados diretamente ao Pátio/Direito são: Eixo - Norte, Pátio - B, Pátio - D, Mesa 4, Sala dos Professores, WC Acessível Pátio, WC Feminino Pátio.",
+    "erro": null
+  },
+  {
+    "id": 10,
+    "pergunta": "O que há ao lado do Corredor Design?",
+    "ferramenta": true,
+    "argumentos": true,
+    "chamadas_esperadas": true,
+    "resultado_valido": true,
+    "conteudo_automatico": true,
+    "resposta_fiel": null,
+    "revisao": "pendente",
+    "justificativa_revisao": "",
+    "duracao_s": 3.566949249000004,
+    "escolhida": "listar_vizinhos",
+    "recebidos": {
+      "local": "Corredor Design"
+    },
+    "chamadas": [
+      {
+        "pedido": {
+          "name": "listar_vizinhos",
+          "arguments": {
+            "local": "Corredor Design"
+          }
+        },
+        "resultado": "Vizinhos de Corredor Design: Eixo - Design, Design, Corredor Design - 03/06, WC Masculino Design, WC Feminino Design."
+      }
+    ],
+    "resposta": "Ao lado do Corredor Design estão o Eixo - Design, o Design, o Corredor Design - 03/06, o WC Masculino Design e o WC Feminino Design.",
+    "erro": null
+  },
+  {
+    "id": 11,
+    "pergunta": "Liste os vizinhos diretos de Cinema.",
+    "ferramenta": true,
+    "argumentos": true,
+    "chamadas_esperadas": true,
+    "resultado_valido": true,
+    "conteudo_automatico": true,
+    "resposta_fiel": null,
+    "revisao": "pendente",
+    "justificativa_revisao": "",
+    "duracao_s": 2.2421147400000336,
+    "escolhida": "listar_vizinhos",
+    "recebidos": {
+      "local": "Cinema"
+    },
+    "chamadas": [
+      {
+        "pedido": {
+          "name": "listar_vizinhos",
+          "arguments": {
+            "local": "Cinema"
+          }
+        },
+        "resultado": "Vizinhos de Cinema: Eixo - Norte, WC Cinema, Anexo Creche."
+      }
+    ],
+    "resposta": "Os vizinhos diretos do Cinema são: Eixo - Norte, WC Cinema, e Anexo Creche.",
+    "erro": null
+  },
+  {
+    "id": 12,
+    "pergunta": "Quais pontos têm ligação direta com Corredor I/J?",
+    "ferramenta": true,
+    "argumentos": true,
+    "chamadas_esperadas": true,
+    "resultado_valido": true,
+    "conteudo_automatico": true,
+    "resposta_fiel": null,
+    "revisao": "pendente",
+    "justificativa_revisao": "",
+    "duracao_s": 3.521567176000019,
+    "escolhida": "listar_vizinhos",
+    "recebidos": {
+      "local": "Corredor I/J"
+    },
+    "chamadas": [
+      {
+        "pedido": {
+          "name": "listar_vizinhos",
+          "arguments": {
+            "local": "Corredor I/J"
+          }
+        },
+        "resultado": "Vizinhos de Corredor I/J: Acesso Lateral I/J, Bloco I, Bloco J, Corredor I/J - WC I, Corredor I/J - J-01/04."
+      }
+    ],
+    "resposta": "O Corredor I/J está conectado aos seguintes locais:\n\n- Acesso Lateral I/J\n- Bloco I\n- Bloco J\n- Corredor I/J - WC I\n- Corredor I/J - J-01/04",
+    "erro": null
+  },
+  {
+    "id": 13,
+    "pergunta": "Bom dia!",
+    "ferramenta": true,
+    "argumentos": true,
+    "chamadas_esperadas": true,
+    "resultado_valido": true,
+    "conteudo_automatico": null,
+    "resposta_fiel": null,
+    "revisao": "pendente",
+    "justificativa_revisao": "",
+    "duracao_s": 0.6485542159999795,
+    "escolhida": null,
+    "recebidos": {},
+    "chamadas": [],
+    "resposta": "Olá! Como posso ajudar você hoje?",
+    "erro": null
+  },
+  {
+    "id": 14,
+    "pergunta": "Obrigado pela ajuda!",
+    "ferramenta": true,
+    "argumentos": true,
+    "chamadas_esperadas": true,
+    "resultado_valido": true,
+    "conteudo_automatico": null,
+    "resposta_fiel": null,
+    "revisao": "pendente",
+    "justificativa_revisao": "",
+    "duracao_s": 1.2247215930000266,
+    "escolhida": null,
+    "recebidos": {},
+    "chamadas": [],
+    "resposta": "De nada! Estou aqui para ajudar. Se tiver mais alguma pergunta, fique à vontade para fazer.",
+    "erro": null
+  },
+  {
+    "id": 15,
+    "pergunta": "Qual é a capital do Brasil?",
+    "ferramenta": true,
+    "argumentos": true,
+    "chamadas_esperadas": true,
+    "resultado_valido": true,
+    "conteudo_automatico": null,
+    "resposta_fiel": null,
+    "revisao": "pendente",
+    "justificativa_revisao": "",
+    "duracao_s": 0.5354287709999994,
+    "escolhida": null,
+    "recebidos": {},
+    "chamadas": [],
+    "resposta": "A capital do Brasil é Brasília.",
+    "erro": null
+  },
+  {
+    "id": 16,
+    "pergunta": "Qual a rota e o tempo aprendido da Mesa 1 até a Mesa 4 no cenário tranquilo?",
+    "ferramenta": true,
+    "argumentos": true,
+    "chamadas_esperadas": true,
+    "resultado_valido": true,
+    "conteudo_automatico": false,
+    "resposta_fiel": null,
+    "revisao": "pendente",
+    "justificativa_revisao": "",
+    "duracao_s": 5.919725388000018,
+    "escolhida": "rota_tempo_previsto",
+    "recebidos": {
+      "origem": "Mesa 1",
+      "destino": "Mesa 4",
+      "cenario": "tranquilo"
+    },
+    "chamadas": [
+      {
+        "pedido": {
+          "name": "rota_tempo_previsto",
+          "arguments": {
+            "origem": "Mesa 1",
+            "destino": "Mesa 4",
+            "cenario": "tranquilo"
+          }
+        },
+        "resultado": "Caminho: Mesa 1 -> Pátio - A -> Pátio - B -> Pátio/Direito -> Mesa 4. Distância aproximada desta rota: 42.0 m. Tempo previsto com atrasos: 22.3 s. Velocidade base fixa: 15 km/h. Cenário SINTÉTICO: tranquilo. Modelo: regressao_linear. Sem validação de tempo no campus; conferir passagem entre móveis."
+      }
+    ],
+    "resposta": "A rota recomendada é:\n\nMesa 1 -> Pátio - A -> Pátio - B -> Pátio/Direito -> Mesa 4\n\nEsta rota leva aproximadamente 22.3 segundos (ou cerca de 3 minutos) considerando a velocidade base de 15 km/h. Este tempo foi estimado com base no cenário tranquilo simulado pela ferramenta.",
+    "erro": null
+  },
+  {
+    "id": 17,
+    "pergunta": "Qual a rota e o tempo previsto da Mesa 1 até a Mesa 4 no cenário movimentado?",
+    "ferramenta": true,
+    "argumentos": true,
+    "chamadas_esperadas": true,
+    "resultado_valido": true,
+    "conteudo_automatico": true,
+    "resposta_fiel": null,
+    "revisao": "pendente",
+    "justificativa_revisao": "",
+    "duracao_s": 8.444793817000004,
+    "escolhida": "rota_tempo_previsto",
+    "recebidos": {
+      "origem": "Mesa 1",
+      "destino": "Mesa 4",
+      "cenario": "movimentado"
+    },
+    "chamadas": [
+      {
+        "pedido": {
+          "name": "rota_tempo_previsto",
+          "arguments": {
+            "origem": "Mesa 1",
+            "destino": "Mesa 4",
+            "cenario": "movimentado"
+          }
+        },
+        "resultado": "Caminho: Mesa 1 -> Pátio - A -> Pátio - B -> Pátio/Direito -> Mesa 4. Distância aproximada desta rota: 42.0 m. Tempo previsto com atrasos: 74.2 s. Velocidade base fixa: 15 km/h. Cenário SINTÉTICO: movimentado. Modelo: regressao_linear. Sem validação de tempo no campus; conferir passagem entre móveis."
+      }
+    ],
+    "resposta": "A rota prevista para ir da Mesa 1 até a Mesa 4, considerando o cenário movimentado, é:\n\n1. Mesa 1 -> Pátio - A\n2. Pátio - A -> Pátio - B\n3. Pátio - B -> Pátio/Direito\n4. Pátio/Direito -> Mesa 4\n\nEsta rota leva aproximadamente 42 metros. O tempo previsto com atrasos é de 74.2 segundos, com uma velocidade base fixa de 15 km/h. Este tempo foi calculado com base no modelo regressão_linear. No entanto, é importante notar que este tempo é sintético e sem validar na realidade do campus. Por favor, confira a passagem entre os móveis.",
+    "erro": null
+  },
+  {
+    "id": 18,
+    "pergunta": "Qual o caminho da Mesa 1 à Mesa 4 no cenário sintético de cadeiras no pátio?",
+    "ferramenta": true,
+    "argumentos": true,
+    "chamadas_esperadas": true,
+    "resultado_valido": true,
+    "conteudo_automatico": true,
+    "resposta_fiel": null,
+    "revisao": "pendente",
+    "justificativa_revisao": "",
+    "duracao_s": 8.572728974999961,
+    "escolhida": "rota_tempo_previsto",
+    "recebidos": {
+      "origem": "Mesa 1",
+      "destino": "Mesa 4",
+      "cenario": "cadeiras_no_patio"
+    },
+    "chamadas": [
+      {
+        "pedido": {
+          "name": "rota_tempo_previsto",
+          "arguments": {
+            "origem": "Mesa 1",
+            "destino": "Mesa 4",
+            "cenario": "cadeiras_no_patio"
+          }
+        },
+        "resultado": "Caminho: Mesa 1 -> Pátio - A -> Pátio - D -> Pátio/Direito -> Mesa 4. Distância aproximada desta rota: 46.0 m. Tempo previsto com atrasos: 23.7 s. Velocidade base fixa: 15 km/h. Cenário SINTÉTICO: cadeiras_no_patio. Modelo: regressao_linear. Sem validação de tempo no campus; conferir passagem entre móveis."
+      }
+    ],
+    "resposta": "O caminho mais rápido da Mesa 1 à Mesa 4, considerando cadeiras no pátio, é:\n\n1. Mesa 1 -> Pátio - A\n2. Pátio - A -> Pátio - D\n3. Pátio - D -> Pátio/Direito\n4. Pátio/Direito -> Mesa 4\n\nA distância total dessa rota é de aproximadamente 46.0 metros. O tempo previsto com atrasos é de 23.7 segundos, com uma velocidade base fixa de 15 km/h. Este modelo foi calculado sob o cenário SINTÉTICO: cadeiras_no_patio. Por favor, observe que este modelo não foi validado na realidade do campus.",
+    "erro": null
+  },
+  {
+    "id": 19,
+    "pergunta": "Preveja a rota da Mesa 1 até Café Mania com atraso hipotético por cadeiras no pátio.",
+    "ferramenta": true,
+    "argumentos": true,
+    "chamadas_esperadas": true,
+    "resultado_valido": true,
+    "conteudo_automatico": true,
+    "resposta_fiel": null,
+    "revisao": "pendente",
+    "justificativa_revisao": "",
+    "duracao_s": 6.9908803419999686,
+    "escolhida": "rota_tempo_previsto",
+    "recebidos": {
+      "origem": "Mesa 1",
+      "destino": "Café Mania",
+      "cenario": "cadeiras_no_patio"
+    },
+    "chamadas": [
+      {
+        "pedido": {
+          "name": "rota_tempo_previsto",
+          "arguments": {
+            "origem": "Mesa 1",
+            "destino": "Café Mania",
+            "cenario": "cadeiras_no_patio"
+          }
+        },
+        "resultado": "Caminho: Mesa 1 -> Pátio - A -> Pátio - B -> Café Mania. Distância aproximada desta rota: 26.0 m. Tempo previsto com atrasos: 30.7 s. Velocidade base fixa: 15 km/h. Cenário SINTÉTICO: cadeiras_no_patio. Modelo: regressao_linear. Sem validação de tempo no campus; conferir passagem entre móveis."
+      }
+    ],
+    "resposta": "A rota prevista é:\n\nMesa 1 -> Pátio - A -> Pátio - B -> Café Mania\n\nDistância aproximada dessa rota: 26.0 metros.\n\nTempo previsto com atrasos: 30.7 segundos.\n\nVelocidade base fixa: 15 km/h.\n\nCenário SINTÉTICO: cadeiras_no_patio.\n\nModelo: regressão linear.\n\nSem validação de tempo no campus; confira a passagem entre móveis.",
+    "erro": null
+  },
+  {
+    "id": 20,
+    "pergunta": "Qual o tempo aprendido de Easy Smart até Café Mania usando o cenário padrão?",
+    "ferramenta": true,
+    "argumentos": true,
+    "chamadas_esperadas": true,
+    "resultado_valido": true,
+    "conteudo_automatico": true,
+    "resposta_fiel": null,
+    "revisao": "pendente",
+    "justificativa_revisao": "",
+    "duracao_s": 4.347372855000003,
+    "escolhida": "rota_tempo_previsto",
+    "recebidos": {
+      "origem": "Easy Smart",
+      "destino": "Café Mania"
+    },
+    "chamadas": [
+      {
+        "pedido": {
+          "name": "rota_tempo_previsto",
+          "arguments": {
+            "origem": "Easy Smart",
+            "destino": "Café Mania"
+          }
+        },
+        "resultado": "Caminho: Easy Smart -> Pátio - B -> Café Mania. Distância aproximada desta rota: 6.0 m. Tempo previsto com atrasos: 7.2 s. Velocidade base fixa: 15 km/h. Cenário SINTÉTICO: tranquilo. Modelo: regressao_linear. Sem validação de tempo no campus; conferir passagem entre móveis."
+      }
+    ],
+    "resposta": "O tempo estimado para viajar de Easy Smart até Café Mania, seguindo o caminho de Pátio - B, é de aproximadamente 7.2 segundos. Este tempo foi calculado com base na velocidade fixa de 15 km/h, considerando um cenário fictício de movimento leve (trabalho normal).",
+    "erro": null
+  },
+  {
+    "id": 21,
+    "pergunta": "Calcule o tempo previsto saindo da Mesa 4 e chegando à própria Mesa 4 no cenário movimentado.",
+    "ferramenta": true,
+    "argumentos": true,
+    "chamadas_esperadas": true,
+    "resultado_valido": true,
+    "conteudo_automatico": false,
+    "resposta_fiel": null,
+    "revisao": "pendente",
+    "justificativa_revisao": "",
+    "duracao_s": 4.759644573999992,
+    "escolhida": "rota_tempo_previsto",
+    "recebidos": {
+      "origem": "Mesa 4",
+      "destino": "Mesa 4",
+      "cenario": "movimentado"
+    },
+    "chamadas": [
+      {
+        "pedido": {
+          "name": "rota_tempo_previsto",
+          "arguments": {
+            "origem": "Mesa 4",
+            "destino": "Mesa 4",
+            "cenario": "movimentado"
+          }
+        },
+        "resultado": "Caminho: Mesa 4. Distância aproximada desta rota: 0.0 m. Tempo previsto com atrasos: 0.0 s. Velocidade base fixa: 15 km/h. Cenário SINTÉTICO: movimentado. Modelo: regressao_linear. Sem validação de tempo no campus; conferir passagem entre móveis."
+      }
+    ],
+    "resposta": "O tempo previsto para você sair da Mesa 4 e chegar novamente à Mesa 4, considerando o cenário movimentado, é de 0 segundos (ou seja, instantaneamente). Esta consulta foi feita com base na velocidade fixa de 15 km/h, sem considerar a realidade física do campus.",
+    "erro": null
+  },
+  {
+    "id": 22,
+    "pergunta": "No cenário sintético de cadeiras no pátio, como vou da Mesa 4 à Mesa 1 e qual o tempo previsto?",
+    "ferramenta": true,
+    "argumentos": true,
+    "chamadas_esperadas": true,
+    "resultado_valido": true,
+    "conteudo_automatico": false,
+    "resposta_fiel": null,
+    "revisao": "pendente",
+    "justificativa_revisao": "",
+    "duracao_s": 6.940035628000032,
+    "escolhida": "rota_tempo_previsto",
+    "recebidos": {
+      "origem": "Mesa 4",
+      "destino": "Mesa 1",
+      "cenario": "cadeiras_no_patio"
+    },
+    "chamadas": [
+      {
+        "pedido": {
+          "name": "rota_tempo_previsto",
+          "arguments": {
+            "origem": "Mesa 4",
+            "destino": "Mesa 1",
+            "cenario": "cadeiras_no_patio"
+          }
+        },
+        "resultado": "Caminho: Mesa 4 -> Pátio/Direito -> Pátio - D -> Pátio - A -> Mesa 1. Distância aproximada desta rota: 46.0 m. Tempo previsto com atrasos: 23.7 s. Velocidade base fixa: 15 km/h. Cenário SINTÉTICO: cadeiras_no_patio. Modelo: regressao_linear. Sem validação de tempo no campus; conferir passagem entre móveis."
+      }
+    ],
+    "resposta": "Para ir da Mesa 4 à Mesa 1 atravessando o pátio, você precisará percorrer cerca de 46 metros. Este trajeto levará aproximadamente 23.7 segundos considerando uma velocidade base de 15 km/h. Esta estimativa inclui atrasos sintéticos decorrentes do cenário fictício de cadeiras no pátio. O modelo utilizado foi regressão linear. Por favor, observe que este tempo não reflete a realidade do campus e deve ser interpretado com cautela.",
+    "erro": null
+  },
+  {
+    "id": 23,
+    "pergunta": "Saindo do Café Mania, qual caminho devo seguir até a Biblioteca, qual a distância e o tempo previsto?",
+    "ferramenta": true,
+    "argumentos": true,
+    "chamadas_esperadas": true,
+    "resultado_valido": true,
+    "conteudo_automatico": false,
+    "resposta_fiel": null,
+    "revisao": "pendente",
+    "justificativa_revisao": "",
+    "duracao_s": 5.414993072000016,
+    "escolhida": "rota_tempo_previsto",
+    "recebidos": {
+      "origem": "Café Mania",
+      "destino": "Biblioteca"
+    },
+    "chamadas": [
+      {
+        "pedido": {
+          "name": "rota_tempo_previsto",
+          "arguments": {
+            "origem": "Café Mania",
+            "destino": "Biblioteca"
+          }
+        },
+        "resultado": "Caminho: Café Mania -> Pátio - B -> Pátio/Direito -> Eixo - Norte -> Biblioteca. Distância aproximada desta rota: 109.5 m. Tempo previsto com atrasos: 42.1 s. Velocidade base fixa: 15 km/h. Cenário SINTÉTICO: tranquilo. Modelo: regressao_linear. Sem validação de tempo no campus; conferir passagem entre móveis."
+      }
+    ],
+    "resposta": "Para ir da Biblioteca, você deve seguir este caminho: Café Mania -> Pátio - B -> Pátio/Direito -> Eixo - Norte. Esta rota tem uma distância aproximada de 109.5 metros. O tempo previsto com atrasos é de 42.1 segundos. A velocidade base fixa é de 15 km/h. Este modelo foi calculado com o cenário fictício chamado \"tranqüilo\".",
+    "erro": null
+  }
+]

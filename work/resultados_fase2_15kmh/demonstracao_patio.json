@@ -1,0 +1,26 @@
+{
+  "origem": "Mesa 1",
+  "destino": "Mesa 4",
+  "cenario": "cadeiras_no_patio",
+  "velocidade_base_kmh": 15.0,
+  "rota_distancia": [
+    "Mesa 1",
+    "Pátio - A",
+    "Pátio - B",
+    "Pátio/Direito",
+    "Mesa 4"
+  ],
+  "distancia_m": 42,
+  "tempo_rota_curta_s": 35.667101585114885,
+  "rota_tempo": [
+    "Mesa 1",
+    "Pátio - A",
+    "Pátio - D",
+    "Pátio/Direito",
+    "Mesa 4"
+  ],
+  "distancia_rota_tempo_m": 46,
+  "tempo_previsto_s": 23.693807770445034,
+  "mudou": true,
+  "economia_prevista_s": 11.973293814669852
+}

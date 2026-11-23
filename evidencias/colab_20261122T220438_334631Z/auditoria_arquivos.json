@@ -1,0 +1,46 @@
+{
+  "arquivos_sha256": {
+    "resultados_agente.zip": "732f052a83d4347be35f48b5c587c625ddd4bfbbb99b43faf84b66ebdc3adb75",
+    "carrinho_iesb_unificado.ipynb": "44e94a7ae21b6b97e7daa646e0b22b42bc6cabcd2fb407f5916f4362ae372e94"
+  },
+  "codigo_identico_ao_projeto_na_revisao": true,
+  "contagens_execucao": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17
+  ],
+  "erros_notebook": 0,
+  "erros_avaliador": 0,
+  "casos": 23,
+  "resumo_recalculado_confere": true,
+  "retornos_das_20_chamadas_conferem_com_referencias": true,
+  "duracao_total_casos_s": 134.10608892600004,
+  "duracao_min_s": 0.5354287709999994,
+  "duracao_max_s": 13.181140244000005,
+  "duracao_mediana_s": 5.5677540429999794,
+  "casos_conteudo_automatico_reprovado": [
+    1,
+    3,
+    5,
+    6,
+    16,
+    21,
+    22,
+    23
+  ],
+  "observacao": "Análise dos arquivos recebidos. Não houve nova inferência. Revisão assistida, não validação humana. Contagens consecutivas 1–17 são compatíveis com sessão nova, sem comprovar isoladamente seu reinício."
+}

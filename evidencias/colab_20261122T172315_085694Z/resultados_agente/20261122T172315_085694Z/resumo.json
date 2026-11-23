@@ -1,0 +1,27 @@
+{
+  "executados": 23,
+  "fidelidade_manual": "pendente",
+  "criterios": {
+    "ferramenta": {
+      "acertos": 15,
+      "total": 23
+    },
+    "argumentos": {
+      "acertos": 14,
+      "total": 23
+    },
+    "chamadas_esperadas": {
+      "acertos": 20,
+      "total": 23
+    },
+    "resultado_valido": {
+      "acertos": 14,
+      "total": 23
+    },
+    "conteudo_automatico": {
+      "acertos": 5,
+      "total": 20
+    }
+  },
+  "duracao_mediana_s": 6.050363576999871
+}

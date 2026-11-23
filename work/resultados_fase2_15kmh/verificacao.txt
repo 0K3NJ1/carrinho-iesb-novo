@@ -1,0 +1,1 @@
+OK: regressão dos 8100 pares em metros; geração reproduzível; grupos sem vazamento; dois modelos; 24300 pares em segundos contra Floyd-Warshall; heurística admissível e consistente; conectividade preservada; despacho da ferramenta. Qwen e Colab não executados.

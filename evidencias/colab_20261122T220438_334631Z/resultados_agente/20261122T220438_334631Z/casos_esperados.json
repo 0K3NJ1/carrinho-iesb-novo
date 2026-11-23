@@ -1,0 +1,560 @@
+[
+  {
+    "id": 1,
+    "pergunta": "Como vou da Entrada Principal até a Mesa 2?",
+    "ferramenta": "rota_tempo_previsto",
+    "argumentos": {
+      "origem": "Entrada Principal",
+      "destino": "Mesa 2"
+    },
+    "resultado_esperado": "Caminho: Entrada Principal -> Eixo - Norte -> Pátio/Direito -> Pátio - B -> Mesa 2. Distância aproximada desta rota: 107.5 m. Tempo previsto com atrasos: 41.4 s. Velocidade base fixa: 15 km/h. Cenário SINTÉTICO: tranquilo. Modelo: regressao_linear. Sem validação de tempo no campus; conferir passagem entre móveis.",
+    "referencia": {
+      "caminho": [
+        "Entrada Principal",
+        "Eixo - Norte",
+        "Pátio/Direito",
+        "Pátio - B",
+        "Mesa 2"
+      ],
+      "vizinhos": [],
+      "valores": [
+        "41.4 s",
+        "107.5 m"
+      ],
+      "sintetico": true
+    },
+    "criterio_manual": "Conferir caminho na ordem, números/unidades e ausência de locais ou fatos inventados. Em tempo aprendido, identificar dados sintéticos e não afirmar que detectou cadeiras. Em vizinhos, conferir lista sem acréscimos. Em saudação/fora de escopo, não inventar rota."
+  },
+  {
+    "id": 2,
+    "pergunta": "Qual é a rota de B-04 para I-05?",
+    "ferramenta": "rota_tempo_previsto",
+    "argumentos": {
+      "origem": "B-04",
+      "destino": "I-05"
+    },
+    "resultado_esperado": "Caminho: B-04 -> Corredor Bloco B - 01/04 -> Corredor Bloco B - 02/05 -> Corredor Bloco B - 03/06 -> Corredor Bloco B -> Eixo - Bloco B -> Eixo - Bloco C -> Acesso Lateral I/J -> Corredor I/J -> Corredor I/J - WC I -> Corredor I/J - I-03/06 -> Corredor I/J - I-02/05 -> I-05. Distância aproximada desta rota: 120.0 m. Tempo previsto com atrasos: 51.8 s. Velocidade base fixa: 15 km/h. Cenário SINTÉTICO: tranquilo. Modelo: regressao_linear. Sem validação de tempo no campus; conferir passagem entre móveis.",
+    "referencia": {
+      "caminho": [
+        "B-04",
+        "Corredor Bloco B - 01/04",
+        "Corredor Bloco B - 02/05",
+        "Corredor Bloco B - 03/06",
+        "Corredor Bloco B",
+        "Eixo - Bloco B",
+        "Eixo - Bloco C",
+        "Acesso Lateral I/J",
+        "Corredor I/J",
+        "Corredor I/J - WC I",
+        "Corredor I/J - I-03/06",
+        "Corredor I/J - I-02/05",
+        "I-05"
+      ],
+      "vizinhos": [],
+      "valores": [
+        "51.8 s",
+        "120.0 m"
+      ],
+      "sintetico": true
+    },
+    "criterio_manual": "Conferir caminho na ordem, números/unidades e ausência de locais ou fatos inventados. Em tempo aprendido, identificar dados sintéticos e não afirmar que detectou cadeiras. Em vizinhos, conferir lista sem acréscimos. Em saudação/fora de escopo, não inventar rota."
+  },
+  {
+    "id": 3,
+    "pergunta": "Saindo da Biblioteca, como chego à C-02?",
+    "ferramenta": "rota_tempo_previsto",
+    "argumentos": {
+      "origem": "Biblioteca",
+      "destino": "C-02"
+    },
+    "resultado_esperado": "Caminho: Biblioteca -> Eixo - Norte -> Eixo - Design -> Eixo - Bloco C -> Corredor Bloco C -> Corredor Bloco C - 03/06 -> Corredor Bloco C - 02/05 -> C-02. Distância aproximada desta rota: 174.0 m. Tempo previsto com atrasos: 63.5 s. Velocidade base fixa: 15 km/h. Cenário SINTÉTICO: tranquilo. Modelo: regressao_linear. Sem validação de tempo no campus; conferir passagem entre móveis.",
+    "referencia": {
+      "caminho": [
+        "Biblioteca",
+        "Eixo - Norte",
+        "Eixo - Design",
+        "Eixo - Bloco C",
+        "Corredor Bloco C",
+        "Corredor Bloco C - 03/06",
+        "Corredor Bloco C - 02/05",
+        "C-02"
+      ],
+      "vizinhos": [],
+      "valores": [
+        "63.5 s",
+        "174.0 m"
+      ],
+      "sintetico": true
+    },
+    "criterio_manual": "Conferir caminho na ordem, números/unidades e ausência de locais ou fatos inventados. Em tempo aprendido, identificar dados sintéticos e não afirmar que detectou cadeiras. Em vizinhos, conferir lista sem acréscimos. Em saudação/fora de escopo, não inventar rota."
+  },
+  {
+    "id": 4,
+    "pergunta": "Mostre o caminho de D-01 até WC Feminino Design.",
+    "ferramenta": "rota_tempo_previsto",
+    "argumentos": {
+      "origem": "D-01",
+      "destino": "WC Feminino Design"
+    },
+    "resultado_esperado": "Caminho: D-01 -> Corredor Design - 01/04 -> Corredor Design - 02/05 -> Corredor Design - 03/06 -> Corredor Design -> WC Feminino Design. Distância aproximada desta rota: 39.0 m. Tempo previsto com atrasos: 17.8 s. Velocidade base fixa: 15 km/h. Cenário SINTÉTICO: tranquilo. Modelo: regressao_linear. Sem validação de tempo no campus; conferir passagem entre móveis.",
+    "referencia": {
+      "caminho": [
+        "D-01",
+        "Corredor Design - 01/04",
+        "Corredor Design - 02/05",
+        "Corredor Design - 03/06",
+        "Corredor Design",
+        "WC Feminino Design"
+      ],
+      "vizinhos": [],
+      "valores": [
+        "17.8 s",
+        "39.0 m"
+      ],
+      "sintetico": true
+    },
+    "criterio_manual": "Conferir caminho na ordem, números/unidades e ausência de locais ou fatos inventados. Em tempo aprendido, identificar dados sintéticos e não afirmar que detectou cadeiras. Em vizinhos, conferir lista sem acréscimos. Em saudação/fora de escopo, não inventar rota."
+  },
+  {
+    "id": 5,
+    "pergunta": "Como ir de J-06 para C-06?",
+    "ferramenta": "rota_tempo_previsto",
+    "argumentos": {
+      "origem": "J-06",
+      "destino": "C-06"
+    },
+    "resultado_esperado": "Caminho: J-06 -> Corredor I/J - J-03/06 -> Corredor I/J - J-02/05 -> Corredor I/J - J-01/04 -> Corredor I/J -> Acesso Lateral I/J -> Eixo - Bloco C -> Corredor Bloco C -> Corredor Bloco C - 03/06 -> C-06. Distância aproximada desta rota: 66.0 m. Tempo previsto com atrasos: 37.4 s. Velocidade base fixa: 15 km/h. Cenário SINTÉTICO: tranquilo. Modelo: regressao_linear. Sem validação de tempo no campus; conferir passagem entre móveis.",
+    "referencia": {
+      "caminho": [
+        "J-06",
+        "Corredor I/J - J-03/06",
+        "Corredor I/J - J-02/05",
+        "Corredor I/J - J-01/04",
+        "Corredor I/J",
+        "Acesso Lateral I/J",
+        "Eixo - Bloco C",
+        "Corredor Bloco C",
+        "Corredor Bloco C - 03/06",
+        "C-06"
+      ],
+      "vizinhos": [],
+      "valores": [
+        "37.4 s",
+        "66.0 m"
+      ],
+      "sintetico": true
+    },
+    "criterio_manual": "Conferir caminho na ordem, números/unidades e ausência de locais ou fatos inventados. Em tempo aprendido, identificar dados sintéticos e não afirmar que detectou cadeiras. Em vizinhos, conferir lista sem acréscimos. Em saudação/fora de escopo, não inventar rota."
+  },
+  {
+    "id": 6,
+    "pergunta": "Calcule a rota da Mesa 1 à Mesa 4.",
+    "ferramenta": "rota_tempo_previsto",
+    "argumentos": {
+      "origem": "Mesa 1",
+      "destino": "Mesa 4"
+    },
+    "resultado_esperado": "Caminho: Mesa 1 -> Pátio - A -> Pátio - B -> Pátio/Direito -> Mesa 4. Distância aproximada desta rota: 42.0 m. Tempo previsto com atrasos: 22.3 s. Velocidade base fixa: 15 km/h. Cenário SINTÉTICO: tranquilo. Modelo: regressao_linear. Sem validação de tempo no campus; conferir passagem entre móveis.",
+    "referencia": {
+      "caminho": [
+        "Mesa 1",
+        "Pátio - A",
+        "Pátio - B",
+        "Pátio/Direito",
+        "Mesa 4"
+      ],
+      "vizinhos": [],
+      "valores": [
+        "22.3 s",
+        "42.0 m"
+      ],
+      "sintetico": true
+    },
+    "criterio_manual": "Conferir caminho na ordem, números/unidades e ausência de locais ou fatos inventados. Em tempo aprendido, identificar dados sintéticos e não afirmar que detectou cadeiras. Em vizinhos, conferir lista sem acréscimos. Em saudação/fora de escopo, não inventar rota."
+  },
+  {
+    "id": 7,
+    "pergunta": "Qual o caminho de WC Cinema até Anexo Creche?",
+    "ferramenta": "rota_tempo_previsto",
+    "argumentos": {
+      "origem": "WC Cinema",
+      "destino": "Anexo Creche"
+    },
+    "resultado_esperado": "Caminho: WC Cinema -> Cinema -> Anexo Creche. Distância aproximada desta rota: 45.0 m. Tempo previsto com atrasos: 17.3 s. Velocidade base fixa: 15 km/h. Cenário SINTÉTICO: tranquilo. Modelo: regressao_linear. Sem validação de tempo no campus; conferir passagem entre móveis.",
+    "referencia": {
+      "caminho": [
+        "WC Cinema",
+        "Cinema",
+        "Anexo Creche"
+      ],
+      "vizinhos": [],
+      "valores": [
+        "17.3 s",
+        "45.0 m"
+      ],
+      "sintetico": true
+    },
+    "criterio_manual": "Conferir caminho na ordem, números/unidades e ausência de locais ou fatos inventados. Em tempo aprendido, identificar dados sintéticos e não afirmar que detectou cadeiras. Em vizinhos, conferir lista sem acréscimos. Em saudação/fora de escopo, não inventar rota."
+  },
+  {
+    "id": 8,
+    "pergunta": "Quero ir do Bloco I até Café Mania. Qual a rota?",
+    "ferramenta": "rota_tempo_previsto",
+    "argumentos": {
+      "origem": "Bloco I",
+      "destino": "Café Mania"
+    },
+    "resultado_esperado": "Caminho: Bloco I -> Corredor I/J -> Acesso Lateral I/J -> Eixo - Bloco C -> Eixo - Design -> Eixo - Norte -> Pátio/Direito -> Pátio - B -> Café Mania. Distância aproximada desta rota: 154.5 m. Tempo previsto com atrasos: 64.6 s. Velocidade base fixa: 15 km/h. Cenário SINTÉTICO: tranquilo. Modelo: regressao_linear. Sem validação de tempo no campus; conferir passagem entre móveis.",
+    "referencia": {
+      "caminho": [
+        "Bloco I",
+        "Corredor I/J",
+        "Acesso Lateral I/J",
+        "Eixo - Bloco C",
+        "Eixo - Design",
+        "Eixo - Norte",
+        "Pátio/Direito",
+        "Pátio - B",
+        "Café Mania"
+      ],
+      "vizinhos": [],
+      "valores": [
+        "64.6 s",
+        "154.5 m"
+      ],
+      "sintetico": true
+    },
+    "criterio_manual": "Conferir caminho na ordem, números/unidades e ausência de locais ou fatos inventados. Em tempo aprendido, identificar dados sintéticos e não afirmar que detectou cadeiras. Em vizinhos, conferir lista sem acréscimos. Em saudação/fora de escopo, não inventar rota."
+  },
+  {
+    "id": 9,
+    "pergunta": "Quais locais estão ligados diretamente ao Pátio/Direito?",
+    "ferramenta": "listar_vizinhos",
+    "argumentos": {
+      "local": "Pátio/Direito"
+    },
+    "resultado_esperado": "Vizinhos de Pátio/Direito: Eixo - Norte, Pátio - B, Pátio - D, Mesa 4, Sala dos Professores, WC Acessível Pátio, WC Feminino Pátio.",
+    "referencia": {
+      "caminho": [],
+      "vizinhos": [
+        "Eixo - Norte",
+        "Pátio - B",
+        "Pátio - D",
+        "Mesa 4",
+        "Sala dos Professores",
+        "WC Acessível Pátio",
+        "WC Feminino Pátio"
+      ],
+      "valores": [],
+      "sintetico": false
+    },
+    "criterio_manual": "Conferir caminho na ordem, números/unidades e ausência de locais ou fatos inventados. Em tempo aprendido, identificar dados sintéticos e não afirmar que detectou cadeiras. Em vizinhos, conferir lista sem acréscimos. Em saudação/fora de escopo, não inventar rota."
+  },
+  {
+    "id": 10,
+    "pergunta": "O que há ao lado do Corredor Design?",
+    "ferramenta": "listar_vizinhos",
+    "argumentos": {
+      "local": "Corredor Design"
+    },
+    "resultado_esperado": "Vizinhos de Corredor Design: Eixo - Design, Design, Corredor Design - 03/06, WC Masculino Design, WC Feminino Design.",
+    "referencia": {
+      "caminho": [],
+      "vizinhos": [
+        "Eixo - Design",
+        "Design",
+        "Corredor Design - 03/06",
+        "WC Masculino Design",
+        "WC Feminino Design"
+      ],
+      "valores": [],
+      "sintetico": false
+    },
+    "criterio_manual": "Conferir caminho na ordem, números/unidades e ausência de locais ou fatos inventados. Em tempo aprendido, identificar dados sintéticos e não afirmar que detectou cadeiras. Em vizinhos, conferir lista sem acréscimos. Em saudação/fora de escopo, não inventar rota."
+  },
+  {
+    "id": 11,
+    "pergunta": "Liste os vizinhos diretos de Cinema.",
+    "ferramenta": "listar_vizinhos",
+    "argumentos": {
+      "local": "Cinema"
+    },
+    "resultado_esperado": "Vizinhos de Cinema: Eixo - Norte, WC Cinema, Anexo Creche.",
+    "referencia": {
+      "caminho": [],
+      "vizinhos": [
+        "Eixo - Norte",
+        "WC Cinema",
+        "Anexo Creche"
+      ],
+      "valores": [],
+      "sintetico": false
+    },
+    "criterio_manual": "Conferir caminho na ordem, números/unidades e ausência de locais ou fatos inventados. Em tempo aprendido, identificar dados sintéticos e não afirmar que detectou cadeiras. Em vizinhos, conferir lista sem acréscimos. Em saudação/fora de escopo, não inventar rota."
+  },
+  {
+    "id": 12,
+    "pergunta": "Quais pontos têm ligação direta com Corredor I/J?",
+    "ferramenta": "listar_vizinhos",
+    "argumentos": {
+      "local": "Corredor I/J"
+    },
+    "resultado_esperado": "Vizinhos de Corredor I/J: Acesso Lateral I/J, Bloco I, Bloco J, Corredor I/J - WC I, Corredor I/J - J-01/04.",
+    "referencia": {
+      "caminho": [],
+      "vizinhos": [
+        "Acesso Lateral I/J",
+        "Bloco I",
+        "Bloco J",
+        "Corredor I/J - WC I",
+        "Corredor I/J - J-01/04"
+      ],
+      "valores": [],
+      "sintetico": false
+    },
+    "criterio_manual": "Conferir caminho na ordem, números/unidades e ausência de locais ou fatos inventados. Em tempo aprendido, identificar dados sintéticos e não afirmar que detectou cadeiras. Em vizinhos, conferir lista sem acréscimos. Em saudação/fora de escopo, não inventar rota."
+  },
+  {
+    "id": 13,
+    "pergunta": "Bom dia!",
+    "ferramenta": null,
+    "argumentos": {},
+    "resultado_esperado": null,
+    "referencia": {
+      "caminho": [],
+      "vizinhos": [],
+      "valores": [],
+      "sintetico": false
+    },
+    "criterio_manual": "Conferir caminho na ordem, números/unidades e ausência de locais ou fatos inventados. Em tempo aprendido, identificar dados sintéticos e não afirmar que detectou cadeiras. Em vizinhos, conferir lista sem acréscimos. Em saudação/fora de escopo, não inventar rota."
+  },
+  {
+    "id": 14,
+    "pergunta": "Obrigado pela ajuda!",
+    "ferramenta": null,
+    "argumentos": {},
+    "resultado_esperado": null,
+    "referencia": {
+      "caminho": [],
+      "vizinhos": [],
+      "valores": [],
+      "sintetico": false
+    },
+    "criterio_manual": "Conferir caminho na ordem, números/unidades e ausência de locais ou fatos inventados. Em tempo aprendido, identificar dados sintéticos e não afirmar que detectou cadeiras. Em vizinhos, conferir lista sem acréscimos. Em saudação/fora de escopo, não inventar rota."
+  },
+  {
+    "id": 15,
+    "pergunta": "Qual é a capital do Brasil?",
+    "ferramenta": null,
+    "argumentos": {},
+    "resultado_esperado": null,
+    "referencia": {
+      "caminho": [],
+      "vizinhos": [],
+      "valores": [],
+      "sintetico": false
+    },
+    "criterio_manual": "Conferir caminho na ordem, números/unidades e ausência de locais ou fatos inventados. Em tempo aprendido, identificar dados sintéticos e não afirmar que detectou cadeiras. Em vizinhos, conferir lista sem acréscimos. Em saudação/fora de escopo, não inventar rota."
+  },
+  {
+    "id": 16,
+    "pergunta": "Qual a rota e o tempo aprendido da Mesa 1 até a Mesa 4 no cenário tranquilo?",
+    "ferramenta": "rota_tempo_previsto",
+    "argumentos": {
+      "origem": "Mesa 1",
+      "destino": "Mesa 4",
+      "cenario": "tranquilo"
+    },
+    "resultado_esperado": "Caminho: Mesa 1 -> Pátio - A -> Pátio - B -> Pátio/Direito -> Mesa 4. Distância aproximada desta rota: 42.0 m. Tempo previsto com atrasos: 22.3 s. Velocidade base fixa: 15 km/h. Cenário SINTÉTICO: tranquilo. Modelo: regressao_linear. Sem validação de tempo no campus; conferir passagem entre móveis.",
+    "referencia": {
+      "caminho": [
+        "Mesa 1",
+        "Pátio - A",
+        "Pátio - B",
+        "Pátio/Direito",
+        "Mesa 4"
+      ],
+      "vizinhos": [],
+      "valores": [
+        "22.3 s",
+        "42.0 m"
+      ],
+      "sintetico": true
+    },
+    "criterio_manual": "Conferir caminho na ordem, números/unidades e ausência de locais ou fatos inventados. Em tempo aprendido, identificar dados sintéticos e não afirmar que detectou cadeiras. Em vizinhos, conferir lista sem acréscimos. Em saudação/fora de escopo, não inventar rota."
+  },
+  {
+    "id": 17,
+    "pergunta": "Qual a rota e o tempo previsto da Mesa 1 até a Mesa 4 no cenário movimentado?",
+    "ferramenta": "rota_tempo_previsto",
+    "argumentos": {
+      "origem": "Mesa 1",
+      "destino": "Mesa 4",
+      "cenario": "movimentado"
+    },
+    "resultado_esperado": "Caminho: Mesa 1 -> Pátio - A -> Pátio - B -> Pátio/Direito -> Mesa 4. Distância aproximada desta rota: 42.0 m. Tempo previsto com atrasos: 74.2 s. Velocidade base fixa: 15 km/h. Cenário SINTÉTICO: movimentado. Modelo: regressao_linear. Sem validação de tempo no campus; conferir passagem entre móveis.",
+    "referencia": {
+      "caminho": [
+        "Mesa 1",
+        "Pátio - A",
+        "Pátio - B",
+        "Pátio/Direito",
+        "Mesa 4"
+      ],
+      "vizinhos": [],
+      "valores": [
+        "74.2 s",
+        "42.0 m"
+      ],
+      "sintetico": true
+    },
+    "criterio_manual": "Conferir caminho na ordem, números/unidades e ausência de locais ou fatos inventados. Em tempo aprendido, identificar dados sintéticos e não afirmar que detectou cadeiras. Em vizinhos, conferir lista sem acréscimos. Em saudação/fora de escopo, não inventar rota."
+  },
+  {
+    "id": 18,
+    "pergunta": "Qual o caminho da Mesa 1 à Mesa 4 no cenário sintético de cadeiras no pátio?",
+    "ferramenta": "rota_tempo_previsto",
+    "argumentos": {
+      "origem": "Mesa 1",
+      "destino": "Mesa 4",
+      "cenario": "cadeiras_no_patio"
+    },
+    "resultado_esperado": "Caminho: Mesa 1 -> Pátio - A -> Pátio - D -> Pátio/Direito -> Mesa 4. Distância aproximada desta rota: 46.0 m. Tempo previsto com atrasos: 23.7 s. Velocidade base fixa: 15 km/h. Cenário SINTÉTICO: cadeiras_no_patio. Modelo: regressao_linear. Sem validação de tempo no campus; conferir passagem entre móveis.",
+    "referencia": {
+      "caminho": [
+        "Mesa 1",
+        "Pátio - A",
+        "Pátio - D",
+        "Pátio/Direito",
+        "Mesa 4"
+      ],
+      "vizinhos": [],
+      "valores": [
+        "23.7 s",
+        "46.0 m"
+      ],
+      "sintetico": true
+    },
+    "criterio_manual": "Conferir caminho na ordem, números/unidades e ausência de locais ou fatos inventados. Em tempo aprendido, identificar dados sintéticos e não afirmar que detectou cadeiras. Em vizinhos, conferir lista sem acréscimos. Em saudação/fora de escopo, não inventar rota."
+  },
+  {
+    "id": 19,
+    "pergunta": "Preveja a rota da Mesa 1 até Café Mania com atraso hipotético por cadeiras no pátio.",
+    "ferramenta": "rota_tempo_previsto",
+    "argumentos": {
+      "origem": "Mesa 1",
+      "destino": "Café Mania",
+      "cenario": "cadeiras_no_patio"
+    },
+    "resultado_esperado": "Caminho: Mesa 1 -> Pátio - A -> Pátio - B -> Café Mania. Distância aproximada desta rota: 26.0 m. Tempo previsto com atrasos: 30.7 s. Velocidade base fixa: 15 km/h. Cenário SINTÉTICO: cadeiras_no_patio. Modelo: regressao_linear. Sem validação de tempo no campus; conferir passagem entre móveis.",
+    "referencia": {
+      "caminho": [
+        "Mesa 1",
+        "Pátio - A",
+        "Pátio - B",
+        "Café Mania"
+      ],
+      "vizinhos": [],
+      "valores": [
+        "30.7 s",
+        "26.0 m"
+      ],
+      "sintetico": true
+    },
+    "criterio_manual": "Conferir caminho na ordem, números/unidades e ausência de locais ou fatos inventados. Em tempo aprendido, identificar dados sintéticos e não afirmar que detectou cadeiras. Em vizinhos, conferir lista sem acréscimos. Em saudação/fora de escopo, não inventar rota."
+  },
+  {
+    "id": 20,
+    "pergunta": "Qual o tempo aprendido de Easy Smart até Café Mania usando o cenário padrão?",
+    "ferramenta": "rota_tempo_previsto",
+    "argumentos": {
+      "origem": "Easy Smart",
+      "destino": "Café Mania"
+    },
+    "exigir_caminho": false,
+    "resultado_esperado": "Caminho: Easy Smart -> Pátio - B -> Café Mania. Distância aproximada desta rota: 6.0 m. Tempo previsto com atrasos: 7.2 s. Velocidade base fixa: 15 km/h. Cenário SINTÉTICO: tranquilo. Modelo: regressao_linear. Sem validação de tempo no campus; conferir passagem entre móveis.",
+    "referencia": {
+      "caminho": [],
+      "vizinhos": [],
+      "valores": [
+        "7.2 s"
+      ],
+      "sintetico": true
+    },
+    "criterio_manual": "Conferir caminho na ordem, números/unidades e ausência de locais ou fatos inventados. Em tempo aprendido, identificar dados sintéticos e não afirmar que detectou cadeiras. Em vizinhos, conferir lista sem acréscimos. Em saudação/fora de escopo, não inventar rota."
+  },
+  {
+    "id": 21,
+    "pergunta": "Calcule o tempo previsto saindo da Mesa 4 e chegando à própria Mesa 4 no cenário movimentado.",
+    "ferramenta": "rota_tempo_previsto",
+    "argumentos": {
+      "origem": "Mesa 4",
+      "destino": "Mesa 4",
+      "cenario": "movimentado"
+    },
+    "exigir_caminho": false,
+    "resultado_esperado": "Caminho: Mesa 4. Distância aproximada desta rota: 0.0 m. Tempo previsto com atrasos: 0.0 s. Velocidade base fixa: 15 km/h. Cenário SINTÉTICO: movimentado. Modelo: regressao_linear. Sem validação de tempo no campus; conferir passagem entre móveis.",
+    "referencia": {
+      "caminho": [],
+      "vizinhos": [],
+      "valores": [
+        "0.0 s"
+      ],
+      "sintetico": true
+    },
+    "criterio_manual": "Conferir caminho na ordem, números/unidades e ausência de locais ou fatos inventados. Em tempo aprendido, identificar dados sintéticos e não afirmar que detectou cadeiras. Em vizinhos, conferir lista sem acréscimos. Em saudação/fora de escopo, não inventar rota."
+  },
+  {
+    "id": 22,
+    "pergunta": "No cenário sintético de cadeiras no pátio, como vou da Mesa 4 à Mesa 1 e qual o tempo previsto?",
+    "ferramenta": "rota_tempo_previsto",
+    "argumentos": {
+      "origem": "Mesa 4",
+      "destino": "Mesa 1",
+      "cenario": "cadeiras_no_patio"
+    },
+    "resultado_esperado": "Caminho: Mesa 4 -> Pátio/Direito -> Pátio - D -> Pátio - A -> Mesa 1. Distância aproximada desta rota: 46.0 m. Tempo previsto com atrasos: 23.7 s. Velocidade base fixa: 15 km/h. Cenário SINTÉTICO: cadeiras_no_patio. Modelo: regressao_linear. Sem validação de tempo no campus; conferir passagem entre móveis.",
+    "referencia": {
+      "caminho": [
+        "Mesa 4",
+        "Pátio/Direito",
+        "Pátio - D",
+        "Pátio - A",
+        "Mesa 1"
+      ],
+      "vizinhos": [],
+      "valores": [
+        "23.7 s",
+        "46.0 m"
+      ],
+      "sintetico": true
+    },
+    "criterio_manual": "Conferir caminho na ordem, números/unidades e ausência de locais ou fatos inventados. Em tempo aprendido, identificar dados sintéticos e não afirmar que detectou cadeiras. Em vizinhos, conferir lista sem acréscimos. Em saudação/fora de escopo, não inventar rota."
+  },
+  {
+    "id": 23,
+    "pergunta": "Saindo do Café Mania, qual caminho devo seguir até a Biblioteca, qual a distância e o tempo previsto?",
+    "ferramenta": "rota_tempo_previsto",
+    "argumentos": {
+      "origem": "Café Mania",
+      "destino": "Biblioteca"
+    },
+    "resultado_esperado": "Caminho: Café Mania -> Pátio - B -> Pátio/Direito -> Eixo - Norte -> Biblioteca. Distância aproximada desta rota: 109.5 m. Tempo previsto com atrasos: 42.1 s. Velocidade base fixa: 15 km/h. Cenário SINTÉTICO: tranquilo. Modelo: regressao_linear. Sem validação de tempo no campus; conferir passagem entre móveis.",
+    "referencia": {
+      "caminho": [
+        "Café Mania",
+        "Pátio - B",
+        "Pátio/Direito",
+        "Eixo - Norte",
+        "Biblioteca"
+      ],
+      "vizinhos": [],
+      "valores": [
+        "42.1 s",
+        "109.5 m"
+      ],
+      "sintetico": true
+    },
+    "criterio_manual": "Conferir caminho na ordem, números/unidades e ausência de locais ou fatos inventados. Em tempo aprendido, identificar dados sintéticos e não afirmar que detectou cadeiras. Em vizinhos, conferir lista sem acréscimos. Em saudação/fora de escopo, não inventar rota."
+  }
+]
