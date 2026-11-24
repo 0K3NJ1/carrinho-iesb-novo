@@ -1,1 +1,0 @@
-OK: 23 referências verificadas; testes controlados de cenário errado, ferramenta errada, argumentos extras/inválidos, chamadas repetidas, resposta incompleta, falta de indicação sintética, JSON quebrado, limite de passos, exceção, ordem dos locais e números/unidades. Fidelidade manual permanece pendente. Qwen NÃO executado; sem taxas de acerto do modelo.
