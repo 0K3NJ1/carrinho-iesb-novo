@@ -11,7 +11,7 @@ Implementação atual: [carrinho_iesb_unificado.ipynb](carrinho_iesb_unificado.i
 
 Comparar o código do grupo com os laboratórios e o gabarito do professor para aproximar seu nível de complexidade do ensinado em aula. Priorizar funções pequenas, variáveis claras e fluxo sequencial explicável, preservando os requisitos do enunciado. O gabarito da Aula 10 é a principal referência do agente; o laboratório de busca orienta os algoritmos.
 
-O LLM interpreta pedidos e seleciona ferramentas; o A* calcula rotas; a regressão estima tempos com dados sintéticos. A velocidade base de 15 km/h é uma hipótese. Não há detecção física de obstáculos. O grafo tem 90 nós e 90 ligações. A bateria v3 tem 39 casos e ainda precisa de validação real no Colab; testes controlados não medem compreensão real do Qwen.
+O LLM interpreta pedidos, seleciona ferramentas e explica o resultado em português (ciclo do gabarito: pensar → agir → observar → responder); o A* calcula rotas; a regressão estima tempos com dados sintéticos. A velocidade base de 15 km/h é uma hipótese. Não há detecção física de obstáculos. O grafo tem 90 nós e 90 ligações. A bateria tem 39 casos. Na execução local de 24/11/2026 (regras v5, RTX 4050), o agente acertou 31; os detalhes estão em `INTERPRETACAO_DO_AGENTE.md`. Ainda é preciso repetir no Colab com T4.
 
 ## Organização de 24/11/2026
 
