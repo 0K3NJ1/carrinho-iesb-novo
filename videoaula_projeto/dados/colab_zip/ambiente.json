@@ -1,0 +1,12 @@
+{
+  "data": "2026-11-24T19:01:58",
+  "python": "3.13.18",
+  "gpu": "sem GPU",
+  "dispositivo": "cpu",
+  "modelo": "Qwen/Qwen2.5-1.5B-Instruct",
+  "regras": "v5 (24/11/2026)",
+  "torch": "2.14.1+cpu",
+  "transformers": "5.22.1",
+  "sklearn": "1.6.1",
+  "pandas": "2.2.3"
+}

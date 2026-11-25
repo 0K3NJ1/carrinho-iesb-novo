@@ -1,0 +1,115 @@
+{
+  "fase1_busca": [
+    {
+      "nos": 20,
+      "algoritmo": "Custo uniforme",
+      "origem": "Entrada Principal",
+      "destino": "Eixo - Bloco B",
+      "expandidos": 19,
+      "custo_m": 186,
+      "execucao_ms": 0.023964999968484335
+    },
+    {
+      "nos": 20,
+      "algoritmo": "A*",
+      "origem": "Entrada Principal",
+      "destino": "Eixo - Bloco B",
+      "expandidos": 19,
+      "custo_m": 186,
+      "execucao_ms": 0.029729999937444518
+    },
+    {
+      "nos": 40,
+      "algoritmo": "Custo uniforme",
+      "origem": "Entrada Principal",
+      "destino": "Eixo - Fundo",
+      "expandidos": 39,
+      "custo_m": 210,
+      "execucao_ms": 0.06440499993232152
+    },
+    {
+      "nos": 40,
+      "algoritmo": "A*",
+      "origem": "Entrada Principal",
+      "destino": "Eixo - Fundo",
+      "expandidos": 39,
+      "custo_m": 210,
+      "execucao_ms": 0.07865000003448586
+    },
+    {
+      "nos": 70,
+      "algoritmo": "Custo uniforme",
+      "origem": "Entrada Principal",
+      "destino": "Corredor Bloco B - 01/04",
+      "expandidos": 69,
+      "custo_m": 221,
+      "execucao_ms": 0.14894500003492794
+    },
+    {
+      "nos": 70,
+      "algoritmo": "A*",
+      "origem": "Entrada Principal",
+      "destino": "Corredor Bloco B - 01/04",
+      "expandidos": 69,
+      "custo_m": 221,
+      "execucao_ms": 0.16674999994847894
+    }
+  ],
+  "fase1_preparo_heuristica_ms": 10.247409000044172,
+  "fase2_validacao": [
+    {
+      "modelo": "regressao_linear",
+      "mae_s": 0.854089555812642,
+      "rmse_s": 1.165478410030321,
+      "r2": 0.9728328275771189
+    },
+    {
+      "modelo": "arvore_decisao",
+      "mae_s": 0.9999099877626129,
+      "rmse_s": 1.5292664389732777,
+      "r2": 0.9532262393630909
+    }
+  ],
+  "fase2_escolhido": "regressao_linear",
+  "fase2_teste": {
+    "mae_s": 0.8375532396039316,
+    "rmse_s": 1.1639254661480662,
+    "r2": 0.972819906721686
+  },
+  "fase2_demonstracao_patio": {
+    "origem": "Mesa 1",
+    "destino": "Mesa 4",
+    "cenario": "cadeiras_no_patio",
+    "velocidade_base_kmh": 15.0,
+    "rota_distancia": [
+      "Mesa 1",
+      "Pátio - A",
+      "Pátio - B",
+      "Pátio/Direito",
+      "Mesa 4"
+    ],
+    "distancia_m": 42,
+    "tempo_rota_curta_s": 35.667101585114885,
+    "rota_tempo": [
+      "Mesa 1",
+      "Pátio - A",
+      "Pátio - D",
+      "Pátio/Direito",
+      "Mesa 4"
+    ],
+    "distancia_rota_tempo_m": 46,
+    "tempo_previsto_s": 23.693807770445034,
+    "mudou": true,
+    "economia_prevista_s": 11.973293814669852
+  },
+  "fase3": {
+    "casos": 39,
+    "escolha_certa": 31,
+    "argumentos_certos": 31,
+    "rotas_validas": 24,
+    "total_rotas": 30,
+    "com_numero_inventado": 4,
+    "mediana_s": 134.84213613300017,
+    "maximo_s": 234.22656661899964
+  }
+}

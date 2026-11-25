@@ -1,0 +1,9 @@
+# Arquivos grandes ou que podem ser gerados de novo (ver README.md)
+Videoaula_Projeto_IESB.mp4
+*.tmp.mp4
+audio/
+cache/
+testes/
+testes_voz/
+vozes/*.onnx
+__pycache__/

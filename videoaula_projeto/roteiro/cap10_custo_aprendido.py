@@ -1,0 +1,76 @@
+from base import *
+from dados import T, br
+
+TP = T['tempos_patio']
+DEMO = T['demonstracao_patio']
+CAD = T['astar_cadeiras_mesa1_mesa4']
+
+
+def pesos(cen):
+    return {k: br(v, 1) for k, v in TP[cen].items()}
+
+
+CAPITULO = dict(numero=10, titulo='Fase 2: o custo aprendido entra na busca', blocos=[
+    bloco('Capítulo dez. O modelo de tempo está treinado. Agora vem o elo entre as fases: a mesma busca A estrela passa a usar o tempo previsto como custo de cada ligação.',
+          titulo('O custo aprendido entra na busca', '`prever_grafo_tempo`, `rota_tempo_previsto` e a rota que muda no pátio', 'Capítulo 10')),
+    bloco('`prever_grafo_tempo` recebe um cenário e devolve um grafo novo, com o mesmo formato de `VIZINHOS`, mas com segundos no lugar de metros. Primeiro, confere se o cenário existe.',
+          codigo(19, (113, 115), janela=(111, 133))),
+    bloco('Ela pega uma linha por trecho com `drop_duplicates`, e preenche os atributos do cenário: no tranquilo, fluxo 1 e sem obstáculo; no movimentado, fluxo 4 e com obstáculo.',
+          codigo(19, (116, 120), janela=(111, 133))),
+    bloco('O terceiro cenário, cadeiras no pátio, é didático. Ele parte do tranquilo, mas no trecho entre Pátio A e Pátio B coloca fluxo 5, obstáculo e cenário movimentado.',
+          codigo(19, (121, 125), janela=(111, 133), notas=[(124, 'só o trecho A–B fica lento')])),
+    bloco('A comparação `{origem, destino} == {"Pátio - A", "Pátio - B"}` usa conjuntos: assim não importa a ordem em que os dois nomes aparecem na ligação.',
+          codigo(19, 124, janela=(111, 133), notas=[(124, 'conjuntos: a ordem não importa')])),
+    bloco('Então o modelo prevê o tempo dos 90 trechos de uma vez, com `predict`. O `np.maximum(0.1, ...)` garante que nenhum tempo seja menor que um décimo de segundo.',
+          codigo(19, (126, 127), janela=(111, 133))),
+    bloco('Por fim, monta o dicionário do grafo nos dois sentidos, como na seção 2. `zip` percorre as ligações e os tempos previstos lado a lado.',
+          codigo(19, (128, 132), janela=(111, 133), notas=[(129, '`zip(LIGACOES, tempos)`')])),
+    bloco('Veja o pátio no cenário tranquilo, com os tempos previstos reais em segundos. A ligação de A até B leva 9,7 segundos.',
+          grafo(camera=PATIO_LARGO, rotulos='todos', pesos=True, pesosValores=pesos('tranquilo'), unidadePeso=' s', zoomTexto=1.15,
+                titulo='Cenário tranquilo · tempos previstos (s)')),
+    bloco('No cenário cadeiras no pátio, a mesma ligação passa para 23 segundos. As outras continuam iguais.',
+          grafo(camera=PATIO_LARGO, rotulos='todos', pesos=True, pesosValores=pesos('cadeiras_no_patio'), unidadePeso=' s', zoomTexto=1.15,
+                arestasDescartadas=[['Pátio - A', 'Pátio - B']], titulo='Cenário cadeiras no pátio · tempos previstos (s)')),
+    bloco('Agora a ferramenta usada pelo agente: `rota_tempo_previsto`. A docstring diz ao modelo de linguagem para que ela serve e o que significa cada parâmetro, inclusive as três opções de cenário.',
+          codigo(19, (135, 145), janela=(135, 163))),
+    bloco('Ela valida os locais e o cenário, gera o grafo de tempos, e recalcula a tabela de referência da heurística, agora em segundos, com uma compreensão de dicionário.',
+          codigo(19, (146, 152), janela=(135, 163), notas=[(152, 'heurística recalculada em segundos')])),
+    bloco('A busca é a mesma `buscar` da Fase 1, com a heurística ligada. Só mudaram o grafo e a referência. Esse é o ponto central da Fase 2.',
+          codigo(19, 153, janela=(135, 163), notas=[(153, 'a mesma busca da Fase 1')])),
+    bloco('Se não houver caminho, a função devolve um aviso em texto.',
+          codigo(19, (154, 155), janela=(135, 163))),
+    bloco('A distância informada é a soma dos metros da rota escolhida por tempo. `dict(VIZINHOS[a])[b]` transforma a lista de vizinhos num dicionário para achar os metros de cada passo.',
+          codigo(19, 156, janela=(135, 163), notas=[(156, 'metros da rota escolhida')])),
+    bloco('E a resposta é um texto com caminho, distância, tempo previsto, a base fixa e avisos de que os dados são sintéticos.',
+          codigo(19, (157, 163), janela=(135, 163))),
+    bloco('Logo depois da definição, um `for` chama a ferramenta para a consulta padrão nos dois cenários.',
+          codigo(19, (166, 167), janela=(150, 172))),
+    bloco('Saídas reais da Entrada até a Mesa 4: no tranquilo, 30 segundos; no movimentado, 68,9 segundos, pelo mesmo caminho de 89,5 metros.',
+          vertical(terminal('rota_tempo_previsto("Entrada Principal", "Mesa 4", "tranquilo")', T['rota_tranquilo'], destaque=[2], fonte=22),
+                   terminal('rota_tempo_previsto("Entrada Principal", "Mesa 4", "movimentado")', T['rota_movimentado'], destaque=[2], fonte=22))),
+    bloco('Agora a demonstração mais importante para a apresentação: `demonstrar_alternativa_patio`. Ela compara a rota mais curta e a rota mais rápida da Mesa 1 até a Mesa 4, com cadeiras no pátio.',
+          codigo(19, (170, 185), janela=(165, 191))),
+    bloco('Ela calcula a rota mais curta com `a_estrela`, a rota mais rápida com `buscar` no grafo de tempos, mede o tempo da rota curta no grafo de tempos e grava tudo num JSON. A linha 188 guarda o resultado em `DEMONSTRACAO_PATIO`.',
+          codigo(19, (171, 188), janela=(170, 191))),
+    bloco('A rota mais curta, em metros, passa por Pátio B: 42 metros. Mas com cadeiras, o trecho de A até B demora. Somando os tempos previstos, essa rota leva 35,7 segundos.',
+          grafo(camera=PATIO_LARGO, rotulos='todos', pesos=True, pesosValores=pesos('cadeiras_no_patio'), unidadePeso=' s', zoomTexto=1.15,
+                arestasDescartadas=[list(p) for p in zip(DEMO['rota_distancia'], DEMO['rota_distancia'][1:])],
+                estados={x: 'descartado' for x in DEMO['rota_distancia']}, titulo='Rota mais curta: 42 m, 35,7 s')),
+    bloco('O A estrela, com custo em segundos, escolhe outro caminho: por Pátio D. São 46 metros, quatro a mais, mas só 23,7 segundos.',
+          grafo(camera=PATIO_LARGO, rotulos='todos', pesos=True, pesosValores=pesos('cadeiras_no_patio'), unidadePeso=' s', zoomTexto=1.15,
+                caminho=DEMO['rota_tempo'], estados={x: 'caminho' for x in DEMO['rota_tempo']},
+                carrinho=dict(caminho=DEMO['rota_tempo']), titulo='Rota mais rápida: 46 m, 23,7 s'), 3.5),
+    bloco('A economia prevista é de 12 segundos. Este é o modelo de custo mudando a decisão da busca, exatamente o que o enunciado pede para mostrar na demonstração ao vivo.',
+          tabela('Mesa 1 → Mesa 4 com cadeiras no pátio (valores reais)', ['rota', 'caminho', 'metros', 'tempo previsto'],
+                 [['mais curta', 'A → B → Direito', br(float(DEMO['distancia_m']), 0), br(DEMO['tempo_rota_curta_s'], 1) + ' s'],
+                  ['mais rápida', 'A → D → Direito', br(float(DEMO['distancia_rota_tempo_m']), 0), br(DEMO['tempo_previsto_s'], 1) + ' s']],
+                 estilos=['erro', 'ok'], fonte=28,
+                 rodape=f'economia prevista: **{br(DEMO["economia_prevista_s"], 1)} s** · `mudou = True`')),
+    bloco('Vale lembrar o limite: o programa não detecta cadeiras de verdade. O cenário é uma hipótese digitada no pedido, e os tempos são sintéticos. É isso que o relatório deve dizer.',
+          topicos('Limites da Fase 2', ['Tempos **sintéticos**: nada foi medido no campus',
+                                        'O cenário vem do **pedido**, não de sensores',
+                                        'Os dois sentidos de cada trecho têm o mesmo tempo',
+                                        'A velocidade base de 15 km/h é uma hipótese fixa'], mostrar=4)),
+    bloco('A célula termina com `FERRAMENTAS = [rota_tempo_previsto, listar_vizinhos]`: a lista das duas funções que o Qwen poderá chamar. É a ponte para a Fase 3.',
+          codigo(19, 190, janela=(176, 191), notas=[(190, 'as ferramentas do agente')])),
+])
