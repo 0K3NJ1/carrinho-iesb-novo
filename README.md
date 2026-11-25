@@ -6,6 +6,7 @@ Implementação atual: [carrinho_iesb_unificado.ipynb](carrinho_iesb_unificado.i
 - `MAPA_DO_GRAFO.md` e `referencias/planta_terreo_iesb.png`: mapa atual e decisões do grafo.
 - `INTERPRETACAO_DO_AGENTE.md`: funcionamento e limites do agente.
 - `AUTORES_PREENCHER.md`: identificação do grupo.
+- `videoaula_projeto/`: videoaula narrada (1h25min, 16 capítulos em `capitulos/`) que explica o notebook linha por linha, com roteiro, legendas, perguntas da defesa e o código que gera o vídeo. Veja o `README.md` da pasta.
 
 ## Próxima análise
 

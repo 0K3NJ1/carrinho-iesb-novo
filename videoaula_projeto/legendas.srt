@@ -1,0 +1,3719 @@
+1
+00:00:00,000 --> 00:00:08,080
+Olá! Nesta videoaula você vai entender, linha por linha, o código do projeto de Inteligência Artificial do carrinho do IESB.
+
+2
+00:00:08,233 --> 00:00:14,687
+O objetivo não é só apresentar o projeto: é aprender a ler, explicar e defender cada parte do código.
+
+3
+00:00:15,300 --> 00:00:24,007
+Primeiro, o problema. Um carrinho precisa ir de um local do térreo do IESB até outro, por exemplo da Biblioteca até uma mesa do pátio.
+
+4
+00:00:24,633 --> 00:00:33,328
+Para o computador resolver isso, o campus é transformado num grafo: cada local é um nó e cada passagem entre dois locais é uma ligação com um custo.
+
+5
+00:00:33,933 --> 00:00:38,286
+E a pergunta que o agente responde é sempre a mesma: qual é a melhor rota?
+
+6
+00:00:38,467 --> 00:00:42,170
+O que muda ao longo do projeto é o significado de “melhor”.
+
+7
+00:00:42,800 --> 00:00:48,720
+O enunciado divide o projeto em três fases, e o código do notebook reúne as três numa peça só.
+
+8
+00:00:48,900 --> 00:00:52,161
+Vamos olhar o desenho geral antes dos detalhes.
+
+9
+00:00:52,767 --> 00:00:57,979
+Na Fase 1, o agente é ingênuo: conhece só o mapa e as distâncias em metros.
+
+10
+00:00:58,133 --> 00:01:02,451
+A função buscar encontra a rota de menor distância com o algoritmo A estrela.
+
+11
+00:01:03,067 --> 00:01:09,312
+Na Fase 2, entram os obstáculos: fluxo de pessoas, piso irregular, portas e obstáculos.
+
+12
+00:01:09,467 --> 00:01:13,878
+Um modelo de regressão aprende, com dados, quanto tempo cada trecho leva.
+
+13
+00:01:14,500 --> 00:01:22,185
+A mesma busca da Fase 1 continua rodando, mas agora o custo de cada ligação é o tempo previsto pelo modelo, e não mais a distância.
+
+14
+00:01:22,800 --> 00:01:31,356
+Na Fase 3, um modelo de linguagem, o Qwen, recebe a pergunta em português, decide qual ferramenta chamar e explica o resultado.
+
+15
+00:01:31,533 --> 00:01:34,794
+Ele não calcula a rota: quem calcula é a busca.
+
+16
+00:01:35,400 --> 00:01:39,683
+Esta é a ideia central do projeto: nada é jogado fora.
+
+17
+00:01:39,867 --> 00:01:43,941
+O agente final contém as três fases funcionando juntas.
+
+18
+00:01:44,567 --> 00:01:47,805
+A aula está dividida em capítulos independentes.
+
+19
+00:01:47,967 --> 00:01:50,996
+Primeiro, o notebook e a linguagem Python.
+
+20
+00:01:51,167 --> 00:01:55,264
+Depois, o grafo, a busca, a heurística e o A estrela.
+
+21
+00:01:55,900 --> 00:02:02,540
+Em seguida, a Fase 2, com os dados e os modelos, e a Fase 3, com o Qwen e o ciclo do agente.
+
+22
+00:02:03,167 --> 00:02:11,839
+No final, os resultados reais da avaliação, uma simulação completa do programa e um capítulo só com perguntas que o professor pode fazer na arguição.
+
+23
+00:02:12,467 --> 00:02:14,869
+Um aviso importante para a defesa.
+
+24
+00:02:15,033 --> 00:02:18,979
+Tudo o que aparece aqui vem do código real e de execuções reais.
+
+25
+00:02:19,133 --> 00:02:23,172
+Quando eu mostrar um exemplo que não é do projeto, o painel avisa.
+
+26
+00:02:23,800 --> 00:02:26,051
+E saiba o que o projeto não usa.
+
+27
+00:02:26,233 --> 00:02:31,050
+Não há NetworkX, não há heapq, não há coordenadas nem distância euclidiana.
+
+28
+00:02:31,233 --> 00:02:34,100
+A heurística é outra, e vamos ver qual.
+
+29
+00:02:34,733 --> 00:02:38,308
+Também não há classes, então não existe self no código.
+
+30
+00:02:38,467 --> 00:02:43,865
+Tudo é feito com funções, listas, tuplas e dicionários, como no gabarito do professor.
+
+31
+00:02:44,033 --> 00:02:45,472
+Vamos começar.
+
+32
+00:02:46,100 --> 00:02:52,612
+Capítulo dois. Antes de olhar algoritmos, vamos entender onde o código mora e em que ordem ele roda.
+
+33
+00:02:53,233 --> 00:02:58,282
+O projeto é um único arquivo: carrinho_iesb_unificado.ipynb.
+
+34
+00:02:58,467 --> 00:03:01,148
+Um notebook é uma sequência de células.
+
+35
+00:03:01,333 --> 00:03:05,790
+Algumas são de texto, em Markdown, e outras são de código Python.
+
+36
+00:03:06,400 --> 00:03:12,947
+Quando uma célula de código roda, as variáveis e funções que ela cria ficam guardadas na memória da sessão.
+
+37
+00:03:13,133 --> 00:03:14,955
+Por isso a ordem importa.
+
+38
+00:03:15,567 --> 00:03:22,358
+A célula do agente, por exemplo, usa LOCAIS, buscar e rota_tempo_previsto, que foram criados lá atrás.
+
+39
+00:03:22,533 --> 00:03:26,445
+Se você pular células, aparece um erro de nome não definido.
+
+40
+00:03:27,067 --> 00:03:30,073
+Este é o caminho que o “Executar tudo” percorre.
+
+41
+00:03:30,233 --> 00:03:34,818
+Cada caixa é uma seção do notebook, e cada seção depende das anteriores.
+
+42
+00:03:35,433 --> 00:03:38,822
+Primeiro vêm as constantes, o mapa e a busca.
+
+43
+00:03:39,000 --> 00:03:40,996
+Esta é a Fase 1.
+
+44
+00:03:41,600 --> 00:03:45,639
+Depois, a Fase 2 gera os dados e treina o modelo de tempo.
+
+45
+00:03:46,267 --> 00:03:55,008
+Em seguida, a Fase 3 carrega o Qwen, define o agente, faz perguntas, roda a avaliação e termina com uma célula que espera você digitar.
+
+46
+00:03:55,633 --> 00:03:58,372
+Vamos ler a primeira célula de código.
+
+47
+00:03:58,533 --> 00:04:05,196
+São três linhas, e cada uma é uma atribuição: um nome à esquerda, o sinal de igual, e um valor à direita.
+
+48
+00:04:05,800 --> 00:04:08,818
+ORIGEM recebe o texto "Entrada Principal".
+
+49
+00:04:09,000 --> 00:04:12,563
+Um texto entre aspas é uma string, o tipo str.
+
+50
+00:04:12,733 --> 00:04:18,282
+O sinal de igual, em Python, não é comparação: significa “guarde este valor neste nome”.
+
+51
+00:04:18,900 --> 00:04:25,668
+DESTINO recebe "Mesa 4". Esses dois nomes são a consulta padrão usada nas demonstrações da Fase 1.
+
+52
+00:04:26,300 --> 00:04:30,107
+VELOCIDADE_BASE_KMH recebe 15.0.
+
+53
+00:04:30,267 --> 00:04:34,689
+O ponto faz desse número um float, um número com casas decimais.
+
+54
+00:04:34,867 --> 00:04:39,104
+Tudo depois do símbolo de cerquilha é comentário: o Python ignora.
+
+55
+00:04:39,733 --> 00:04:47,720
+Os nomes estão em maiúsculas por convenção: em Python, isso avisa ao leitor que o valor é uma constante, que não deve mudar durante o programa.
+
+56
+00:04:47,900 --> 00:04:51,266
+A linguagem não proíbe a mudança; é um combinado.
+
+57
+00:04:51,900 --> 00:04:59,167
+Agora as bibliotecas. Uma biblioteca é um conjunto de código pronto que importamos para não reescrever tudo do zero.
+
+58
+00:04:59,800 --> 00:05:03,236
+Estas sete são nativas: já vêm com o Python.
+
+59
+00:05:03,400 --> 00:05:11,329
+perf_counter mede tempo com precisão, median calcula mediana, json lê e grava texto estruturado e random sorteia números.
+
+60
+00:05:11,933 --> 00:05:14,602
+Path cuida de pastas e arquivos.
+
+61
+00:05:14,767 --> 00:05:23,056
+re trabalha com expressões regulares, unicodedata separa letras de acentos, e get_close_matches encontra palavras parecidas.
+
+62
+00:05:23,667 --> 00:05:26,383
+As externas precisam ser instaladas.
+
+63
+00:05:26,567 --> 00:05:29,352
+Matplotlib desenha os gráficos.
+
+64
+00:05:29,533 --> 00:05:34,164
+NumPy faz contas com vetores, e pandas organiza os dados em tabelas.
+
+65
+00:05:34,800 --> 00:05:39,176
+O scikit-learn fornece os modelos de aprendizado e as métricas.
+
+66
+00:05:39,333 --> 00:05:43,721
+PyTorch e transformers carregam e executam o modelo de linguagem Qwen.
+
+67
+00:05:44,333 --> 00:05:47,130
+Repare que existem três formas de importar.
+
+68
+00:05:47,300 --> 00:05:50,910
+Aqui, na seção da Fase 2, aparecem todas.
+
+69
+00:05:51,533 --> 00:05:58,486
+import json traz o módulo inteiro; depois usamos json.dumps, com o nome do módulo, um ponto e a função.
+
+70
+00:05:59,100 --> 00:06:03,058
+import numpy as np faz o mesmo, mas dá um apelido curto.
+
+71
+00:06:03,233 --> 00:06:07,760
+Por isso o código escreve np.maximum em vez de numpy.maximum.
+
+72
+00:06:08,367 --> 00:06:13,974
+E from sklearn.linear_model import LinearRegression traz só um nome de dentro do módulo.
+
+73
+00:06:14,133 --> 00:06:17,081
+Depois ele é usado direto, sem prefixo.
+
+74
+00:06:17,700 --> 00:06:19,348
+Um último detalhe.
+
+75
+00:06:19,533 --> 00:06:28,913
+Células como %pip -q install numpy pandas scikit-learn não são Python: o símbolo de porcentagem indica um comando mágico do Jupyter, que instala pacotes na sessão.
+
+76
+00:06:29,533 --> 00:06:37,694
+Há mais duas células assim: uma instala o Matplotlib, antes dos gráficos, e outra instala o transformers, antes de carregar o Qwen.
+
+77
+00:06:38,300 --> 00:06:41,271
+A opção -q deixa a instalação silenciosa.
+
+78
+00:06:41,433 --> 00:06:46,715
+No Colab, a maioria desses pacotes já vem instalada, e o comando só confirma.
+
+79
+00:06:46,900 --> 00:06:50,452
+Agora que sabemos onde o código mora, vamos à linguagem.
+
+80
+00:06:51,067 --> 00:06:59,054
+Capítulo três. Aqui vamos aprender os elementos de Python que aparecem no projeto, sempre com exemplos tirados do próprio código.
+
+81
+00:06:59,667 --> 00:07:01,965
+Comece pelos tipos de dados.
+
+82
+00:07:02,134 --> 00:07:06,916
+Todo valor em Python tem um tipo, e o tipo decide o que você pode fazer com ele.
+
+83
+00:07:07,534 --> 00:07:12,874
+Texto é str. Número inteiro é int, como os 60 metros de uma ligação.
+
+84
+00:07:13,034 --> 00:07:18,072
+Número com casas decimais é float, como os 15.0 quilômetros por hora.
+
+85
+00:07:18,700 --> 00:07:23,262
+bool só tem dois valores, True e False, e é o resultado de comparações.
+
+86
+00:07:23,434 --> 00:07:27,961
+None significa “nenhum valor”: buscar devolve None quando não existe caminho.
+
+87
+00:07:28,567 --> 00:07:32,096
+Depois vêm as estruturas que guardam vários valores.
+
+88
+00:07:32,267 --> 00:07:39,058
+Uma lista, entre colchetes, é uma sequência ordenada que pode crescer: LOCAIS é uma lista de nomes.
+
+89
+00:07:39,667 --> 00:07:45,750
+Uma tupla, entre parênteses, também é uma sequência, mas não pode ser alterada depois de criada.
+
+90
+00:07:45,934 --> 00:07:50,473
+Cada ligação do mapa é uma tupla: origem, destino e metros.
+
+91
+00:07:51,100 --> 00:07:55,279
+Um dicionário, entre chaves, guarda pares de chave e valor.
+
+92
+00:07:55,434 --> 00:07:59,903
+Em VIZINHOS, a chave é o nome do local e o valor é a lista dos vizinhos.
+
+93
+00:08:00,534 --> 00:08:05,131
+E um conjunto, o set, guarda valores sem repetição e sem ordem.
+
+94
+00:08:05,300 --> 00:08:10,001
+O projeto usa set em preparar_pedido para descobrir parâmetros extras.
+
+95
+00:08:10,634 --> 00:08:15,753
+Por que escolher cada um? A lista serve quando a ordem importa, como no caminho.
+
+96
+00:08:15,934 --> 00:08:18,905
+A tupla protege dados que não devem mudar.
+
+97
+00:08:19,067 --> 00:08:22,932
+O dicionário permite achar um valor pela chave muito rápido.
+
+98
+00:08:23,567 --> 00:08:27,374
+Agora os três tipos de parênteses, que confundem muita gente.
+
+99
+00:08:27,534 --> 00:08:29,437
+Olhe esta linha da busca.
+
+100
+00:08:30,067 --> 00:08:32,702
+Os colchetes de fora criam uma lista.
+
+101
+00:08:32,867 --> 00:08:37,022
+Dentro dela há uma tupla, entre parênteses, com quatro valores.
+
+102
+00:08:37,200 --> 00:08:40,345
+E o último valor é outra lista, com a origem dentro.
+
+103
+00:08:40,967 --> 00:08:45,134
+Parênteses também servem para chamar funções, como em min(fronteira).
+
+104
+00:08:45,300 --> 00:08:50,930
+Colchetes também servem para pegar um item: grafo[local] pega o valor guardado na chave local.
+
+105
+00:08:51,534 --> 00:08:58,162
+Índices começam em zero. Em PONTOS_IJ[indice - 1], o código pega o item anterior da lista.
+
+106
+00:08:58,334 --> 00:09:05,392
+E em caminho[1:], os dois-pontos fazem uma fatia: todos os itens a partir do segundo.
+
+107
+00:09:06,000 --> 00:09:08,739
+Fatias com número negativo contam do fim.
+
+108
+00:09:08,900 --> 00:09:16,573
+Na conversa interativa, [-4:] guarda só as quatro últimas mensagens do histórico.
+
+109
+00:09:17,200 --> 00:09:20,125
+Operadores aritméticos fazem contas.
+
+110
+00:09:20,300 --> 00:09:28,310
+Nesta linha, a distância em metros vezes 3,6, dividida pela velocidade em quilômetros por hora, dá o tempo em segundos.
+
+111
+00:09:28,934 --> 00:09:35,516
+Por que 3,6? Porque um metro por segundo equivale a 3,6 quilômetros por hora.
+
+112
+00:09:35,700 --> 00:09:42,653
+Para 89,5 metros a 15 quilômetros por hora, a conta dá 21,48 segundos.
+
+113
+00:09:43,267 --> 00:09:51,648
+Operadores de comparação devolvem True ou False: igual é dois sinais de igual, diferente é exclamação e igual, e existem menor e maior.
+
+114
+00:09:51,834 --> 00:09:54,828
+in testa se um valor está dentro de uma coleção.
+
+115
+00:09:55,434 --> 00:10:01,737
+Operadores lógicos combinam condições: and exige as duas, or aceita uma delas, e not inverte.
+
+116
+00:10:01,900 --> 00:10:06,160
+Aqui o teste rejeita velocidade que não é número, ou que é booleana.
+
+117
+00:10:06,767 --> 00:10:10,667
+Repare nos dois-pontos no fim de if, for, while e def.
+
+118
+00:10:10,834 --> 00:10:18,554
+Eles abrem um bloco. E o bloco é definido pela indentação: as linhas recuadas com quatro espaços pertencem a ele.
+
+119
+00:10:19,167 --> 00:10:22,765
+Em muitas linguagens, o bloco é marcado com chaves.
+
+120
+00:10:22,934 --> 00:10:30,329
+Em Python, a indentação faz parte da sintaxe: se você recuar errado, o programa muda de significado ou dá erro.
+
+121
+00:10:30,934 --> 00:10:38,886
+Agora as funções. A palavra def cria uma função; em seguida vêm o nome, os parâmetros entre parênteses e os dois-pontos.
+
+122
+00:10:39,500 --> 00:10:42,471
+Parâmetros são os nomes que a função recebe.
+
+123
+00:10:42,634 --> 00:10:45,000
+Argumentos são os valores que você passa na chamada.
+
+124
+00:10:46,167 --> 00:10:52,691
+Em buscar("Mesa 1", "Mesa 4", VIZINHOS, True), "Mesa 1" é o argumento do parâmetro origem.
+
+125
+00:10:53,300 --> 00:10:56,689
+referencia=None é um parâmetro com valor padrão.
+
+126
+00:10:56,867 --> 00:11:03,878
+Se a chamada não informar a referência, ela vale None, e as linhas 14 e 15 trocam por DISTANCIA_ENTRADA.
+
+127
+00:11:04,500 --> 00:11:08,156
+return encerra a função e devolve um valor para quem chamou.
+
+128
+00:11:08,334 --> 00:11:13,569
+Aqui a função devolve três valores separados por vírgula, e o Python os junta numa tupla.
+
+129
+00:11:14,200 --> 00:11:21,014
+Do outro lado, quem chama desempacota a tupla em três nomes de uma vez, como faz a_estrela na linha 42.
+
+130
+00:11:21,634 --> 00:11:23,874
+Escopo é onde um nome existe.
+
+131
+00:11:24,034 --> 00:11:28,863
+Variáveis criadas dentro de uma função são locais: somem quando ela termina.
+
+132
+00:11:29,034 --> 00:11:34,432
+Nomes criados fora, no nível da célula, são globais e todas as funções podem ler.
+
+133
+00:11:35,067 --> 00:11:42,404
+Para alterar uma variável global dentro de uma função, é preciso declarar global, como faz conversar com ULTIMA_GERACAO.
+
+134
+00:11:42,567 --> 00:11:46,281
+Sem isso, a atribuição criaria uma variável local nova.
+
+135
+00:11:46,900 --> 00:11:49,662
+Agora a diferença entre função e método.
+
+136
+00:11:49,834 --> 00:11:52,759
+Uma função existe sozinha: min(fronteira).
+
+137
+00:11:52,934 --> 00:11:57,891
+Um método pertence a um objeto e é chamado com um ponto: fronteira.remove(melhor).
+
+138
+00:11:58,500 --> 00:12:02,191
+O ponto significa “acesse algo que pertence a este objeto”.
+
+139
+00:12:02,367 --> 00:12:08,125
+Em Python, tudo é objeto: uma lista sabe se remover itens, uma string sabe se transformar.
+
+140
+00:12:08,300 --> 00:12:11,759
+O ponto dá acesso a esses atributos e métodos.
+
+141
+00:12:12,367 --> 00:12:19,553
+Vamos ver isso em detalhe com uma expressão real do projeto: pergunta.strip().lower(), na última célula do notebook.
+
+142
+00:12:20,167 --> 00:12:27,771
+pergunta é uma variável. Ela recebe o que a função input devolve, e input sempre devolve uma string, o texto que a pessoa digitou.
+
+143
+00:12:28,400 --> 00:12:31,278
+O primeiro ponto acessa um método da string.
+
+144
+00:12:31,434 --> 00:12:35,682
+strip remove espaços e quebras de linha do começo e do fim.
+
+145
+00:12:35,867 --> 00:12:41,822
+Os parênteses depois do nome executam o método; sem eles, você só teria uma referência ao método.
+
+146
+00:12:42,434 --> 00:12:47,518
+Quando strip() roda, ele não altera a string original: strings são imutáveis em Python.
+
+147
+00:12:47,700 --> 00:12:51,484
+Ele cria e devolve uma string nova, sem os espaços.
+
+148
+00:12:52,100 --> 00:12:55,663
+O segundo ponto é aplicado sobre esse valor devolvido.
+
+149
+00:12:55,834 --> 00:12:58,538
+Isso se chama encadeamento de métodos.
+
+150
+00:12:58,700 --> 00:13:02,913
+lower converte as letras para minúsculas e devolve outra string nova.
+
+151
+00:13:03,534 --> 00:13:07,852
+A ordem é da esquerda para a direita: primeiro strip, depois lower.
+
+152
+00:13:08,034 --> 00:13:13,281
+No fim, pergunta continua igual; só o valor da expressão é usado na comparação.
+
+153
+00:13:13,900 --> 00:13:19,901
+Por isso a expressão funciona dentro do while: a condição é “enquanto o texto limpo for diferente de sair”.
+
+154
+00:13:20,067 --> 00:13:25,000
+Assim, “ SAIR ”, com espaços e maiúsculas, também encerra a conversa.
+
+155
+00:13:25,634 --> 00:13:27,967
+E se tirássemos um dos métodos?
+
+156
+00:13:28,134 --> 00:13:31,163
+Sem strip, “sair ” com espaço não encerraria.
+
+157
+00:13:31,334 --> 00:13:34,514
+Sem lower, “Sair” com maiúscula não encerraria.
+
+158
+00:13:34,700 --> 00:13:38,031
+Cada método resolve um problema real de digitação.
+
+159
+00:13:38,667 --> 00:13:43,089
+Agora os laços. O for percorre uma coleção item por item.
+
+160
+00:13:43,267 --> 00:13:49,826
+Aqui ele percorre cada tupla de LIGACOES e já separa os três valores em origem, destino e metros.
+
+161
+00:13:50,434 --> 00:13:53,684
+O while repete enquanto a condição for verdadeira.
+
+162
+00:13:53,867 --> 00:14:00,217
+A busca roda enquanto houver itens na fronteira, porque não se sabe antes quantas voltas serão necessárias.
+
+163
+00:14:00,834 --> 00:14:05,129
+continue pula para a próxima volta do laço, ignorando o resto do bloco.
+
+164
+00:14:05,300 --> 00:14:11,046
+break sai do laço de vez. Na conversa interativa, digitar sair executa break.
+
+165
+00:14:11,667 --> 00:14:14,220
+Três funções ajudam nos laços.
+
+166
+00:14:14,400 --> 00:14:17,232
+range(12) gera os números de 0 a 11.
+
+167
+00:14:17,400 --> 00:14:20,139
+enumerate devolve o índice junto com o item.
+
+168
+00:14:20,300 --> 00:14:23,039
+E zip percorre duas listas lado a lado.
+
+169
+00:14:23,667 --> 00:14:29,657
+Há também uma forma curta de if, a expressão condicional: valor se condição, senão outro valor.
+
+170
+00:14:29,834 --> 00:14:35,534
+Aqui, a estimativa vale a fórmula da heurística se usar_heuristica for verdadeiro, ou zero.
+
+171
+00:14:36,167 --> 00:14:39,312
+As f-strings montam textos com valores dentro.
+
+172
+00:14:39,467 --> 00:14:47,442
+A letra f antes das aspas permite colocar expressões entre chaves, e :.3f formata o número com três casas decimais.
+
+173
+00:14:48,067 --> 00:14:52,211
+Uma lambda é uma função pequena e sem nome, escrita numa linha.
+
+174
+00:14:52,367 --> 00:14:57,440
+Aqui ela diz ao max qual valor comparar: a distância de cada local até a entrada.
+
+175
+00:14:58,067 --> 00:15:02,199
+Compreensões de lista criam uma lista nova a partir de outra numa linha só.
+
+176
+00:15:02,367 --> 00:15:07,811
+Esta pega todos os locais cujo nome começa com WC: a lista de banheiros.
+
+177
+00:15:08,434 --> 00:15:11,800
+Por fim, as exceções, que são erros sinalizados.
+
+178
+00:15:11,967 --> 00:15:16,587
+raise ValueError dispara um erro de propósito quando a velocidade é inválida.
+
+179
+00:15:17,200 --> 00:15:20,647
+E try com except captura um erro para o programa não parar.
+
+180
+00:15:20,834 --> 00:15:27,729
+Em calcular_rota, se a velocidade fosse inválida, o erro vira uma mensagem de texto em vez de derrubar o notebook.
+
+181
+00:15:28,334 --> 00:15:32,466
+O assert confere uma condição e para o programa se ela for falsa.
+
+182
+00:15:32,634 --> 00:15:37,741
+O projeto usa assert para garantir que os dados gerados não têm valores faltando.
+
+183
+00:15:38,367 --> 00:15:42,801
+Pronto: com esses elementos, você consegue ler qualquer linha do projeto.
+
+184
+00:15:42,967 --> 00:15:47,506
+No próximo capítulo, vamos ver como o campus do IESB vira um grafo.
+
+185
+00:15:48,134 --> 00:15:57,630
+Capítulo quatro. Como o térreo do IESB, com corredores, salas e mesas, se transforma numa estrutura de dados que um algoritmo consegue percorrer?
+
+186
+00:15:58,234 --> 00:16:00,509
+Tudo começa na planta do térreo.
+
+187
+00:16:00,667 --> 00:16:06,227
+Ela é a referência do grupo para decidir quais locais existem e quais estão ligados.
+
+188
+00:16:06,834 --> 00:16:10,606
+Um grafo é um conjunto de nós ligados por arestas.
+
+189
+00:16:10,767 --> 00:16:16,002
+No projeto, cada nó é um local, como uma sala, uma mesa ou um ponto de corredor.
+
+190
+00:16:16,167 --> 00:16:19,394
+Cada aresta é uma passagem entre dois locais.
+
+191
+00:16:20,001 --> 00:16:23,680
+O grafo final tem 90 nós e 90 ligações.
+
+192
+00:16:23,834 --> 00:16:30,625
+Como existe exatamente um ciclo, no pátio, o número de ligações é igual ao de nós: uma árvore teria 89.
+
+193
+00:16:31,234 --> 00:16:35,204
+Cada ligação tem um peso: a distância estimada em metros.
+
+194
+00:16:35,367 --> 00:16:38,466
+O peso é o custo de atravessar aquela aresta.
+
+195
+00:16:38,634 --> 00:16:42,604
+Na Fase 1, o melhor caminho é o de menor soma de pesos.
+
+196
+00:16:43,234 --> 00:16:48,585
+Atenção a um ponto que costuma aparecer na arguição: o projeto não guarda coordenadas.
+
+197
+00:16:48,767 --> 00:16:52,702
+As posições que você vê na tela foram escolhidas só para desenhar.
+
+198
+00:16:52,867 --> 00:16:55,931
+O algoritmo só conhece nomes e metros.
+
+199
+00:16:56,567 --> 00:17:03,311
+As ligações são bidirecionais: se dá para ir de A até B, dá para voltar de B até A, com o mesmo custo.
+
+200
+00:17:03,467 --> 00:17:05,788
+Isso é um grafo não direcionado.
+
+201
+00:17:06,401 --> 00:17:13,819
+Agora o código. A seção 2 começa com a lista LOCAIS, entre colchetes, com o nome de cada local como string.
+
+202
+00:17:14,434 --> 00:17:17,486
+Depois vem LIGACOES, uma lista de tuplas.
+
+203
+00:17:17,667 --> 00:17:23,158
+Cada tupla tem três valores: origem, destino e a distância estimada em metros.
+
+204
+00:17:23,767 --> 00:17:28,665
+A primeira diz que da Entrada Principal ao Eixo Norte são 60 metros.
+
+205
+00:17:28,834 --> 00:17:36,496
+O eixo principal soma 210 metros, dividido em trechos de 60, 48, 39, 39 e 24.
+
+206
+00:17:37,101 --> 00:17:46,051
+Repare no valor 27.5 na linha 28: o tipo pode ser int ou float na mesma lista, porque Python só se importa com o tipo na hora da conta.
+
+207
+00:17:46,667 --> 00:17:56,070
+Em seguida, o pátio. O método extend acrescenta vários itens de uma vez ao fim da lista: os três pontos de circulação A, B e D.
+
+208
+00:17:56,701 --> 00:18:00,230
+E LIGACOES.extend acrescenta as ligações do pátio.
+
+209
+00:18:00,401 --> 00:18:05,764
+A, B, Pátio Direito e D formam um quadrado: este é o único ciclo do grafo.
+
+210
+00:18:05,934 --> 00:18:09,010
+As mesas ficam a 2 metros dos pontos.
+
+211
+00:18:09,634 --> 00:18:18,909
+As três últimas ligações do pátio levam aos apoios: Sala dos Professores, com 15 metros, e os dois banheiros do pátio, com 40 e 35.
+
+212
+00:18:19,067 --> 00:18:23,106
+O comentário avisa que essas posições ainda não foram revisadas.
+
+213
+00:18:23,734 --> 00:18:26,508
+No desenho, o ciclo é este quadrado.
+
+214
+00:18:26,667 --> 00:18:32,808
+Por causa dele, existem dois caminhos entre a Mesa 1 e a Mesa 4: por B ou por D.
+
+215
+00:18:32,967 --> 00:18:35,694
+Isso vai ser importante na Fase 2.
+
+216
+00:18:36,301 --> 00:18:41,014
+A partir daqui, o código usa laços para não escrever cada ligação à mão.
+
+217
+00:18:41,167 --> 00:18:48,631
+Este for percorre uma lista de duas tuplas e acrescenta as ligações do Cinema até o WC do Cinema e o Anexo Creche.
+
+218
+00:18:49,267 --> 00:18:55,234
+Este laço maior monta os três corredores, Design, Bloco C e Bloco B, de um jeito só.
+
+219
+00:18:55,401 --> 00:19:00,741
+Cada volta recebe o nome do corredor, a letra das salas e o sufixo dos banheiros.
+
+220
+00:19:01,367 --> 00:19:04,385
+A variável anterior começa no próprio corredor.
+
+221
+00:19:04,567 --> 00:19:12,147
+O laço interno cria um ponto por par de salas, por exemplo "Corredor Design - 03/06", e o liga ao ponto anterior com 10 metros.
+
+222
+00:19:12,767 --> 00:19:20,092
+A expressão "/".join(salas) junta as strings da tupla com uma barra no meio: de ("03", "06") sai "03/06".
+
+223
+00:19:20,267 --> 00:19:22,960
+join é um método da string separadora.
+
+224
+00:19:23,567 --> 00:19:28,349
+Para cada sala do par, uma ligação de 2 metros vai do ponto até a sala.
+
+225
+00:19:28,534 --> 00:19:34,501
+O nome da sala é montado com soma de strings: "D" mais hífen mais "03" dá "D-03".
+
+226
+00:19:35,134 --> 00:19:38,895
+No fim de cada volta, anterior passa a ser o ponto atual.
+
+227
+00:19:39,067 --> 00:19:47,228
+Assim, a próxima volta liga o novo ponto ao anterior, formando uma corrente: corredor, 03/06, 02/05, 01/04.
+
+228
+00:19:47,834 --> 00:19:55,798
+No desenho, cada corredor vira esta escada: um caminho de pontos com salas dos dois lados e os banheiros perto da entrada do corredor.
+
+229
+00:19:56,434 --> 00:20:05,036
+O corredor I e J é feito com outra ideia: cada ponto tem uma posição em metros a partir do acesso lateral, de menos 35 a mais 35.
+
+230
+00:20:05,667 --> 00:20:08,429
+O laço usa enumerate para saber o índice.
+
+231
+00:20:08,601 --> 00:20:12,013
+Se o ponto ainda não está em LOCAIS, ele é incluído.
+
+232
+00:20:12,167 --> 00:20:16,601
+A partir do segundo, liga ao ponto anterior com a diferença de posições.
+
+233
+00:20:17,234 --> 00:20:22,643
+Por exemplo: de menos 35 para menos 25, a ligação tem 10 metros.
+
+234
+00:20:22,801 --> 00:20:28,907
+O sublinhado em anterior, posicao_anterior, _ é um nome descartável: o terceiro valor não é usado.
+
+235
+00:20:29,534 --> 00:20:35,466
+No fim de cada volta, um for interno liga o ponto às suas salas ou banheiros, com 2 metros cada.
+
+236
+00:20:35,634 --> 00:20:40,765
+O ponto central, "Corredor I/J", tem a lista vazia e não liga a nenhuma sala.
+
+237
+00:20:41,401 --> 00:20:45,034
+Agora a peça mais importante: o dicionário VIZINHOS.
+
+238
+00:20:45,201 --> 00:20:48,486
+Primeiro, cada local recebe uma lista vazia.
+
+239
+00:20:49,101 --> 00:20:57,378
+Depois, para cada ligação, o vizinho é acrescentado nos dois sentidos: o destino na lista da origem, e a origem na lista do destino.
+
+240
+00:20:57,534 --> 00:21:00,087
+É isso que torna o grafo bidirecional.
+
+241
+00:21:00,701 --> 00:21:03,707
+Essa estrutura se chama lista de adjacência.
+
+242
+00:21:03,867 --> 00:21:08,684
+Para saber para onde o carrinho pode ir a partir de um local, basta ler VIZINHOS[local].
+
+243
+00:21:09,301 --> 00:21:12,446
+A função listar_vizinhos faz exatamente isso.
+
+244
+00:21:12,601 --> 00:21:21,691
+Para o Pátio Direito, o resultado real é: Eixo Norte, Pátio B, Pátio D, Mesa 4, Sala dos Professores e os dois banheiros do pátio.
+
+245
+00:21:22,301 --> 00:21:26,433
+Por que um dicionário de listas, e não uma matriz de 90 por 90?
+
+246
+00:21:26,601 --> 00:21:29,305
+Porque cada local tem poucos vizinhos.
+
+247
+00:21:29,467 --> 00:21:33,808
+A matriz guardaria 8100 posições, quase todas vazias.
+
+248
+00:21:34,434 --> 00:21:37,312
+A célula termina imprimindo o tamanho do grafo.
+
+249
+00:21:37,467 --> 00:21:42,412
+A saída real é: 90 nós e 90 ligações com distância em metros.
+
+250
+00:21:43,034 --> 00:21:51,601
+Resumo em termos de Inteligência Artificial: o estado é o local atual do carrinho; o estado inicial é a origem; as ações são mover para um vizinho;
+
+251
+00:21:51,767 --> 00:21:57,130
+o teste de objetivo é chegar ao destino; e o custo de cada ação é o peso da ligação.
+
+252
+00:21:57,734 --> 00:22:00,914
+Capítulo cinco. Já temos o grafo.
+
+253
+00:22:01,101 --> 00:22:04,548
+Agora, como um programa encontra o melhor caminho dentro dele?
+
+254
+00:22:04,734 --> 00:22:08,007
+Esta é a pergunta da busca em Inteligência Artificial.
+
+255
+00:22:08,634 --> 00:22:12,940
+Buscar é explorar estados a partir da origem até achar o objetivo.
+
+256
+00:22:13,101 --> 00:22:16,989
+Uma busca não informada só conhece o custo já percorrido.
+
+257
+00:22:17,167 --> 00:22:21,021
+Uma busca informada usa também uma estimativa do que falta.
+
+258
+00:22:21,634 --> 00:22:26,974
+A busca de custo uniforme sempre expande o nó de menor custo acumulado desde a origem.
+
+259
+00:22:27,134 --> 00:22:33,669
+Esse custo se chama g. Com custos positivos, o primeiro caminho que chega ao destino é o mais barato.
+
+260
+00:22:34,301 --> 00:22:36,936
+Agora a função buscar, linha por linha.
+
+261
+00:22:37,101 --> 00:22:44,461
+Ela recebe a origem, o destino, o grafo, um booleano dizendo se usa a heurística, e a tabela de referência da heurística.
+
+262
+00:22:45,067 --> 00:22:49,292
+Se a referência não for passada, usa a tabela DISTANCIA_ENTRADA.
+
+263
+00:22:49,467 --> 00:22:55,840
+E se a origem ou o destino não existirem no grafo, a função devolve None, None e zero, sem procurar.
+
+264
+00:22:56,467 --> 00:22:59,589
+A linha 18 calcula a estimativa da origem.
+
+265
+00:22:59,767 --> 00:23:04,816
+No custo uniforme, usar_heuristica é falso, então a estimativa é zero.
+
+266
+00:23:05,434 --> 00:23:09,322
+A fronteira é a lista dos caminhos que ainda podem ser explorados.
+
+267
+00:23:09,501 --> 00:23:15,201
+Cada item é uma tupla com quatro valores: f, g, o local e o caminho até ele.
+
+268
+00:23:15,834 --> 00:23:20,489
+visitados guarda os locais já expandidos, e expandidos conta quantos foram.
+
+269
+00:23:20,667 --> 00:23:23,441
+Essa contagem é a métrica do experimento.
+
+270
+00:23:24,067 --> 00:23:27,921
+O laço while roda enquanto a fronteira não estiver vazia.
+
+271
+00:23:28,101 --> 00:23:33,185
+A cada volta, ele escolhe um item, testa e, se for o caso, expande.
+
+272
+00:23:33,801 --> 00:23:44,388
+Se a fronteira esvaziar sem achar o destino, não existe caminho entre os dois locais, e a linha 38, já fora do laço, devolve None, None e a contagem de expandidos.
+
+273
+00:23:45,001 --> 00:23:47,322
+min(fronteira) escolhe a menor tupla.
+
+274
+00:23:47,501 --> 00:23:53,804
+Python compara tuplas posição por posição: primeiro o f, depois o g, depois o nome do local.
+
+275
+00:23:53,967 --> 00:23:57,159
+Por isso a primeira posição da tupla é a prioridade.
+
+276
+00:23:57,767 --> 00:24:02,004
+Esta é a fila de prioridade do projeto: uma lista comum com min.
+
+277
+00:24:02,167 --> 00:24:10,386
+Em projetos grandes se usa heapq, que é mais rápido; aqui, com 90 nós, a lista simples é suficiente e mais fácil de explicar.
+
+278
+00:24:11,001 --> 00:24:15,331
+A linha 25 desempacota a tupla escolhida em quatro nomes.
+
+279
+00:24:15,501 --> 00:24:21,560
+Se o local é o destino, a busca termina e devolve o caminho, o custo g e os expandidos.
+
+280
+00:24:22,167 --> 00:24:27,692
+Detalhe importante: o teste de objetivo acontece quando o nó sai da fronteira, e não quando entra.
+
+281
+00:24:27,867 --> 00:24:30,432
+É isso que garante o caminho mais barato.
+
+282
+00:24:31,067 --> 00:24:35,164
+Se o local já foi visitado, continue pula para a próxima volta.
+
+283
+00:24:35,334 --> 00:24:40,256
+Isso descarta cópias antigas e piores do mesmo local que ficaram na fronteira.
+
+284
+00:24:40,867 --> 00:24:44,721
+Senão, o local entra em visitados e o contador aumenta.
+
+285
+00:24:44,901 --> 00:24:47,686
+Depois, o for percorre os vizinhos.
+
+286
+00:24:47,867 --> 00:24:53,648
+Para cada vizinho ainda não visitado, calcula o novo g: o g atual mais o custo da ligação.
+
+287
+00:24:54,267 --> 00:24:58,213
+E acrescenta na fronteira uma tupla nova, com o caminho estendido.
+
+288
+00:24:58,367 --> 00:25:04,148
+Repare que caminho + [vizinho] cria uma lista nova: o caminho de cada item da fronteira é independente.
+
+289
+00:25:04,767 --> 00:25:10,536
+Vamos ver tudo isso funcionando com dados reais: custo uniforme da Mesa 1 até a Mesa 4.
+
+290
+00:25:10,701 --> 00:25:13,986
+Estas são exatamente as voltas que a função executa.
+
+291
+00:25:14,601 --> 00:25:19,267
+Volta 1. A fronteira tem só a origem, Mesa 1, com custo zero.
+
+292
+00:25:19,434 --> 00:25:23,717
+Ela é escolhida, não é o destino e ainda não foi visitada.
+
+293
+00:25:23,901 --> 00:25:29,136
+Então é expandida: seu único vizinho, Pátio A, entra com g igual a 2.
+
+294
+00:25:29,767 --> 00:25:33,864
+Volta 2. O único item é Pátio A, com g 2.
+
+295
+00:25:34,034 --> 00:25:41,765
+Ao expandir, entram Pátio B, com 2 mais 20, igual a 22, e Pátio D, com 2 mais 18, igual a 20.
+
+296
+00:25:41,934 --> 00:25:44,766
+Mesa 1 já foi visitada e não volta.
+
+297
+00:25:45,401 --> 00:25:49,510
+Volta 3. O menor custo é Pátio D, com 20.
+
+298
+00:25:49,667 --> 00:25:56,388
+Ele entra em visitados, e seus vizinhos entram: Pátio Direito com 44 e Mesa 3 com 22.
+
+299
+00:25:57,001 --> 00:26:02,399
+Volta 4. Agora há um empate em 22: Mesa 3 e Pátio B.
+
+300
+00:26:02,567 --> 00:26:08,417
+O min compara tuplas posição por posição: f igual, g igual, então desempata pelo nome.
+
+301
+00:26:08,601 --> 00:26:12,304
+“Mesa 3” vem antes de “Pátio B” na ordem alfabética.
+
+302
+00:26:12,934 --> 00:26:16,695
+Mesa 3 é expandida, mas não tem vizinhos novos.
+
+303
+00:26:16,867 --> 00:26:21,115
+Volta 5: Pátio B, com 22, é expandido.
+
+304
+00:26:21,301 --> 00:26:28,104
+Entram Pátio Direito com 40, Mesa 2 e Easy Smart com 24, e Café Mania com 26.
+
+305
+00:26:28,734 --> 00:26:36,059
+Repare que Pátio Direito aparece duas vezes na fronteira: com 44, vindo por D, e com 40, vindo por B.
+
+306
+00:26:36,234 --> 00:26:42,096
+O código não apaga a cópia pior; ela fica lá e será ignorada se for escolhida depois.
+
+307
+00:26:42,701 --> 00:26:52,534
+Voltas 6, 7 e 8: Easy Smart, Mesa 2 e Café Mania, todos perto de 24 e 26, são expandidos e não acrescentam nada.
+
+308
+00:26:52,701 --> 00:26:56,891
+A busca gasta tempo com eles porque não sabe onde fica o destino.
+
+309
+00:26:57,501 --> 00:27:01,331
+Volta 9. O menor agora é Pátio Direito com 40.
+
+310
+00:27:01,501 --> 00:27:10,173
+Ao expandi-lo, Mesa 4 entra com 40 mais 2, igual a 42, junto com o Eixo Norte, a Sala dos Professores e os banheiros.
+
+311
+00:27:10,801 --> 00:27:15,502
+Volta 10. O menor custo é Mesa 4, com 42.
+
+312
+00:27:15,667 --> 00:27:19,799
+Agora sim, ao ser retirada da fronteira, ela é o destino.
+
+313
+00:27:19,967 --> 00:27:24,738
+A função devolve o caminho, o custo 42 e 9 nós expandidos.
+
+314
+00:27:25,367 --> 00:27:33,969
+O carrinho segue o caminho encontrado: Mesa 1, Pátio A, Pátio B, Pátio Direito e Mesa 4, com 42 metros no total.
+
+315
+00:27:34,601 --> 00:27:41,891
+Vantagens do custo uniforme: é completo, porque acha um caminho se ele existir, e é ótimo com custos positivos.
+
+316
+00:27:42,067 --> 00:27:46,896
+A limitação: expande em todas as direções, inclusive para longe do destino.
+
+317
+00:27:47,501 --> 00:27:55,929
+Neste exemplo, ele expandiu 9 nós, incluindo Mesa 3, Easy Smart, Mesa 2 e Café Mania, que não ajudam a chegar à Mesa 4.
+
+318
+00:27:56,101 --> 00:28:00,547
+No próximo capítulo, vamos dar uma direção à busca: a heurística.
+
+319
+00:28:01,167 --> 00:28:03,674
+Capítulo seis, só sobre heurística.
+
+320
+00:28:03,834 --> 00:28:08,036
+É uma das partes mais cobradas na arguição, então vamos com calma.
+
+321
+00:28:08,667 --> 00:28:13,972
+Uma heurística é uma estimativa de quanto falta para chegar ao objetivo, a partir de um nó.
+
+322
+00:28:14,134 --> 00:28:16,978
+Chamamos essa estimativa de h de n.
+
+323
+00:28:17,601 --> 00:28:19,620
+Ela existe para dar direção.
+
+324
+00:28:19,801 --> 00:28:23,480
+O custo uniforme olha só para trás, para o custo já pago.
+
+325
+00:28:23,634 --> 00:28:28,126
+A heurística olha para a frente e diz quais nós parecem mais perto do destino.
+
+326
+00:28:28,734 --> 00:28:35,734
+Atenção à diferença: o custo real é a menor soma de metros até o destino, que só conhecemos depois da busca.
+
+327
+00:28:35,901 --> 00:28:40,138
+O custo estimado é um palpite calculado antes, de forma barata.
+
+328
+00:28:40,767 --> 00:28:45,457
+O exemplo clássico de heurística é a distância em linha reta, a euclidiana.
+
+329
+00:28:45,634 --> 00:28:52,576
+Mas ela exige coordenadas de cada local, e este projeto não tem coordenadas: só nomes e metros das ligações.
+
+330
+00:28:53,201 --> 00:29:02,105
+A seção 3 começa importando perf_counter, do módulo time, e criando DISTANCIA_ENTRADA como um dicionário vazio, que será preenchido logo depois.
+
+331
+00:29:02,734 --> 00:29:07,389
+A solução do grupo foi usar um ponto de referência: a Entrada Principal.
+
+332
+00:29:07,567 --> 00:29:14,068
+Antes de qualquer consulta, o código calcula a menor distância da entrada até cada um dos 90 locais.
+
+333
+00:29:14,701 --> 00:29:22,873
+O laço percorre LOCAIS e, para cada um, chama buscar da entrada até ele, com usar_heuristica falso, ou seja, custo uniforme.
+
+334
+00:29:23,034 --> 00:29:26,632
+O custo devolvido vai para o dicionário DISTANCIA_ENTRADA.
+
+335
+00:29:27,267 --> 00:29:32,583
+perf_counter marca o tempo antes e depois, e a diferença vezes mil dá milissegundos.
+
+336
+00:29:32,767 --> 00:29:38,060
+Na execução real, essa preparação levou cerca de 3 milissegundos, uma vez só.
+
+337
+00:29:38,667 --> 00:29:42,428
+Estes são os valores reais da tabela para alguns locais.
+
+338
+00:29:42,601 --> 00:29:49,462
+A Mesa 4 fica a 89,5 metros da entrada; a Mesa 1, a 127,5.
+
+339
+00:29:50,067 --> 00:29:58,402
+Agora a fórmula. A estimativa de um local até o destino é o valor absoluto da diferença entre as distâncias dos dois até a entrada.
+
+340
+00:29:59,034 --> 00:30:03,120
+No código, ela aparece dentro de buscar, na linha 35.
+
+341
+00:30:03,301 --> 00:30:05,843
+abs é a função de valor absoluto.
+
+342
+00:30:06,001 --> 00:30:12,153
+E referencia.get(vizinho, 0) busca a distância no dicionário, com zero se o local não estiver lá.
+
+343
+00:30:12,767 --> 00:30:16,830
+Existe também uma função h na linha 7, com a mesma fórmula.
+
+344
+00:30:17,001 --> 00:30:24,419
+Mas ela não é chamada: buscar calcula a estimativa direto na linha, para poder trocar a tabela de referência na Fase 2.
+
+345
+00:30:25,034 --> 00:30:32,847
+Vamos calcular. Da Mesa 1 até a Mesa 4: 127,5 menos 89,5 dá 38.
+
+346
+00:30:33,001 --> 00:30:36,576
+O custo real, que a busca achou, é 42.
+
+347
+00:30:36,734 --> 00:30:40,135
+A estimativa ficou abaixo do real, como deve ser.
+
+348
+00:30:40,767 --> 00:30:51,227
+Por que ela nunca exagera? Pela desigualdade triangular: o caminho mais curto da entrada até o destino não pode ser maior que ir da entrada até n e depois de n até o destino.
+
+349
+00:30:51,834 --> 00:30:58,822
+Passando d de E até n para o outro lado: a diferença fica menor ou igual à distância real de n até o destino.
+
+350
+00:30:59,001 --> 00:31:04,167
+O mesmo raciocínio vale trocando os papéis, e por isso vale para o valor absoluto.
+
+351
+00:31:04,801 --> 00:31:12,091
+Ela também é consistente: para qualquer ligação de u até v com custo c, h de u é menor ou igual a c mais h de v.
+
+352
+00:31:12,267 --> 00:31:18,152
+Em palavras: andar uma aresta nunca faz a estimativa cair mais do que o custo da aresta.
+
+353
+00:31:18,767 --> 00:31:25,407
+Essas propriedades valem porque a tabela usa os mesmos metros do grafo e é calculada com busca exata.
+
+354
+00:31:25,567 --> 00:31:32,230
+Se alguém mudar uma distância e não reexecutar a célula, a tabela fica desatualizada e a garantia some.
+
+355
+00:31:32,834 --> 00:31:35,933
+E na Fase 2, quando o custo vira segundos?
+
+356
+00:31:36,101 --> 00:31:38,863
+A tabela em metros não serve mais.
+
+357
+00:31:39,034 --> 00:31:45,662
+Por isso rota_tempo_previsto recalcula a referência em segundos, no grafo de tempos, antes de cada busca.
+
+358
+00:31:46,267 --> 00:31:48,298
+E se a heurística fosse ruim?
+
+359
+00:31:48,467 --> 00:31:54,352
+Se ela superestimar o que falta, o A* pode descartar o melhor caminho e devolver um pior.
+
+360
+00:31:54,534 --> 00:31:59,340
+Se for zero, não atrapalha, mas também não ajuda: vira custo uniforme.
+
+361
+00:31:59,967 --> 00:32:06,235
+Essa fraqueza aparece quando a origem é a própria entrada: aí todos os nós no caminho têm a mesma prioridade.
+
+362
+00:32:06,401 --> 00:32:10,452
+Vamos ver o efeito disso no próximo capítulo, sobre o A estrela.
+
+363
+00:32:11,067 --> 00:32:15,048
+Capítulo sete: o A estrela, o algoritmo central da Fase 1.
+
+364
+00:32:15,234 --> 00:32:20,992
+Ele junta as duas ideias que já vimos: o custo já percorrido e a estimativa do que falta.
+
+365
+00:32:21,601 --> 00:32:27,103
+A prioridade de cada nó na fronteira é f de n, a soma de g de n e h de n.
+
+366
+00:32:27,734 --> 00:32:31,460
+g de n é o custo real já pago, da origem até n.
+
+367
+00:32:31,634 --> 00:32:34,872
+É a soma dos metros das ligações percorridas.
+
+368
+00:32:35,501 --> 00:32:42,280
+h de n é a estimativa do que ainda falta, de n até o destino, dada pela heurística do capítulo anterior.
+
+369
+00:32:42,901 --> 00:32:46,859
+E f de n estima o custo total de um caminho que passa por n.
+
+370
+00:32:47,034 --> 00:32:55,566
+Somar faz sentido porque as duas partes estão na mesma unidade, metros, e juntas cobrem o trajeto inteiro: o que já foi e o que falta.
+
+371
+00:32:56,201 --> 00:33:01,622
+No código, o A estrela é a mesma função buscar, com usar_heuristica verdadeiro.
+
+372
+00:33:01,801 --> 00:33:09,381
+A linha 35 calcula h do vizinho, e a linha 36 guarda na fronteira o novo g mais a estimativa, que é o f.
+
+373
+00:33:10,001 --> 00:33:15,944
+Como f é a primeira posição da tupla, o min da linha 23 escolhe automaticamente o menor f.
+
+374
+00:33:16,101 --> 00:33:21,684
+Em empate de f, escolhe o menor g; em empate de g, a ordem alfabética do nome.
+
+375
+00:33:22,301 --> 00:33:29,800
+A função a_estrela é só um atalho: chama buscar com o grafo de metros e a heurística ligada, e devolve o caminho e o custo.
+
+376
+00:33:30,434 --> 00:33:36,261
+Agora, a mesma consulta do capítulo cinco, Mesa 1 até Mesa 4, com o A estrela.
+
+377
+00:33:36,434 --> 00:33:45,500
+No início da volta 1, a fronteira tem só a origem: g zero, h 38, pois 127,5 menos 89,5 dá 38.
+
+378
+00:33:45,667 --> 00:33:47,779
+Então f é 38.
+
+379
+00:33:48,401 --> 00:34:01,090
+Início da volta 2. Ao expandir a Mesa 1, entrou Pátio A, com g 2 e h 36, pois 125,5 menos 89,5 dá 36. f é 38, e ele é o único da fronteira.
+
+380
+00:34:01,701 --> 00:34:14,239
+Início da volta 3. Ao expandir Pátio A, entraram Pátio B, com g 22 e h 16, f 38, e Pátio D, com g 20 e h 22, f 42.
+
+381
+00:34:14,401 --> 00:34:18,522
+Repare: D tem g menor, mas B parece mais perto do destino.
+
+382
+00:34:19,134 --> 00:34:23,046
+Por isso o A estrela escolhe Pátio B, com f 38.
+
+383
+00:34:23,201 --> 00:34:27,554
+O custo uniforme tinha escolhido Pátio D, só porque o g era menor.
+
+384
+00:34:27,734 --> 00:34:29,718
+A heurística mudou a ordem.
+
+385
+00:34:30,334 --> 00:34:41,664
+Início da volta 4. Pátio B foi expandido e entraram Pátio Direito, Mesa 2 e Easy Smart, todos com f 42, e Café Mania, com f 46.
+
+386
+00:34:42,301 --> 00:34:45,214
+Agora há vários empates em 42.
+
+387
+00:34:45,367 --> 00:34:49,546
+Pela regra da tupla, ganha o menor g: Pátio D, com g 20.
+
+388
+00:34:49,701 --> 00:34:56,771
+Ao ser expandido, ele acrescenta Mesa 3 e uma segunda cópia de Pátio Direito, as duas com f 46.
+
+389
+00:34:57,401 --> 00:35:05,248
+Voltas 5 e 6: Easy Smart e Mesa 2, com f 42 e g 24, são expandidos sem novidade.
+
+390
+00:35:05,434 --> 00:35:09,926
+Os empates fazem o A estrela gastar duas expansões que não ajudam.
+
+391
+00:35:10,534 --> 00:35:18,335
+Início da volta 7. Pátio Direito, com g 40 e h 2, f 42, é escolhido e expandido.
+
+392
+00:35:18,501 --> 00:35:23,167
+Mesa 4 entra com g 42 e h zero: f 42.
+
+393
+00:35:23,801 --> 00:35:29,280
+Volta 8. Mesa 4 é retirada com f 42 e é o destino.
+
+394
+00:35:29,434 --> 00:35:34,483
+Caminho: Mesa 1, Pátio A, Pátio B, Pátio Direito, Mesa 4.
+
+395
+00:35:34,667 --> 00:35:38,335
+Custo 42 metros, o mesmo do custo uniforme.
+
+396
+00:35:38,967 --> 00:35:44,446
+A diferença está no trabalho: o A estrela expandiu 7 nós, contra 9 do custo uniforme.
+
+397
+00:35:44,601 --> 00:35:51,102
+Mesa 3 e Café Mania ficaram na fronteira com f 46 e nunca precisaram ser expandidos.
+
+398
+00:35:51,734 --> 00:35:54,415
+Veja o carrinho percorrendo o caminho escolhido.
+
+399
+00:35:55,267 --> 00:35:57,785
+Quando o A estrela garante o caminho ótimo?
+
+400
+00:35:57,967 --> 00:36:05,234
+Quando a heurística é admissível e o objetivo é testado ao retirar o nó da fronteira, como na linha 26.
+
+401
+00:36:05,867 --> 00:36:10,406
+Por que o primeiro caminho encontrado pode não ser ótimo em outras implementações?
+
+402
+00:36:10,567 --> 00:36:18,600
+Se o teste de objetivo fosse feito ao inserir o vizinho, um caminho caro poderia ser devolvido antes de outro mais barato aparecer.
+
+403
+00:36:19,234 --> 00:36:25,711
+E se a heurística for zero? Então f é igual a g, e o A estrela vira exatamente o custo uniforme.
+
+404
+00:36:25,867 --> 00:36:29,500
+É isso que o projeto faz quando usar_heuristica é falso.
+
+405
+00:36:30,134 --> 00:36:35,218
+E a busca gulosa? Ela usa só h de n, ignorando o custo já pago.
+
+406
+00:36:35,401 --> 00:36:38,105
+É rápida, mas não garante o melhor caminho.
+
+407
+00:36:38,267 --> 00:36:40,902
+O A estrela equilibra as duas coisas.
+
+408
+00:36:41,534 --> 00:36:47,535
+Agora, um caso em que a heurística do projeto não ajuda nada: quando a origem é a própria Entrada Principal.
+
+409
+00:36:47,701 --> 00:36:53,157
+Da entrada até a Mesa 4, os dois algoritmos expandem os mesmos 4 nós.
+
+410
+00:36:53,767 --> 00:37:01,324
+O motivo é matemático. Para um nó n que a busca alcança vindo da entrada, g de n é igual à distância da entrada até n.
+
+411
+00:37:01,501 --> 00:37:05,889
+Então f igual a g mais o destino menos g dá sempre o mesmo valor.
+
+412
+00:37:06,501 --> 00:37:10,854
+Isso explica o experimento da Fase 1, que mede tudo a partir da entrada.
+
+413
+00:37:11,034 --> 00:37:16,931
+Guarde esse ponto para a defesa: não é erro de implementação, é a escolha do ponto de referência.
+
+414
+00:37:17,567 --> 00:37:25,055
+Sobre complexidade: cada ligação pode colocar um item na fronteira, e a cada volta min e remove percorrem a fronteira inteira.
+
+415
+00:37:25,234 --> 00:37:31,015
+No pior caso, isso dá algo da ordem de E ao quadrado, onde E é o número de ligações.
+
+416
+00:37:31,634 --> 00:37:36,498
+Com heapq e um conjunto para os visitados, cairia para E vezes log de E.
+
+417
+00:37:36,667 --> 00:37:44,398
+Mas com 90 ligações, a versão simples resolve cada busca em centésimos de milissegundo, e é bem mais fácil de explicar.
+
+418
+00:37:45,034 --> 00:37:52,754
+Capítulo oito. Com a busca pronta, o projeto cria funções de uso direto e faz o experimento comparativo pedido no Marco 1.
+
+419
+00:37:53,368 --> 00:37:55,387
+Comece por calcular_tempo.
+
+420
+00:37:55,568 --> 00:38:01,604
+Ela recebe a distância em metros e a velocidade em quilômetros por hora, e devolve segundos.
+
+421
+00:38:01,768 --> 00:38:04,646
+Antes da conta, ela confere os dados.
+
+422
+00:38:05,268 --> 00:38:09,435
+A primeira conferência: a velocidade precisa ser int ou float.
+
+423
+00:38:09,601 --> 00:38:14,523
+isinstance testa o tipo; passar uma tupla de tipos aceita qualquer um deles.
+
+424
+00:38:15,134 --> 00:38:17,304
+Por que rejeitar bool à parte?
+
+425
+00:38:17,468 --> 00:38:21,031
+Porque em Python True é um tipo especial de int e valeria 1.
+
+426
+00:38:21,201 --> 00:38:27,179
+Sem esse teste, calcular_tempo(10, True) funcionaria e daria um resultado sem sentido.
+
+427
+00:38:27,801 --> 00:38:34,069
+Depois, a velocidade precisa ser maior que zero e finita, e a distância não pode ser negativa.
+
+428
+00:38:34,234 --> 00:38:38,250
+Comparações encadeadas como 0 < v < inf são válidas em Python.
+
+429
+00:38:38,434 --> 00:38:40,256
+float("inf") é o infinito.
+
+430
+00:38:40,868 --> 00:38:43,700
+Agora calcular_rota, na seção 4.
+
+431
+00:38:43,868 --> 00:38:48,859
+Repare nas anotações de tipo: origem: str e -> str, com uma seta.
+
+432
+00:38:49,034 --> 00:38:53,886
+Elas não mudam a execução; documentam que a função recebe e devolve texto.
+
+433
+00:38:54,501 --> 00:38:58,796
+O texto entre aspas triplas logo abaixo do def é a docstring.
+
+434
+00:38:58,968 --> 00:39:06,374
+Com a linha Args: e uma linha por parâmetro, ela segue o formato do gabarito: é o que o modelo de linguagem lê sobre uma ferramenta.
+
+435
+00:39:07,001 --> 00:39:15,824
+A função confere se os locais existem, valida a velocidade chamando calcular_tempo com zero metros dentro de um try, e só então chama a_estrela.
+
+436
+00:39:16,434 --> 00:39:24,444
+Se a_estrela devolver None, não há caminho, e a função avisa com um texto, em vez de tentar calcular o tempo de um caminho que não existe.
+
+437
+00:39:25,068 --> 00:39:27,772
+No fim, monta o texto de resposta.
+
+438
+00:39:27,934 --> 00:39:31,997
+" -> ".join(caminho) junta os nomes com uma seta entre eles.
+
+439
+00:39:32,168 --> 00:39:38,541
+Nas f-strings, :.1f mostra uma casa decimal e :g mostra o número sem zeros desnecessários.
+
+440
+00:39:39,168 --> 00:39:44,891
+Esta é a saída real da seção 5, que chama calcular_rota para quatro consultas.
+
+441
+00:39:45,068 --> 00:39:53,995
+Da entrada até a Mesa 4: 89,5 metros e 21,5 segundos, a 15 quilômetros por hora, sem paradas.
+
+442
+00:39:54,601 --> 00:39:58,629
+Este tempo é ideal: só distância dividida por velocidade.
+
+443
+00:39:58,801 --> 00:40:04,756
+Ele não é o tempo previsto da Fase 2 e não é exposto ao Qwen: serve como referência do Marco 1.
+
+444
+00:40:05,368 --> 00:40:12,763
+Agora o experimento. O enunciado pede comparar uma busca não informada com o A estrela em mapas de tamanhos diferentes.
+
+445
+00:40:12,934 --> 00:40:17,310
+O projeto recorta o próprio campus em 20, 40 e 70 nós.
+
+446
+00:40:17,934 --> 00:40:28,626
+recortar_mapa é uma busca em largura: começa na entrada, usa uma fila, e a cada passo retira o primeiro da fila com pop(0) e acrescenta os vizinhos ainda não escolhidos.
+
+447
+00:40:29,234 --> 00:40:31,950
+Ela para ao atingir a quantidade pedida.
+
+448
+00:40:32,134 --> 00:40:37,996
+Depois monta um grafo novo só com as ligações entre os nós selecionados, sem inventar ligações.
+
+449
+00:40:38,601 --> 00:40:42,664
+A célula começa importando median, do módulo statistics.
+
+450
+00:40:42,834 --> 00:40:48,325
+Antes do laço, cria a lista vazia RESULTADOS e fixa 30 repetições por medida.
+
+451
+00:40:48,934 --> 00:40:55,957
+O laço do experimento recorta cada mapa e escolhe como destino o nó mais distante da entrada, com max e uma lambda.
+
+452
+00:40:56,568 --> 00:41:04,160
+Para cada algoritmo, roda uma vez de aquecimento fora da medição e depois 30 repetições, medindo cada uma com perf_counter.
+
+453
+00:41:04,334 --> 00:41:08,362
+Guarda a mediana dos tempos, que resiste a picos ocasionais.
+
+454
+00:41:08,968 --> 00:41:11,672
+No fim, a célula imprime a tabela.
+
+455
+00:41:11,834 --> 00:41:20,633
+As f-strings usam alinhamento: :>3 alinha à direita em 3 posições e :<14 alinha à esquerda em 14, para as colunas ficarem retas.
+
+456
+00:41:21,268 --> 00:41:23,752
+Estes são os resultados reais.
+
+457
+00:41:23,934 --> 00:41:27,567
+Os custos são iguais entre os algoritmos, como deve ser.
+
+458
+00:41:27,734 --> 00:41:32,841
+E os nós expandidos também são iguais: 19, 39 e 69.
+
+459
+00:41:33,468 --> 00:41:39,040
+Lembre do capítulo anterior: a origem é a Entrada, que é o ponto de referência da heurística.
+
+460
+00:41:39,201 --> 00:41:44,169
+Por isso quase todos os nós empatam em f, e o A estrela não poupa expansões aqui.
+
+461
+00:41:44,801 --> 00:41:51,290
+O tempo do A estrela ficou um pouco maior, porque ele calcula a heurística para cada vizinho sem ganhar nada em troca.
+
+462
+00:41:51,468 --> 00:41:55,380
+São centésimos de milissegundo, e variam entre máquinas.
+
+463
+00:41:56,001 --> 00:42:00,052
+A seção 5.2 desenha os gráficos com Matplotlib.
+
+464
+00:42:00,234 --> 00:42:07,977
+Para cada métrica, plt.bar desenha as barras dos dois algoritmos lado a lado, deslocadas para a esquerda e para a direita.
+
+465
+00:42:08,601 --> 00:42:13,349
+Este é o gráfico real de nós expandidos, gerado na execução do Colab.
+
+466
+00:42:13,968 --> 00:42:16,103
+E este é o do tempo de execução.
+
+467
+00:42:16,268 --> 00:42:23,999
+No Colab, os tempos foram maiores que na máquina local, mas a relação se manteve: o A estrela um pouco mais lento nesse experimento.
+
+468
+00:42:24,634 --> 00:42:31,437
+A mesma célula desenha um último gráfico: o tempo ideal da Entrada até a Mesa 4, a 15 quilômetros por hora.
+
+469
+00:42:31,601 --> 00:42:37,301
+A compreensão de lista na linha 31 chama calcular_tempo para cada velocidade da lista.
+
+470
+00:42:37,934 --> 00:42:44,829
+O resultado real é este: 21,5 segundos para 89,5 metros, sem paradas.
+
+471
+00:42:45,001 --> 00:42:49,818
+É a referência que a Fase 2 vai substituir pelo tempo previsto com atrasos.
+
+472
+00:42:50,434 --> 00:42:58,502
+Uma limitação honesta para o relatório: os três mapas são recortes do mesmo campus, não mapas independentes, e há uma consulta por tamanho.
+
+473
+00:42:58,668 --> 00:43:03,996
+Uma origem diferente da entrada mostraria a vantagem do A estrela, como vimos com a Mesa 1.
+
+474
+00:43:04,601 --> 00:43:10,184
+Capítulo nove: a Fase 2. Até aqui, o melhor caminho era o mais curto.
+
+475
+00:43:10,368 --> 00:43:13,235
+Mas o mais curto nem sempre é o mais rápido.
+
+476
+00:43:13,401 --> 00:43:17,870
+Agora o agente vai aprender, com dados, quanto tempo cada trecho leva.
+
+477
+00:43:18,501 --> 00:43:22,877
+O enunciado permite dados sintéticos, desde que documentados.
+
+478
+00:43:23,035 --> 00:43:29,768
+O grupo gera uma tabela fictícia: para cada um dos 90 trechos, dois cenários e 12 repetições.
+
+479
+00:43:29,935 --> 00:43:32,465
+São 2160 linhas.
+
+480
+00:43:33,101 --> 00:43:41,053
+Depois das importações, a célula fixa a semente em 42 e cria a pasta resultados_fase2_15kmh com Path.
+
+481
+00:43:41,235 --> 00:43:45,100
+O exist_ok=True evita erro se a pasta já existir.
+
+482
+00:43:45,735 --> 00:43:49,055
+A geração fica em gerar_dados_sinteticos.
+
+483
+00:43:49,235 --> 00:43:54,087
+random.Random(SEMENTE_DADOS) cria um sorteador com semente 42.
+
+484
+00:43:54,268 --> 00:43:59,840
+A semente faz os sorteios saírem iguais em toda execução: o experimento é reproduzível.
+
+485
+00:44:00,468 --> 00:44:08,339
+Para cada trecho, o laço usa enumerate sobre LIGACOES, que dá o número do trecho e a tupla com origem, destino e distância.
+
+486
+00:44:08,501 --> 00:44:11,495
+Piso e porta são sorteados uma vez por trecho.
+
+487
+00:44:12,101 --> 00:44:20,564
+Depois, para cada cenário e cada repetição, sorteia o fluxo de pessoas: de 0 a 2 no tranquilo, de 3 a 5 no movimentado.
+
+488
+00:44:20,735 --> 00:44:24,507
+E um obstáculo, com 10 ou 40 por cento de chance.
+
+489
+00:44:25,135 --> 00:44:27,421
+O tempo segue uma regra pública.
+
+490
+00:44:27,601 --> 00:44:30,886
+A base é a distância a 15 quilômetros por hora.
+
+491
+00:44:31,068 --> 00:44:36,315
+Ela cresce 15 por cento por unidade de fluxo e 25 por cento com piso irregular.
+
+492
+00:44:36,935 --> 00:44:46,512
+Uma porta soma 3 segundos, um obstáculo soma 12, e gauss(0, 0.8) acrescenta um ruído aleatório, para os dados não serem perfeitos.
+
+493
+00:44:46,668 --> 00:44:49,988
+O max(0.1, tempo) impede tempo negativo.
+
+494
+00:44:50,601 --> 00:44:56,068
+Cada linha vira um dicionário, e a lista de dicionários vira uma tabela do pandas, o DataFrame.
+
+495
+00:44:56,235 --> 00:44:59,171
+Estas são as três primeiras linhas reais.
+
+496
+00:44:59,801 --> 00:45:04,340
+Repare: o mesmo trecho, no mesmo cenário, tem tempos diferentes.
+
+497
+00:45:04,501 --> 00:45:08,831
+A terceira linha teve um obstáculo e passou de 30 segundos.
+
+498
+00:45:09,001 --> 00:45:12,878
+É essa variação que o modelo precisa aprender a prever em média.
+
+499
+00:45:13,501 --> 00:45:21,755
+Logo depois da geração, três assert conferem a tabela: nenhum valor faltando, nenhuma linha duplicada e todos os tempos positivos.
+
+500
+00:45:22,368 --> 00:45:30,958
+As entradas do modelo são separadas em numéricas, como distância, fluxo, porta e obstáculo, e categóricas, como piso e cenário.
+
+501
+00:45:31,135 --> 00:45:34,060
+Nomes de locais e o número do trecho não entram.
+
+502
+00:45:34,668 --> 00:45:39,288
+preparar_modelo monta um Pipeline, uma sequência de etapas aplicadas em ordem.
+
+503
+00:45:39,468 --> 00:45:44,993
+Para as numéricas: preencher faltantes com a mediana e padronizar a escala com StandardScaler.
+
+504
+00:45:45,601 --> 00:45:50,964
+Para as categóricas: preencher faltantes com o valor mais frequente e aplicar one-hot.
+
+505
+00:45:51,135 --> 00:45:57,624
+One-hot transforma “regular” e “irregular” em colunas de zero e um, porque modelos só fazem contas com números.
+
+506
+00:45:58,235 --> 00:46:02,251
+O ColumnTransformer aplica cada preparo à sua lista de colunas.
+
+507
+00:46:02,435 --> 00:46:07,473
+E o estimador no fim é uma regressão linear ou uma árvore de decisão, conforme o nome.
+
+508
+00:46:08,101 --> 00:46:13,232
+Por que o Pipeline? Porque o preparo aprende valores, como médias e medianas.
+
+509
+00:46:13,401 --> 00:46:19,913
+Dentro do Pipeline, ele aprende só com os dados de treino de cada rodada, e nada do teste vaza para o treino.
+
+510
+00:46:20,535 --> 00:46:25,120
+A regressão linear supõe que o tempo é uma soma de pesos vezes atributos.
+
+511
+00:46:25,301 --> 00:46:32,997
+A árvore de decisão divide os dados em perguntas sucessivas, com profundidade máxima 8 e pelo menos 5 linhas por folha.
+
+512
+00:46:33,601 --> 00:46:39,103
+Agora a divisão dos dados. GroupShuffleSplit separa 20 por cento dos trechos para teste.
+
+513
+00:46:39,268 --> 00:46:43,690
+A palavra-chave é trecho: todas as linhas de um trecho ficam do mesmo lado.
+
+514
+00:46:44,301 --> 00:46:54,459
+Por que agrupar? Se o mesmo trecho aparecesse no treino e no teste, o modelo seria testado com algo muito parecido com o que já viu, e o erro pareceria menor do que é.
+
+515
+00:46:55,068 --> 00:47:01,662
+Nos trechos de treino, os dois modelos passam por validação cruzada com GroupKFold de 5 grupos.
+
+516
+00:47:01,835 --> 00:47:07,535
+cross_val_predict treina em 4 partes e prevê a quinta, girando até todas serem previstas.
+
+517
+00:47:08,168 --> 00:47:12,939
+As métricas: MAE é o erro absoluto médio, em segundos.
+
+518
+00:47:13,101 --> 00:47:18,743
+RMSE é a raiz do erro quadrático médio, que pune mais os erros grandes.
+
+519
+00:47:18,901 --> 00:47:23,451
+E R² mede quanto da variação o modelo explica, de 0 a 1.
+
+520
+00:47:24,068 --> 00:47:31,556
+Resultado real da validação: a regressão linear errou 0,85 segundo em média, e a árvore, 1,0.
+
+521
+00:47:31,735 --> 00:47:35,983
+A linear também venceu no RMSE e no R².
+
+522
+00:47:36,601 --> 00:47:43,299
+Faz sentido: a regra que gerou os dados é quase uma soma de termos, exatamente o formato da regressão linear.
+
+523
+00:47:43,468 --> 00:47:47,914
+Num campus real, com relações mais complicadas, a árvore poderia ganhar.
+
+524
+00:47:48,535 --> 00:47:51,518
+min com uma lambda escolhe o modelo de menor MAE.
+
+525
+00:47:51,701 --> 00:47:56,797
+Ele é treinado no conjunto de treino e avaliado uma única vez no teste reservado.
+
+526
+00:47:57,401 --> 00:48:07,176
+No teste, a regressão linear teve MAE de 0,84 segundo, RMSE de 1,16 e R² de 0,97.
+
+527
+00:48:07,335 --> 00:48:12,303
+O resultado é parecido com a validação, sinal de que não houve sobreajuste.
+
+528
+00:48:12,935 --> 00:48:16,266
+O notebook também mostra onde o modelo erra mais.
+
+529
+00:48:16,435 --> 00:48:25,455
+Os cinco maiores erros do teste estão todos num trecho longo, Entrada até Eixo Norte, com 60 metros, chegando a 5,8 segundos.
+
+530
+00:48:26,068 --> 00:48:32,232
+Por quê? Na regra, fluxo e piso multiplicam a base, e a base é maior em trechos longos.
+
+531
+00:48:32,401 --> 00:48:36,963
+A regressão linear soma efeitos e não modela bem essa multiplicação.
+
+532
+00:48:37,135 --> 00:48:39,909
+É uma análise honesta de onde o modelo erra.
+
+533
+00:48:40,535 --> 00:48:42,995
+Essa análise vem destas linhas.
+
+534
+00:48:43,168 --> 00:48:48,194
+A tabela erros copia o teste e ganha as colunas de previsão e de erro absoluto.
+
+535
+00:48:48,368 --> 00:48:53,325
+groupby calcula o erro médio por cenário, e nlargest pega os cinco maiores.
+
+536
+00:48:53,935 --> 00:49:03,884
+Os resultados são gravados em arquivos: as previsões e a validação em CSV, e um resumo em JSON, com a semente, os trechos de treino e teste e as métricas.
+
+537
+00:49:04,068 --> 00:49:06,215
+Isso documenta a execução.
+
+538
+00:49:06,835 --> 00:49:11,745
+Por fim, o modelo é treinado de novo com todos os dados, para uso da ferramenta.
+
+539
+00:49:11,901 --> 00:49:15,476
+As métricas relatadas são as de antes desse retreino.
+
+540
+00:49:16,101 --> 00:49:19,780
+Capítulo dez. O modelo de tempo está treinado.
+
+541
+00:49:19,935 --> 00:49:26,726
+Agora vem o elo entre as fases: a mesma busca A estrela passa a usar o tempo previsto como custo de cada ligação.
+
+542
+00:49:27,335 --> 00:49:35,519
+prever_grafo_tempo recebe um cenário e devolve um grafo novo, com o mesmo formato de VIZINHOS, mas com segundos no lugar de metros.
+
+543
+00:49:35,701 --> 00:49:38,359
+Primeiro, confere se o cenário existe.
+
+544
+00:49:38,968 --> 00:49:50,101
+Ela pega uma linha por trecho com drop_duplicates, e preenche os atributos do cenário: no tranquilo, fluxo 1 e sem obstáculo; no movimentado, fluxo 4 e com obstáculo.
+
+545
+00:49:50,735 --> 00:49:54,322
+O terceiro cenário, cadeiras no pátio, é didático.
+
+546
+00:49:54,501 --> 00:50:01,896
+Ele parte do tranquilo, mas no trecho entre Pátio A e Pátio B coloca fluxo 5, obstáculo e cenário movimentado.
+
+547
+00:50:02,501 --> 00:50:11,846
+A comparação {origem, destino} == {"Pátio - A", "Pátio - B"} usa conjuntos: assim não importa a ordem em que os dois nomes aparecem na ligação.
+
+548
+00:50:12,468 --> 00:50:16,821
+Então o modelo prevê o tempo dos 90 trechos de uma vez, com predict.
+
+549
+00:50:17,001 --> 00:50:22,654
+O np.maximum(0.1, ...) garante que nenhum tempo seja menor que um décimo de segundo.
+
+550
+00:50:23,268 --> 00:50:28,352
+Por fim, monta o dicionário do grafo nos dois sentidos, como na seção 2.
+
+551
+00:50:28,535 --> 00:50:32,354
+zip percorre as ligações e os tempos previstos lado a lado.
+
+552
+00:50:32,968 --> 00:50:37,925
+Veja o pátio no cenário tranquilo, com os tempos previstos reais em segundos.
+
+553
+00:50:38,101 --> 00:50:42,036
+A ligação de A até B leva 9,7 segundos.
+
+554
+00:50:42,668 --> 00:50:47,775
+No cenário cadeiras no pátio, a mesma ligação passa para 23 segundos.
+
+555
+00:50:47,935 --> 00:50:50,291
+As outras continuam iguais.
+
+556
+00:50:50,901 --> 00:50:54,906
+Agora a ferramenta usada pelo agente: rota_tempo_previsto.
+
+557
+00:50:55,068 --> 00:51:02,486
+A docstring diz ao modelo de linguagem para que ela serve e o que significa cada parâmetro, inclusive as três opções de cenário.
+
+558
+00:51:03,101 --> 00:51:12,516
+Ela valida os locais e o cenário, gera o grafo de tempos, e recalcula a tabela de referência da heurística, agora em segundos, com uma compreensão de dicionário.
+
+559
+00:51:13,135 --> 00:51:17,360
+A busca é a mesma buscar da Fase 1, com a heurística ligada.
+
+560
+00:51:17,535 --> 00:51:20,332
+Só mudaram o grafo e a referência.
+
+561
+00:51:20,501 --> 00:51:23,194
+Esse é o ponto central da Fase 2.
+
+562
+00:51:23,801 --> 00:51:27,353
+Se não houver caminho, a função devolve um aviso em texto.
+
+563
+00:51:27,968 --> 00:51:32,031
+A distância informada é a soma dos metros da rota escolhida por tempo.
+
+564
+00:51:32,201 --> 00:51:38,005
+dict(VIZINHOS[a])[b] transforma a lista de vizinhos num dicionário para achar os metros de cada passo.
+
+565
+00:51:38,635 --> 00:51:46,157
+E a resposta é um texto com caminho, distância, tempo previsto, a base fixa e avisos de que os dados são sintéticos.
+
+566
+00:51:46,768 --> 00:51:52,026
+Logo depois da definição, um for chama a ferramenta para a consulta padrão nos dois cenários.
+
+567
+00:51:52,635 --> 00:52:04,383
+Saídas reais da Entrada até a Mesa 4: no tranquilo, 30 segundos; no movimentado, 68,9 segundos, pelo mesmo caminho de 89,5 metros.
+
+568
+00:52:05,001 --> 00:52:10,434
+Agora a demonstração mais importante para a apresentação: demonstrar_alternativa_patio.
+
+569
+00:52:10,601 --> 00:52:16,730
+Ela compara a rota mais curta e a rota mais rápida da Mesa 1 até a Mesa 4, com cadeiras no pátio.
+
+570
+00:52:17,335 --> 00:52:27,063
+Ela calcula a rota mais curta com a_estrela, a rota mais rápida com buscar no grafo de tempos, mede o tempo da rota curta no grafo de tempos e grava tudo num JSON.
+
+571
+00:52:27,235 --> 00:52:31,530
+A linha 188 guarda o resultado em DEMONSTRACAO_PATIO.
+
+572
+00:52:32,135 --> 00:52:37,208
+A rota mais curta, em metros, passa por Pátio B: 42 metros.
+
+573
+00:52:37,368 --> 00:52:40,513
+Mas com cadeiras, o trecho de A até B demora.
+
+574
+00:52:40,668 --> 00:52:45,671
+Somando os tempos previstos, essa rota leva 35,7 segundos.
+
+575
+00:52:46,301 --> 00:52:51,571
+O A estrela, com custo em segundos, escolhe outro caminho: por Pátio D.
+
+576
+00:52:51,735 --> 00:52:57,295
+São 46 metros, quatro a mais, mas só 23,7 segundos.
+
+577
+00:52:57,901 --> 00:53:00,837
+A economia prevista é de 12 segundos.
+
+578
+00:53:01,001 --> 00:53:08,314
+Este é o modelo de custo mudando a decisão da busca, exatamente o que o enunciado pede para mostrar na demonstração ao vivo.
+
+579
+00:53:08,935 --> 00:53:13,079
+Vale lembrar o limite: o programa não detecta cadeiras de verdade.
+
+580
+00:53:13,235 --> 00:53:17,890
+O cenário é uma hipótese digitada no pedido, e os tempos são sintéticos.
+
+581
+00:53:18,068 --> 00:53:20,377
+É isso que o relatório deve dizer.
+
+582
+00:53:21,001 --> 00:53:28,256
+A célula termina com FERRAMENTAS = [rota_tempo_previsto, listar_vizinhos]: a lista das duas funções que o Qwen poderá chamar.
+
+583
+00:53:28,435 --> 00:53:30,675
+É a ponte para a Fase 3.
+
+584
+00:53:31,301 --> 00:53:37,813
+Capítulo onze: a Fase 3. Um modelo de linguagem passa a receber os pedidos em português.
+
+585
+00:53:37,968 --> 00:53:42,785
+Primeiro, vamos entender como ele é carregado e como “enxerga” as ferramentas.
+
+586
+00:53:43,401 --> 00:53:47,580
+O papel do modelo é muito claro no enunciado: ele não calcula a rota.
+
+587
+00:53:47,735 --> 00:53:52,970
+Modelos de linguagem são bons com linguagem, e ruins com contas exatas de caminhos.
+
+588
+00:53:53,135 --> 00:53:56,396
+Ele entende o pedido, chama a ferramenta e explica.
+
+589
+00:53:57,001 --> 00:54:02,979
+A seção 6 começa importando torch, o PyTorch, e duas classes da biblioteca transformers.
+
+590
+00:54:03,135 --> 00:54:09,520
+Depois verifica se há placa de vídeo: torch.cuda.is_available() devolve verdadeiro se houver GPU.
+
+591
+00:54:10,135 --> 00:54:18,528
+O modelo é o Qwen2.5-1.5B-Instruct: 1,5 bilhão de parâmetros, treinado para seguir instruções.
+
+592
+00:54:18,701 --> 00:54:24,284
+É público e roda dentro da própria sessão, sem chave de API e sem custo por chamada.
+
+593
+00:54:24,901 --> 00:54:30,067
+O tokenizador converte texto em números, os tokens, que são pedaços de palavras.
+
+594
+00:54:30,235 --> 00:54:32,800
+O modelo só trabalha com esses números.
+
+595
+00:54:32,968 --> 00:54:36,694
+from_pretrained baixa e carrega os dois na primeira execução.
+
+596
+00:54:37,301 --> 00:54:44,312
+Com GPU, o modelo usa float16, metade da memória, e vai para a placa com .to(dispositivo).
+
+597
+00:54:44,468 --> 00:54:48,461
+Sem GPU, usa float32 na CPU.
+
+598
+00:54:48,635 --> 00:54:52,419
+E qwen.eval() coloca o modelo em modo de uso, sem treino.
+
+599
+00:54:53,035 --> 00:55:00,197
+Agora a função conversar. Ela recebe a lista de mensagens, a lista de ferramentas e o limite de tokens.
+
+600
+00:55:00,368 --> 00:55:04,628
+global ULTIMA_GERACAO permite registrar informações da última geração.
+
+601
+00:55:05,235 --> 00:55:13,419
+apply_chat_template monta o texto no formato que o Qwen foi treinado para ler: as mensagens com seus papéis e a descrição das ferramentas.
+
+602
+00:55:13,601 --> 00:55:17,338
+add_generation_prompt avisa que agora é a vez do assistente.
+
+603
+00:55:17,968 --> 00:55:25,061
+return_tensors="pt" devolve os números como tensores do PyTorch, e .to(dispositivo) os coloca no mesmo lugar do modelo.
+
+604
+00:55:25,668 --> 00:55:32,029
+torch.no_grad() desliga o cálculo de gradientes, que só serve para treinar, e economiza memória.
+
+605
+00:55:32,201 --> 00:55:35,416
+generate produz até max_tokens tokens novos.
+
+606
+00:55:35,601 --> 00:55:39,373
+E do_sample=False escolhe sempre o token mais provável.
+
+607
+00:55:40,001 --> 00:55:48,510
+Por isso as execuções no Colab e na máquina local deram exatamente os mesmos acertos: com do_sample falso, a mesma entrada gera a mesma saída.
+
+608
+00:55:49,135 --> 00:55:53,383
+A saída do generate contém a pergunta e a resposta juntas.
+
+609
+00:55:53,568 --> 00:55:59,372
+A fatia saida[0][tamanho_da_pergunta:] corta a parte da pergunta e deixa só os tokens novos.
+
+610
+00:56:00,001 --> 00:56:07,790
+As linhas seguintes registram por que a geração terminou: eos se o modelo encerrou sozinho, ou limite de tokens se foi cortado.
+
+611
+00:56:07,968 --> 00:56:11,357
+Isso ajuda a diagnosticar respostas incompletas.
+
+612
+00:56:11,968 --> 00:56:17,192
+Por fim, decode transforma os números de volta em texto, pulando os tokens especiais.
+
+613
+00:56:17,801 --> 00:56:20,470
+Como o modelo conhece as ferramentas?
+
+614
+00:56:20,635 --> 00:56:22,828
+Ele nunca vê o código Python.
+
+615
+00:56:23,001 --> 00:56:31,522
+A biblioteca transforma cada função numa ficha em JSON, com nome, descrição e parâmetros, tirados das anotações de tipo e da docstring.
+
+616
+00:56:32,135 --> 00:56:37,927
+Repare que a lista de opções do cenário virou um enum, e que origem e destino são obrigatórios.
+
+617
+00:56:38,101 --> 00:56:44,102
+Por isso a docstring precisa ser bem escrita: ela é a única coisa que o modelo lê sobre a ferramenta.
+
+618
+00:56:44,735 --> 00:56:47,950
+A conversa é uma lista de mensagens com papéis.
+
+619
+00:56:48,135 --> 00:56:52,116
+system traz as regras do agente; user traz a pergunta.
+
+620
+00:56:52,301 --> 00:56:54,854
+O modelo responde como assistant.
+
+621
+00:56:55,468 --> 00:56:59,205
+Quando decide usar uma ferramenta, o modelo não executa nada.
+
+622
+00:56:59,368 --> 00:57:05,903
+Ele só escreve um texto especial entre as marcas tool_call, com o nome da ferramenta e os argumentos em JSON.
+
+623
+00:57:06,535 --> 00:57:10,307
+As regras ficam na variável REGRAS, na seção 7.
+
+624
+00:57:10,468 --> 00:57:17,363
+É o prompt do sistema, e ele é versionado: os comentários registram o que mudou da versão 1 até a 5, e por quê.
+
+625
+00:57:17,968 --> 00:57:23,401
+Repare na sintaxe: REGRAS é uma única string, escrita em várias linhas.
+
+626
+00:57:23,568 --> 00:57:30,765
+Dentro de parênteses, strings vizinhas são juntadas automaticamente pelo Python, sem precisar do sinal de mais.
+
+627
+00:57:31,401 --> 00:57:39,306
+As primeiras frases dizem que o Qwen não conhece o mapa nem os tempos, e que deve chamar uma ferramenta sempre que a pergunta citar um local.
+
+628
+00:57:39,468 --> 00:57:42,962
+Isso entrou na versão 5, depois de um teste real.
+
+629
+00:57:43,568 --> 00:57:51,857
+Na versão 4, o Qwen respondeu 15 de 39 pedidos sem chamar ferramenta, inventando rotas e números como 78 metros.
+
+630
+00:57:52,035 --> 00:57:54,948
+Foi a avaliação real que mostrou o problema.
+
+631
+00:57:55,568 --> 00:58:02,893
+Outras regras pedem para copiar os nomes como o usuário escreveu, sem trocar origem e destino, e explicam os cenários.
+
+632
+00:58:03,068 --> 00:58:08,268
+Há até um exemplo: “biblio para b4” usa origem biblio e destino b4.
+
+633
+00:58:08,901 --> 00:58:16,899
+E as últimas frases pedem para explicar o resultado só depois de recebê-lo, copiando os números como vieram, sem converter unidades.
+
+634
+00:58:17,068 --> 00:58:21,363
+No próximo capítulo, veremos como o código confere o pedido do modelo.
+
+635
+00:58:21,968 --> 00:58:25,973
+Capítulo doze. O Qwen escreve um pedido de ferramenta.
+
+636
+00:58:26,135 --> 00:58:31,370
+Mas um modelo pequeno erra: troca nomes, inventa locais, usa cenários errados.
+
+637
+00:58:31,535 --> 00:58:35,203
+Por isso, antes de executar, o código confere tudo.
+
+638
+00:58:35,835 --> 00:58:42,696
+A seção 7 importa json, re, unicodedata e get_close_matches, todos nativos do Python.
+
+639
+00:58:42,868 --> 00:58:47,430
+Depois cria a tabela TROCAS, um dicionário de palavras a trocar ou ignorar.
+
+640
+00:58:48,035 --> 00:58:50,263
+A primeira peça é padronizar.
+
+641
+00:58:50,435 --> 00:58:58,758
+Ela transforma qualquer texto numa forma simples e comparável, para que “Sala B04”, “b4” e “B-04” virem a mesma coisa.
+
+642
+00:58:59,368 --> 00:59:02,153
+Passo um: lower() deixa tudo minúsculo.
+
+643
+00:59:02,335 --> 00:59:11,367
+unicodedata.normalize com a forma NFD separa cada letra do seu acento, e a linha 15 descarta os acentos, que têm a categoria Mn.
+
+644
+00:59:12,002 --> 00:59:18,433
+Passo dois, com expressões regulares: re.sub troca tudo o que não é letra ou número por espaço.
+
+645
+00:59:18,602 --> 00:59:24,754
+E a linha 17 coloca um espaço entre letra e número: b4 vira b espaço 4.
+
+646
+00:59:25,368 --> 00:59:30,150
+Passo três: para cada palavra, a tabela TROCAS substitui ou apaga.
+
+647
+00:59:30,335 --> 00:59:36,081
+Banheiro vira wc, fem vira feminino, e palavras como sala, bloco, do e da somem.
+
+648
+00:59:36,235 --> 00:59:38,997
+Números perdem zeros à esquerda com int.
+
+649
+00:59:39,602 --> 00:59:45,325
+Veja a transformação real de “Sala B04”, passo a passo, até chegar em “b 4”.
+
+650
+00:59:45,935 --> 00:59:51,309
+A sala some, porque está na tabela de palavras ignoradas, e o zero de 04 também.
+
+651
+00:59:51,468 --> 00:59:56,738
+É por isso que “B-04” e “Sala B04” chegam ao mesmo nome padronizado.
+
+652
+00:59:57,368 --> 01:00:05,575
+Mais dois exemplos reais: “banheiro fem do Design” vira “wc feminino design”, igual ao nome padronizado de “WC Feminino Design”.
+
+653
+01:00:05,735 --> 01:00:08,381
+E “Pátio/Direito” vira “patio direito”.
+
+654
+01:00:09,002 --> 01:00:15,526
+Com isso, o código monta o dicionário NOMES: a chave é o nome padronizado, e o valor é o nome oficial do mapa.
+
+655
+01:00:15,702 --> 01:00:20,322
+O assert garante que dois locais nunca fiquem com o mesmo nome padronizado.
+
+656
+01:00:20,935 --> 01:00:26,704
+Os apelidos também entram em NOMES: biblio leva à Biblioteca, mesa um leva à Mesa 1.
+
+657
+01:00:26,868 --> 01:00:33,879
+Já os genéricos, como banheiro e lanchonete, ficam em outro dicionário, porque apontam para vários locais.
+
+658
+01:00:34,502 --> 01:00:44,242
+E o dicionário CENARIOS lista, para cada cenário, as palavras que o usuário pode usar: lotado e cheio indicam movimentado; calmo e normal indicam tranquilo.
+
+659
+01:00:44,868 --> 01:00:48,780
+Agora resolver_local, que decide qual local o texto significa.
+
+660
+01:00:48,935 --> 01:00:53,172
+Ela devolve uma tupla: o local, ou None, e uma lista de opções.
+
+661
+01:00:53,802 --> 01:00:56,959
+Primeiro, procura o texto padronizado em NOMES.
+
+662
+01:00:57,135 --> 01:01:01,314
+Se achar, é um nome do mapa ou um apelido, e devolve o local.
+
+663
+01:01:01,935 --> 01:01:06,857
+Se for genérico, devolve None com a lista de opções, para o programa perguntar qual.
+
+664
+01:01:07,035 --> 01:01:12,131
+Para banheiro, são 13 opções; para lanchonete, Easy Smart e Café Mania.
+
+665
+01:01:12,735 --> 01:01:17,425
+Se o texto tiver número ou estiver vazio, devolve None sem opções.
+
+666
+01:01:17,602 --> 01:01:24,381
+Uma decisão de segurança: “B-07” não existe, e o código nunca “corrige” para uma sala parecida, como B-01.
+
+667
+01:01:25,002 --> 01:01:30,655
+Só então tenta erro de digitação com get_close_matches, que compara a semelhança entre textos.
+
+668
+01:01:30,835 --> 01:01:37,463
+O corte de 0,85 exige muita semelhança, e o resultado só é aceito se houver um único candidato.
+
+669
+01:01:38,068 --> 01:01:41,991
+No código, são poucas linhas, na mesma ordem do diagrama.
+
+670
+01:01:42,602 --> 01:01:51,541
+Exemplos reais: “b4” e “biblio” são resolvidos direto; “bibliotca” e “cafe manai” por semelhança; banheiro e lanchonete pedem escolha;
+
+671
+01:01:51,702 --> 01:01:55,881
+sala 02, B-07 e auditório pedem um nome do mapa.
+
+672
+01:01:56,502 --> 01:01:59,531
+resolver_cenario faz o mesmo com os cenários.
+
+673
+01:01:59,702 --> 01:02:08,362
+Lotado vira movimentado, e até grafias erradas como “tranqulho” e “tranq” viram tranquilo, por causa do corte menor, de 0,7.
+
+674
+01:02:08,968 --> 01:02:12,148
+Duas funções conferem se o modelo não inventou nada.
+
+675
+01:02:12,335 --> 01:02:18,023
+aparece_na_pergunta testa se alguma das palavras aparece no texto padronizado da pergunta.
+
+676
+01:02:18,635 --> 01:02:24,300
+E local_na_pergunta percorre todos os trechos de 1 a 4 palavras da pergunta e resolve cada um.
+
+677
+01:02:24,468 --> 01:02:29,703
+Se algum trecho leva ao mesmo local que o modelo pediu, o local veio mesmo do usuário.
+
+678
+01:02:30,335 --> 01:02:38,496
+Exemplo real: na pergunta “cafe manai para easy smrt”, o trecho “cafe manai” resolve para Café Mania, então o pedido é aceito.
+
+679
+01:02:38,668 --> 01:02:42,220
+Já Mesa 3 não aparece em “da biblioteca para o banheiro”.
+
+680
+01:02:42,835 --> 01:02:45,946
+pergunta_ao_usuario monta o texto de esclarecimento.
+
+681
+01:02:46,102 --> 01:02:51,604
+Se houver opções, lista as opções; senão, pede um nome do mapa com o exemplo B-04.
+
+682
+01:02:51,768 --> 01:02:54,913
+A f-string coloca o nome do campo na pergunta.
+
+683
+01:02:55,535 --> 01:03:02,233
+CAMPOS diz quais argumentos de local cada ferramenta tem: origem e destino para a rota, e local para os vizinhos.
+
+684
+01:03:02,868 --> 01:03:05,375
+Tudo isso é reunido em preparar_pedido.
+
+685
+01:03:05,535 --> 01:03:14,810
+Ela devolve um dicionário com um status: ok, se pode executar; erro, que volta para o modelo corrigir; ou esclarecimento, que vira uma pergunta ao usuário.
+
+686
+01:03:15,435 --> 01:03:19,823
+Primeiro, confere se o pedido é um dicionário com uma ferramenta conhecida.
+
+687
+01:03:20,002 --> 01:03:24,436
+pedido.get("name") busca a chave sem dar erro se ela não existir.
+
+688
+01:03:25,068 --> 01:03:30,768
+Depois, parâmetros extras: a diferença entre conjuntos com o sinal de menos mostra o que sobrou.
+
+689
+01:03:30,935 --> 01:03:36,159
+Se o modelo mandar velocidade, o pedido é recusado, porque a base é fixa.
+
+690
+01:03:36,768 --> 01:03:39,519
+Para cada campo de local, resolve o texto.
+
+691
+01:03:39,702 --> 01:03:42,615
+Se não houver local, devolve esclarecimento.
+
+692
+01:03:42,768 --> 01:03:47,527
+Se houver, mas não estiver na pergunta, devolve erro: o modelo inventou.
+
+693
+01:03:48,135 --> 01:03:50,526
+Para a rota, resolve o cenário.
+
+694
+01:03:50,702 --> 01:03:57,226
+Se for diferente de tranquilo e não aparecer na pergunta, devolve erro com uma dica do cenário que o usuário citou.
+
+695
+01:03:57,835 --> 01:04:05,613
+Exemplos reais. “biblio para b4”: o pedido vira Biblioteca até B-04, cenário tranquilo, status ok.
+
+696
+01:04:06,235 --> 01:04:14,106
+“da biblioteca para o banheiro”: status esclarecimento, com a pergunta “Qual é o local de destino?” e as 13 opções de banheiro.
+
+697
+01:04:14,735 --> 01:04:18,681
+Um pedido com velocidade 10 é recusado por parâmetro extra.
+
+698
+01:04:19,302 --> 01:04:25,803
+E este caso aconteceu de verdade no teste: o usuário pediu cadeiras no pátio, e o Qwen mandou movimentado.
+
+699
+01:04:25,968 --> 01:04:30,019
+O código recusa e devolve a dica: use cadeiras no pátio.
+
+700
+01:04:30,635 --> 01:04:39,864
+Por fim, executar chama preparar_pedido e, se estiver tudo certo, chama a função Python da ferramenta, desempacotando os argumentos com dois asteriscos.
+
+701
+01:04:40,468 --> 01:04:49,000
+Dois asteriscos transformam um dicionário em argumentos nomeados: origem igual a Biblioteca, destino igual a B-04, cenário igual a tranquilo.
+
+702
+01:04:49,168 --> 01:04:52,464
+No próximo capítulo, o ciclo completo do agente.
+
+703
+01:04:53,068 --> 01:04:57,131
+Capítulo treze: a função agente, o coração da Fase 3.
+
+704
+01:04:57,302 --> 01:05:02,932
+Ela segue o mesmo ciclo do gabarito da Aula 10: pensar, agir, observar e responder.
+
+705
+01:05:03,535 --> 01:05:08,178
+Pensar: o Qwen lê a conversa e decide se precisa de uma ferramenta.
+
+706
+01:05:08,802 --> 01:05:12,493
+Agir: o código confere o pedido e executa a ferramenta.
+
+707
+01:05:12,668 --> 01:05:17,207
+Observar: o resultado volta para o Qwen como uma mensagem com o papel tool.
+
+708
+01:05:17,835 --> 01:05:23,024
+Responder: quando o Qwen não pede mais ferramenta, o texto dele é a resposta final.
+
+709
+01:05:23,202 --> 01:05:27,160
+O ciclo tem no máximo 3 passos, para não girar para sempre.
+
+710
+01:05:27,768 --> 01:05:31,018
+Antes do ciclo, três funções auxiliares.
+
+711
+01:05:31,202 --> 01:05:38,957
+extrair_json procura a primeira chave aberta e a última chave fechada do texto, e tenta converter o trecho com json.loads.
+
+712
+01:05:39,568 --> 01:05:45,616
+Se o texto não for JSON válido, json.loads dispara ValueError, e o except devolve None.
+
+713
+01:05:45,802 --> 01:05:48,599
+Assim um JSON quebrado não derruba o programa.
+
+714
+01:05:49,235 --> 01:05:55,329
+ler_pedido_de_ferramenta só tenta ler um pedido se houver a marca tool_call ou se o texto começar com chave.
+
+715
+01:05:55,502 --> 01:06:01,132
+Essa segunda condição entrou depois do teste real: o Qwen pequeno às vezes esquece as marcas.
+
+716
+01:06:01,735 --> 01:06:07,109
+fala_do_mapa diz se a pergunta cita um local, um nome genérico ou uma palavra de rota.
+
+717
+01:06:07,268 --> 01:06:12,793
+Resultados reais: “Bom dia!” dá falso; “mesa 1 pra lanchonete” dá verdadeiro.
+
+718
+01:06:13,402 --> 01:06:16,838
+numeros_fora_da_ferramenta é o controle de alucinação.
+
+719
+01:06:17,002 --> 01:06:23,294
+Ela pega todos os números da explicação do Qwen e tira os que aparecem nos resultados das ferramentas.
+
+720
+01:06:23,468 --> 01:06:25,487
+O que sobra foi inventado.
+
+721
+01:06:26,102 --> 01:06:35,703
+Detalhes: marcadores de lista no início da linha são ignorados, e os números viram float, então 46 e 46.0 contam como iguais.
+
+722
+01:06:35,868 --> 01:06:43,623
+Exemplo real: se o resultado diz 74.2 e o Qwen escreve 74, o 74 é sinalizado.
+
+723
+01:06:44,235 --> 01:06:52,280
+Agora a função agente. Ela monta a lista de mensagens: as regras como system, o histórico, se houver, e a pergunta como user.
+
+724
+01:06:52,902 --> 01:06:57,324
+A variável contexto junta o que o usuário escreveu, inclusive no histórico.
+
+725
+01:06:57,502 --> 01:07:01,460
+É com ela que preparar_pedido confere se os nomes vieram do usuário.
+
+726
+01:07:01,635 --> 01:07:05,117
+E detalhes guarda tudo o que aconteceu, para a avaliação.
+
+727
+01:07:05,735 --> 01:07:08,451
+O laço roda no máximo 3 vezes.
+
+728
+01:07:08,635 --> 01:07:14,706
+Passo 1, pensar: conversar gera a resposta do Qwen, e ela é guardada nas tentativas.
+
+729
+01:07:14,868 --> 01:07:17,642
+Depois, tenta ler um pedido de ferramenta.
+
+730
+01:07:18,268 --> 01:07:21,216
+Se não há pedido, a resposta seria final.
+
+731
+01:07:21,402 --> 01:07:26,962
+Mas se a pergunta fala do mapa e nenhuma ferramenta foi chamada, o texto seria inventado.
+
+732
+01:07:27,135 --> 01:07:31,592
+Então o código devolve a pergunta ao Qwen, com o formato exato do pedido.
+
+733
+01:07:32,202 --> 01:07:35,777
+Esse bloco foi a principal correção da versão 5.
+
+734
+01:07:35,935 --> 01:07:42,482
+Na avaliação real, ele trocou rotas inventadas por uma resposta honesta: não consegui consultar o mapa.
+
+735
+01:07:43,102 --> 01:07:53,120
+Caso contrário, passo 4, responder: a resposta vira a final, com status concluído se alguma ferramenta foi chamada, ou resposta livre, como numa saudação.
+
+736
+01:07:53,302 --> 01:07:55,089
+O break sai do laço.
+
+737
+01:07:55,702 --> 01:07:58,104
+Se há pedido, o código confere.
+
+738
+01:07:58,268 --> 01:08:03,747
+JSON inválido vira um erro. Senão, preparar_pedido analisa o pedido com o contexto.
+
+739
+01:08:04,368 --> 01:08:09,220
+Se faltar informação, o próprio programa pergunta ao usuário e sai do laço.
+
+740
+01:08:09,402 --> 01:08:11,909
+O Qwen não escolhe o banheiro por você.
+
+741
+01:08:12,535 --> 01:08:18,920
+Passo 2, agir: se o status é ok, executar roda a ferramenta, e a chamada é registrada.
+
+742
+01:08:19,102 --> 01:08:23,815
+Se é erro, a mensagem de erro passa a ser o resultado, e volta ao modelo.
+
+743
+01:08:24,435 --> 01:08:29,949
+Com mostrar verdadeiro, que é o padrão, o agente imprime o pedido e o resultado da ferramenta.
+
+744
+01:08:30,135 --> 01:08:33,675
+É assim que a demonstração mostra o que acontece por dentro.
+
+745
+01:08:34,302 --> 01:08:40,350
+Passo 3, observar: a resposta do Qwen entra como assistant, e o resultado entra como tool.
+
+746
+01:08:40,535 --> 01:08:45,225
+Na próxima volta, o Qwen lê o resultado e escreve a explicação.
+
+747
+01:08:45,835 --> 01:08:49,584
+Repare no else depois do for, na linha 260.
+
+748
+01:08:49,768 --> 01:08:56,199
+Ele só roda se o laço terminar sem break, ou seja, se os 3 passos acabarem sem resposta final.
+
+749
+01:08:56,835 --> 01:09:01,861
+No fim, se a resposta foi concluída, o código procura números inventados.
+
+750
+01:09:02,035 --> 01:09:07,259
+Se encontrar, acrescenta um aviso de verificação e o resultado exato da ferramenta.
+
+751
+01:09:07,868 --> 01:09:12,813
+A seção 8 testa o agente. Primeiro imprime a ficha JSON da ferramenta.
+
+752
+01:09:12,968 --> 01:09:17,541
+Depois percorre uma lista de quatro perguntas e chama agente em cada uma.
+
+753
+01:09:18,168 --> 01:09:21,441
+Esta é uma execução real, com o Qwen na GPU.
+
+754
+01:09:21,602 --> 01:09:32,073
+O Qwen pediu rota_tempo_previsto de Biblioteca até Mesa 3, o A estrela calculou 113,5 metros e 43 segundos, e o Qwen explicou em português.
+
+755
+01:09:32,702 --> 01:09:38,425
+A explicação usou 43 segundos, e o resultado dizia 43.0.
+
+756
+01:09:38,602 --> 01:09:43,512
+Como os números são comparados como valores, isso não é sinalizado como invenção.
+
+757
+01:09:44,135 --> 01:09:47,095
+A seção 8 também mostra como perguntar.
+
+758
+01:09:47,268 --> 01:09:54,326
+A célula 8.2 tem uma caixa de texto do Colab, criada pelo comentário especial #@param.
+
+759
+01:09:54,502 --> 01:09:58,356
+Se a caixa estiver vazia, input abre um campo para digitar.
+
+760
+01:09:58,968 --> 01:10:04,075
+A célula do chat só chama conversa_interativa se a caixa ABRIR_CONVERSA for marcada.
+
+761
+01:10:04,235 --> 01:10:07,775
+Assim, o “Executar tudo” não para esperando digitação.
+
+762
+01:10:08,402 --> 01:10:15,239
+conversa_interativa repete com while True, lê a pergunta com input, e trata sair, cancelar e texto vazio.
+
+763
+01:10:15,402 --> 01:10:17,653
+Depois chama o agente com o histórico.
+
+764
+01:10:18,268 --> 01:10:22,876
+O histórico guarda só as duas últimas trocas, com a fatia de menos 4.
+
+765
+01:10:23,035 --> 01:10:30,070
+Assim, depois de “Qual é o local de destino?”, a resposta “Café Mania” é entendida junto com o pedido anterior.
+
+766
+01:10:30,702 --> 01:10:39,943
+E a última célula do notebook usa input puro: espera perguntas até alguém digitar sair, com o pergunta.strip().lower() que estudamos no capítulo três.
+
+767
+01:10:40,568 --> 01:10:43,377
+Capítulo catorze: a avaliação.
+
+768
+01:10:43,535 --> 01:10:52,578
+O enunciado pede pelo menos 15 pedidos de teste, com o resultado esperado, medindo em quantos o agente acerta, e uma análise das falhas.
+
+769
+01:10:52,735 --> 01:10:54,940
+O projeto tem 39.
+
+770
+01:10:55,568 --> 01:11:02,220
+Cada caso é uma tupla com três valores: a pergunta, o que o agente deve fazer, e os argumentos esperados.
+
+771
+01:11:02,402 --> 01:11:06,221
+O que fazer pode ser o nome da ferramenta, None ou esclarecer.
+
+772
+01:11:06,835 --> 01:11:14,833
+A lista é organizada por grupos, com comentários: rotas com nomes exatos, vizinhos, perguntas sem ferramenta e os três cenários.
+
+773
+01:11:15,468 --> 01:11:25,208
+Depois vêm os testes difíceis: escrita informal, abreviações, erros de digitação, ordem invertida, e pedidos em que falta informação ou o local não existe.
+
+774
+01:11:25,368 --> 01:11:27,968
+Nesses, o esperado é esclarecer.
+
+775
+01:11:28,602 --> 01:11:35,312
+Antes de chamar o Qwen, a célula confere os próprios casos: todo caso de ferramenta precisa executar sem erro.
+
+776
+01:11:35,468 --> 01:11:39,391
+Isso evita testar o agente contra uma resposta esperada errada.
+
+777
+01:11:40,002 --> 01:11:50,067
+A função o_que_o_agente_fez traduz os detalhes devolvidos pelo agente para o mesmo formato do caso: esclarecer com o campo, o nome e os argumentos da ferramenta, ou nada.
+
+778
+01:11:50,702 --> 01:11:57,981
+O laço mede o tempo de cada pedido com perf_counter, compara a escolha e os argumentos, e verifica números inventados.
+
+779
+01:11:58,135 --> 01:12:01,187
+Um caso só é certo se tudo estiver certo.
+
+780
+01:12:01,802 --> 01:12:08,813
+Cada caso imprime uma linha com certo ou ERRADO, a escolha esperada e a feita, os números inventados e o tempo.
+
+781
+01:12:08,968 --> 01:12:12,102
+E o dicionário do caso entra na lista AVALIACAO.
+
+782
+01:12:12,735 --> 01:12:21,825
+A linha 22 tem um detalhe: dict com dois asteriscos junta o cenário padrão tranquilo com os argumentos esperados, porque o agente sempre preenche o cenário.
+
+783
+01:12:22,435 --> 01:12:28,970
+No fim, o pandas monta a tabela, calcula os totais e salva um CSV com a versão das regras no nome.
+
+784
+01:12:29,602 --> 01:12:34,000
+Resultado real, com o Qwen dois ponto cinco: 31 de 39 casos certos.
+
+785
+01:12:35,168 --> 01:12:41,030
+Em 30 casos que pediam uma ferramenta, 24 tiveram ferramenta e argumentos certos.
+
+786
+01:12:41,202 --> 01:12:44,591
+E 4 explicações tiveram números sinalizados.
+
+787
+01:12:45,202 --> 01:12:49,996
+Por grupo, o ponto fraco é claro: escrita informal, com 3 de 10.
+
+788
+01:12:50,168 --> 01:12:53,859
+Saudações e perguntas fora do mapa acertaram todas.
+
+789
+01:12:54,468 --> 01:12:58,879
+Vamos ver as falhas de verdade, com o texto bruto que o Qwen escreveu.
+
+790
+01:12:59,035 --> 01:13:06,488
+Em “cafe manai para easy smrt”, nas três tentativas, ele escreveu a mesma frase, sem chamar a ferramenta.
+
+791
+01:13:07,102 --> 01:13:10,526
+Repare que “caminha 203” não existe no mapa.
+
+792
+01:13:10,702 --> 01:13:16,181
+Sem a proteção da versão 5, isso seria mostrado ao usuário como se fosse verdade.
+
+793
+01:13:16,335 --> 01:13:18,993
+Com ela, o agente admite que não conseguiu.
+
+794
+01:13:19,602 --> 01:13:25,557
+Em “mesa um pra mesa quatro, ta lotado”, o Qwen entendeu outra coisa: que a mesa estava ocupada.
+
+795
+01:13:25,735 --> 01:13:30,703
+Depois escreveu algo parecido com argumentos, mas fora do formato de ferramenta.
+
+796
+01:13:31,335 --> 01:13:42,456
+E em “O que há ao lado do Corredor Design?”, ele primeiro inventou salas 203, 204 e 205, e na segunda tentativa chamou a ferramenta de rota sem destino,
+
+797
+01:13:42,635 --> 01:13:44,828
+quando o certo era listar vizinhos.
+
+798
+01:13:45,435 --> 01:13:59,947
+As quatro explicações sinalizadas arredondaram números: 74,2 segundos virou 74, 51,8 virou 51, 22,2 virou 22 e 17,8 virou 17.
+
+799
+01:14:00,102 --> 01:14:03,956
+A verificação pegou todas e mostrou o resultado exato.
+
+800
+01:14:04,568 --> 01:14:08,491
+A comparação entre versões mostra o efeito das correções.
+
+801
+01:14:08,668 --> 01:14:14,310
+Na versão 4, eram 24 certos, e 15 pedidos com rotas inventadas.
+
+802
+01:14:14,468 --> 01:14:19,320
+Na versão 5, 31 certos e nenhuma rota inventada chegou ao usuário.
+
+803
+01:14:19,935 --> 01:14:25,994
+Agora o custo. O Qwen roda dentro da sessão, sem API paga e sem chave no código.
+
+804
+01:14:26,168 --> 01:14:30,927
+Mas não é de graça: cada pedido consome tempo de processamento e memória.
+
+805
+01:14:31,535 --> 01:14:36,062
+Na CPU, cada pedido levou cerca de 35 vezes mais.
+
+806
+01:14:36,235 --> 01:14:41,017
+Por isso, na apresentação, é obrigatório escolher a GPU T4 no Colab.
+
+807
+01:14:41,202 --> 01:14:45,938
+E pedidos com falha custam mais, porque o agente chama o Qwen até três vezes.
+
+808
+01:14:46,568 --> 01:14:54,056
+Capítulo quinze. Vamos juntar tudo e acompanhar o programa inteiro, do “Executar tudo” até a resposta de uma pergunta.
+
+809
+01:14:54,235 --> 01:14:57,218
+Todos os valores são de execuções reais.
+
+810
+01:14:57,835 --> 01:15:06,042
+Ao clicar em executar tudo, a seção 1 cria as constantes: origem Entrada Principal, destino Mesa 4 e velocidade base 15.
+
+811
+01:15:06,668 --> 01:15:13,262
+A seção 2 constrói o grafo: LOCAIS, LIGACOES e VIZINHOS, e imprime 90 nós e 90 ligações.
+
+812
+01:15:13,868 --> 01:15:20,821
+A seção 3 define buscar e calcula DISTANCIA_ENTRADA para os 90 locais, em cerca de 3 milissegundos.
+
+813
+01:15:21,002 --> 01:15:25,541
+As seções 4 e 5 criam as ferramentas e rodam o experimento.
+
+814
+01:15:26,168 --> 01:15:34,747
+A seção 5.3 gera 2160 linhas sintéticas, valida os dois modelos, escolhe a regressão linear e treina MODELO_TEMPO.
+
+815
+01:15:34,902 --> 01:15:37,571
+No fim, cria a lista FERRAMENTAS.
+
+816
+01:15:38,202 --> 01:15:42,032
+A seção 6 detecta a GPU e carrega o Qwen.
+
+817
+01:15:42,202 --> 01:15:45,684
+A seção 7 define as regras e o agente.
+
+818
+01:15:45,868 --> 01:15:49,547
+A partir daqui, o notebook pode responder perguntas.
+
+819
+01:15:50,168 --> 01:15:55,717
+Agora a pergunta da célula 8.2: “Como vou da Biblioteca até a Mesa 3?”.
+
+820
+01:15:55,902 --> 01:15:59,558
+A função agente monta as mensagens e chama conversar.
+
+821
+01:16:00,168 --> 01:16:06,912
+O Qwen responde com um pedido de ferramenta: rota_tempo_previsto, origem Biblioteca, destino Mesa 3.
+
+822
+01:16:07,068 --> 01:16:11,758
+ler_pedido_de_ferramenta e extrair_json transformam o texto num dicionário.
+
+823
+01:16:12,368 --> 01:16:20,947
+preparar_pedido confere: Biblioteca e Mesa 3 existem e aparecem na pergunta, não há parâmetro extra, e o cenário vazio vira tranquilo.
+
+824
+01:16:21,102 --> 01:16:22,622
+Status ok.
+
+825
+01:16:23,235 --> 01:16:31,384
+executar chama rota_tempo_previsto, que chama prever_grafo_tempo: o modelo da Fase 2 prevê o tempo dos 90 trechos no cenário tranquilo.
+
+826
+01:16:32,002 --> 01:16:38,027
+Com o grafo de segundos e a referência recalculada, a mesma buscar da Fase 1 roda o A estrela.
+
+827
+01:16:38,635 --> 01:16:44,962
+O caminho encontrado: Biblioteca, Eixo Norte, Pátio Direito, Pátio D, Mesa 3.
+
+828
+01:16:45,135 --> 01:16:49,581
+São 113,5 metros e 43 segundos previstos.
+
+829
+01:16:50,202 --> 01:16:53,649
+O texto da ferramenta volta ao Qwen como mensagem tool.
+
+830
+01:16:53,835 --> 01:16:56,574
+Ele escreve a explicação em português.
+
+831
+01:16:56,735 --> 01:17:03,700
+Depois, numeros_fora_da_ferramenta compara os números: 113.5 e 43 estão no resultado.
+
+832
+01:17:03,868 --> 01:17:05,492
+Nada sinalizado.
+
+833
+01:17:06,102 --> 01:17:08,737
+E a resposta final é impressa.
+
+834
+01:17:08,902 --> 01:17:16,111
+Em resumo: o LLM entendeu e explicou, o modelo de custo deu os tempos, e a busca A estrela encontrou o caminho.
+
+835
+01:17:16,268 --> 01:17:18,821
+As três fases numa só pergunta.
+
+836
+01:17:19,435 --> 01:17:23,045
+Na GPU, essa pergunta inteira levou alguns segundos.
+
+837
+01:17:23,202 --> 01:17:28,124
+O mapa e o treino rodam uma vez só; o Qwen é a parte cara de cada pedido.
+
+838
+01:17:28,735 --> 01:17:32,043
+Capítulo dezesseis: preparação para a defesa.
+
+839
+01:17:32,202 --> 01:17:37,042
+Na arguição, cada um responde sobre a fase de outro colega, sozinho.
+
+840
+01:17:37,202 --> 01:17:41,892
+Aqui estão perguntas prováveis, com respostas baseadas no código real.
+
+841
+01:17:42,502 --> 01:17:45,729
+Pergunta 1. Por que o projeto usa Python?
+
+842
+01:17:46,335 --> 01:17:55,843
+Porque é a linguagem da disciplina e do Colab, tem bibliotecas maduras para dados e modelos de linguagem, e permite um código curto e fácil de explicar.
+
+843
+01:17:56,469 --> 01:17:59,974
+Pergunta 2. Por que VIZINHOS é um dicionário?
+
+844
+01:18:00,602 --> 01:18:07,033
+Porque o algoritmo pergunta o tempo todo quais são os vizinhos de um local, e o dicionário responde direto pela chave.
+
+845
+01:18:07,202 --> 01:18:10,998
+É uma lista de adjacência, ideal para um grafo esparso.
+
+846
+01:18:11,602 --> 01:18:15,757
+Pergunta 3. Por que a busca usa while e não for?
+
+847
+01:18:16,369 --> 01:18:19,572
+Porque o número de voltas não é conhecido antes.
+
+848
+01:18:19,735 --> 01:18:25,353
+O laço roda enquanto houver itens na fronteira, e termina com return quando o destino é retirado.
+
+849
+01:18:25,969 --> 01:18:29,834
+Pergunta 4. Qual a diferença entre função e método?
+
+850
+01:18:30,469 --> 01:18:33,080
+Uma função existe sozinha, como min.
+
+851
+01:18:33,235 --> 01:18:38,412
+Um método pertence a um objeto e é chamado com ponto, como fronteira ponto remove.
+
+852
+01:18:38,569 --> 01:18:41,424
+O ponto acessa o que pertence ao objeto.
+
+853
+01:18:42,035 --> 01:18:46,817
+Pergunta 5. Como funciona pergunta.strip().lower()?
+
+854
+01:18:47,435 --> 01:18:54,191
+Strip devolve uma nova string sem os espaços das pontas, e lower age sobre esse resultado, deixando tudo minúsculo.
+
+855
+01:18:54,369 --> 01:18:59,186
+É encadeamento, da esquerda para a direita, e a variável original não muda.
+
+856
+01:18:59,802 --> 01:19:04,608
+Pergunta 6. O que é a fronteira e por que ela é uma lista de tuplas?
+
+857
+01:19:05,235 --> 01:19:08,380
+É o conjunto de caminhos ainda não explorados.
+
+858
+01:19:08,535 --> 01:19:17,671
+Cada item é uma tupla com f, g, local e caminho, e como o min compara tuplas posição por posição, a lista simples funciona como fila de prioridade.
+
+859
+01:19:18,302 --> 01:19:22,875
+Pergunta 7. Qual a diferença entre custo uniforme e A*?
+
+860
+01:19:23,502 --> 01:19:27,437
+O custo uniforme ordena pela distância já percorrida, g.
+
+861
+01:19:27,602 --> 01:19:29,981
+O A estrela ordena por g mais h.
+
+862
+01:19:30,135 --> 01:19:35,103
+No projeto, é a mesma função buscar, mudando só o parâmetro usar heurística.
+
+863
+01:19:35,735 --> 01:19:39,809
+Pergunta 8. Como vocês garantem que o caminho é ótimo?
+
+864
+01:19:40,435 --> 01:19:49,606
+Com três condições: a heurística é admissível e consistente, o objetivo é testado ao retirar o nó da fronteira, e todos os custos são positivos.
+
+865
+01:19:49,769 --> 01:19:53,820
+Os custos do A estrela sempre bateram com os do custo uniforme.
+
+866
+01:19:54,435 --> 01:19:58,544
+Pergunta 9. Qual é a heurística e por que ela é admissível?
+
+867
+01:19:59,169 --> 01:20:04,880
+É o valor absoluto da diferença entre as distâncias do nó e do destino até a Entrada Principal.
+
+868
+01:20:05,035 --> 01:20:10,955
+Pela desigualdade triangular, essa diferença nunca ultrapassa a distância real entre eles.
+
+869
+01:20:11,569 --> 01:20:15,655
+Pergunta 10. Por que não usaram distância euclidiana?
+
+870
+01:20:16,269 --> 01:20:20,099
+Porque o projeto não guarda coordenadas, só nomes e metros.
+
+871
+01:20:20,269 --> 01:20:25,945
+A distância até um ponto de referência dá uma estimativa admissível usando apenas o próprio grafo.
+
+872
+01:20:26,569 --> 01:20:30,492
+Pergunta 11. O que acontece se a heurística retornar zero?
+
+873
+01:20:31,102 --> 01:20:34,944
+Então f é igual a g, e o A estrela vira o custo uniforme.
+
+874
+01:20:35,102 --> 01:20:39,362
+Continua correto, mas perde a direção e pode expandir mais nós.
+
+875
+01:20:39,969 --> 01:20:45,065
+Pergunta 12. Por que, no experimento, o A* expandiu os mesmos nós?
+
+876
+01:20:45,669 --> 01:20:49,813
+Porque a origem do experimento é a própria Entrada, o ponto de referência.
+
+877
+01:20:49,969 --> 01:20:52,871
+Aí quase todos os nós empatam em f.
+
+878
+01:20:53,035 --> 01:20:57,875
+Com outra origem, como a Mesa 1, o A estrela expandiu 7 nós contra 9.
+
+879
+01:20:58,502 --> 01:21:02,797
+Pergunta 13. Qual a complexidade da busca do projeto?
+
+880
+01:21:03,402 --> 01:21:07,151
+A cada volta, min e remove percorrem a fronteira inteira.
+
+881
+01:21:07,335 --> 01:21:10,794
+No pior caso, isso fica na ordem de E ao quadrado.
+
+882
+01:21:10,969 --> 01:21:15,032
+Com heapq e um conjunto de visitados, cairia para E log E.
+
+883
+01:21:15,635 --> 01:21:20,417
+Pergunta 14. O que aconteceria se o campus fosse muito maior?
+
+884
+01:21:21,035 --> 01:21:27,141
+A lista com min ficaria lenta, e valeria trocar por heapq e usar um conjunto para os visitados.
+
+885
+01:21:27,302 --> 01:21:31,724
+A tabela da heurística continuaria correta, mas o preparo custaria mais.
+
+886
+01:21:32,335 --> 01:21:36,177
+Pergunta 15. Como o modelo de custo foi treinado?
+
+887
+01:21:36,802 --> 01:21:42,455
+Com 2160 linhas sintéticas geradas por uma regra pública e semente fixa.
+
+888
+01:21:42,635 --> 01:21:51,365
+Um Pipeline faz imputação, padronização e one hot, e a regressão linear venceu a árvore pela menor MAE na validação cruzada por trecho.
+
+889
+01:21:51,969 --> 01:21:56,438
+Pergunta 16. Por que separar treino e teste por trecho?
+
+890
+01:21:57,069 --> 01:22:01,735
+Porque o mesmo trecho no treino e no teste deixaria o teste fácil demais.
+
+891
+01:22:01,902 --> 01:22:06,499
+Agrupando por trecho, medimos se o modelo prevê trechos que nunca viu.
+
+892
+01:22:07,102 --> 01:22:13,034
+Pergunta 17. O que significam MAE, RMSE e R²?
+
+893
+01:22:13,669 --> 01:22:19,067
+MAE é o erro absoluto médio, 0,84 segundo no teste.
+
+894
+01:22:19,235 --> 01:22:23,739
+RMSE pune mais os erros grandes, 1,16 segundo.
+
+895
+01:22:23,902 --> 01:22:29,625
+E R quadrado é a fração da variação que o modelo explica, 0,97.
+
+896
+01:22:30,235 --> 01:22:34,228
+Pergunta 18. Como o custo aprendido entra no A*?
+
+897
+01:22:34,835 --> 01:22:42,706
+Prever grafo tempo usa o modelo para trocar os metros por segundos previstos, a referência da heurística é recalculada em segundos,
+
+898
+01:22:42,869 --> 01:22:46,665
+e a mesma função buscar da Fase 1 roda sobre esse grafo.
+
+899
+01:22:47,269 --> 01:22:51,796
+Pergunta 19. Mostre o modelo de custo mudando a decisão.
+
+900
+01:22:52,402 --> 01:23:00,807
+Da Mesa 1 até a Mesa 4 com cadeiras no pátio: a rota mais curta, por B, tem 42 metros e 35,7 segundos.
+
+901
+01:23:00,969 --> 01:23:07,551
+O A estrela com tempo escolhe a rota por D, com 46 metros e 23,7 segundos.
+
+902
+01:23:08,169 --> 01:23:12,475
+Pergunta 20. Como o LLM decide qual ferramenta chamar?
+
+903
+01:23:13,102 --> 01:23:18,918
+Ele lê as regras, a pergunta e a ficha em JSON de cada ferramenta, gerada pela docstring.
+
+904
+01:23:19,102 --> 01:23:22,073
+Então escreve um pedido entre as marcas tool call.
+
+905
+01:23:22,235 --> 01:23:24,138
+Quem executa é o código.
+
+906
+01:23:24,769 --> 01:23:28,982
+Pergunta 21. Por que o LLM não calcula a rota?
+
+907
+01:23:29,602 --> 01:23:34,628
+Porque modelos de linguagem não são confiáveis em cálculos exatos de caminhos.
+
+908
+01:23:34,802 --> 01:23:37,611
+A busca é exata e verificável.
+
+909
+01:23:37,769 --> 01:23:41,808
+O modelo entende o pedido e explica; a ferramenta calcula.
+
+910
+01:23:42,435 --> 01:23:47,670
+Pergunta 22. Quando o LLM alucina, e o que o código faz?
+
+911
+01:23:48,302 --> 01:23:55,720
+Na versão 4, ele inventou rotas sem chamar ferramenta; hoje o código pede de novo e, se não conseguir, admite.
+
+912
+01:23:55,902 --> 01:24:01,068
+Locais inventados são recusados, e números fora do resultado são sinalizados.
+
+913
+01:24:01,702 --> 01:24:06,183
+Pergunta 23. Quanto custa e quanto demora cada chamada?
+
+914
+01:24:06,802 --> 01:24:11,492
+Não há custo por chamada, porque o modelo roda na sessão, sem chave de API.
+
+915
+01:24:11,669 --> 01:24:18,982
+Mas há tempo: mediana de 3,8 segundos por pedido na GPU e 135 segundos na CPU do Colab.
+
+916
+01:24:19,602 --> 01:24:24,129
+Pergunta 24. E se o usuário pedir algo fora do escopo?
+
+917
+01:24:24,735 --> 01:24:30,783
+Se for uma saudação ou pergunta geral, ele responde sem ferramenta, como na capital do Brasil.
+
+918
+01:24:30,969 --> 01:24:35,879
+Se for um local que não existe, como B-07, o programa pede um nome do mapa.
+
+919
+01:24:36,502 --> 01:24:42,434
+Pergunta 25. Por que existe preparar_pedido se o LLM já escolhe os argumentos?
+
+920
+01:24:43,069 --> 01:24:45,146
+Porque um modelo pequeno erra.
+
+921
+01:24:45,302 --> 01:24:52,046
+Preparar pedido padroniza os nomes e confere tudo antes de executar, devolvendo ok, erro ou esclarecimento.
+
+922
+01:24:52,202 --> 01:24:55,011
+O modelo interpreta, e o código garante.
+
+923
+01:24:55,635 --> 01:24:59,930
+Pergunta 26. Quais são as limitações do projeto?
+
+924
+01:25:00,535 --> 01:25:05,747
+Os dados são sintéticos, as distâncias são estimativas e não há sensores.
+
+925
+01:25:05,902 --> 01:25:09,686
+O Qwen pequeno acerta só 3 de 10 pedidos informais.
+
+926
+01:25:09,869 --> 01:25:14,477
+E o agente calcula um destino por vez, com experimento em recortes do mesmo mapa.
+
+927
+01:25:15,102 --> 01:25:19,617
+Uma dica final: na arguição, explique com as palavras do código.
+
+928
+01:25:19,802 --> 01:25:22,843
+Cite a função, a linha e o número real.
+
+929
+01:25:23,002 --> 01:25:30,141
+Você passou por todo o projeto: o grafo, a busca, a heurística, o A estrela, o modelo de custo e o agente.
+
+930
+01:25:30,302 --> 01:25:32,019
+Boa apresentação!

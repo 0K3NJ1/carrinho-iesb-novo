@@ -1,0 +1,17 @@
+00:00:00  Capítulo 1 — Abertura: o que vamos aprender
+00:02:46  Capítulo 2 — O notebook por dentro e as bibliotecas
+00:06:51  Capítulo 3 — Python essencial, com o código do projeto
+00:15:48  Capítulo 4 — O campus vira um grafo
+00:21:57  Capítulo 5 — A busca de custo uniforme
+00:28:01  Capítulo 6 — Heurística: uma estimativa que aponta o caminho
+00:32:11  Capítulo 7 — O algoritmo A*
+00:37:45  Capítulo 8 — Ferramentas e experimento da Fase 1
+00:43:04  Capítulo 9 — Fase 2: dados sintéticos e modelos de tempo
+00:49:16  Capítulo 10 — Fase 2: o custo aprendido entra na busca
+00:53:31  Capítulo 11 — Fase 3: o Qwen e as ferramentas
+00:58:21  Capítulo 12 — Fase 3: o código confere o pedido do modelo
+01:04:53  Capítulo 13 — Fase 3: o ciclo do agente e as interfaces
+01:10:40  Capítulo 14 — Avaliação real do agente
+01:14:46  Capítulo 15 — Simulação completa: do “Executar tudo” à resposta
+01:17:28  Capítulo 16 — Preparação para a defesa
+01:25:32  Fim

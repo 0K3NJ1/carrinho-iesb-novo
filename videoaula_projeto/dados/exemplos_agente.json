@@ -1,0 +1,196 @@
+{
+ "padronizar": {
+  "Sala B04": "b 4",
+  "banheiro fem do Design": "wc feminino design",
+  "Café Mania": "cafe mania",
+  "Pátio/Direito": "patio direito",
+  "Corredor I/J": "corredor i j",
+  "mesa 01": "mesa 1",
+  "WC Feminino Design": "wc feminino design",
+  "B-04": "b 4"
+ },
+ "resolver_local": {
+  "B-04": [
+   "B-04",
+   []
+  ],
+  "b4": [
+   "B-04",
+   []
+  ],
+  "biblio": [
+   "Biblioteca",
+   []
+  ],
+  "bibliotca": [
+   "Biblioteca",
+   []
+  ],
+  "cafe manai": [
+   "Café Mania",
+   []
+  ],
+  "banheiro": [
+   null,
+   [
+    "WC Acessível Pátio",
+    "WC Feminino Pátio",
+    "WC Cinema",
+    "WC Masculino Design",
+    "WC Feminino Design",
+    "WC Masculino C",
+    "WC Feminino C",
+    "WC Masculino B",
+    "WC Feminino B",
+    "WC Masculino I",
+    "WC Feminino I",
+    "WC Masculino J",
+    "WC Feminino J"
+   ]
+  ],
+  "lanchonete": [
+   null,
+   [
+    "Easy Smart",
+    "Café Mania"
+   ]
+  ],
+  "sala 02": [
+   null,
+   []
+  ],
+  "B-07": [
+   null,
+   []
+  ],
+  "auditorio": [
+   null,
+   []
+  ],
+  "": [
+   null,
+   []
+  ]
+ },
+ "resolver_cenario": {
+  "lotado": "movimentado",
+  "tranqüilo": "tranquilo",
+  "tranqulho": "tranquilo",
+  "tranq": "tranquilo",
+  "cadeiras": "cadeiras_no_patio",
+  "chuva": null
+ },
+ "local_na_pergunta": {
+  "Café Mania em \"cafe manai para easy smrt\"": true,
+  "Mesa 3 em \"da biblioteca para o banheiro\"": false
+ },
+ "preparar_pedido": [
+  {
+   "pedido": {
+    "name": "rota_tempo_previsto",
+    "arguments": {
+     "origem": "biblio",
+     "destino": "b4"
+    }
+   },
+   "pergunta": "biblio para b4",
+   "resultado": {
+    "status": "ok",
+    "pedido": {
+     "name": "rota_tempo_previsto",
+     "arguments": {
+      "origem": "Biblioteca",
+      "destino": "B-04",
+      "cenario": "tranquilo"
+     }
+    }
+   }
+  },
+  {
+   "pedido": {
+    "name": "rota_tempo_previsto",
+    "arguments": {
+     "origem": "Biblioteca",
+     "destino": "banheiro"
+    }
+   },
+   "pergunta": "da biblioteca para o banheiro",
+   "resultado": {
+    "status": "esclarecimento",
+    "campo": "destino",
+    "mensagem": "Qual é o local de destino? Opções: WC Acessível Pátio, WC Feminino Pátio, WC Cinema, WC Masculino Design, WC Feminino Design, WC Masculino C, WC Feminino C, WC Masculino B, WC Feminino B, WC Masculino I, WC Feminino I, WC Masculino J, WC Feminino J."
+   }
+  },
+  {
+   "pedido": {
+    "name": "rota_tempo_previsto",
+    "arguments": {
+     "origem": "Biblioteca",
+     "destino": "Mesa 3"
+    }
+   },
+   "pergunta": "inventa local",
+   "resultado": {
+    "status": "erro",
+    "mensagem": "Erro: \"Biblioteca\" não aparece na pergunta. Copie o nome como o usuário escreveu."
+   }
+  },
+  {
+   "pedido": {
+    "name": "rota_tempo_previsto",
+    "arguments": {
+     "origem": "Mesa 1",
+     "destino": "Mesa 4",
+     "velocidade": 10
+    }
+   },
+   "pergunta": "mesa 1 ate mesa 4",
+   "resultado": {
+    "status": "erro",
+    "mensagem": "Erro: parâmetro extra. A velocidade é fixa em 15 km/h."
+   }
+  },
+  {
+   "pedido": {
+    "name": "rota_tempo_previsto",
+    "arguments": {
+     "origem": "Mesa 1",
+     "destino": "Mesa 4",
+     "cenario": "movimentado"
+    }
+   },
+   "pergunta": "Da Mesa 1 até a Mesa 4, considere cadeiras no pátio.",
+   "resultado": {
+    "status": "erro",
+    "mensagem": "Erro: o usuário não pediu o cenário movimentado. Use cenario=cadeiras_no_patio."
+   }
+  },
+  {
+   "pedido": {
+    "name": "voar",
+    "arguments": {}
+   },
+   "pergunta": "quero voar",
+   "resultado": {
+    "status": "erro",
+    "mensagem": "Erro: ferramenta ou arguments inválidos."
+   }
+  }
+ ],
+ "fala_do_mapa": {
+  "Bom dia!": false,
+  "Qual é a capital do Brasil?": false,
+  "mesa 1 pra lanchonete": true,
+  "cafe manai para easy smrt": true
+ },
+ "extrair_json": {
+  "name": "listar_vizinhos",
+  "arguments": {
+   "local": "Cinema"
+  }
+ },
+ "numeros_fora": [
+  "74"
+ ],
+ "nomes_total": 99
+}

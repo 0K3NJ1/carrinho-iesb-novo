@@ -1,0 +1,542 @@
+{
+ "Entrada Principal": {
+  "x": 60,
+  "y": 470,
+  "rotulo": "Entrada",
+  "lado": "cima"
+ },
+ "Eixo - Norte": {
+  "x": 330,
+  "y": 470,
+  "rotulo": "Eixo Norte",
+  "lado": "cima"
+ },
+ "Eixo - Design": {
+  "x": 760,
+  "y": 470,
+  "rotulo": "Eixo Design",
+  "lado": "cima"
+ },
+ "Eixo - Bloco C": {
+  "x": 1040,
+  "y": 470,
+  "rotulo": "Eixo Bloco C",
+  "lado": "cima"
+ },
+ "Eixo - Bloco B": {
+  "x": 1320,
+  "y": 470,
+  "rotulo": "Eixo Bloco B",
+  "lado": "cima"
+ },
+ "Eixo - Fundo": {
+  "x": 1520,
+  "y": 470,
+  "rotulo": "Eixo Fundo",
+  "lado": "cima"
+ },
+ "Pátio/Direito": {
+  "x": 420,
+  "y": 330,
+  "rotulo": "Pátio/Direito",
+  "lado": "cima"
+ },
+ "Mesa 1": {
+  "x": 130,
+  "y": 90,
+  "rotulo": "Mesa 1",
+  "lado": "cima"
+ },
+ "Mesa 2": {
+  "x": 420,
+  "y": 60,
+  "rotulo": "Mesa 2",
+  "lado": "cima"
+ },
+ "Mesa 3": {
+  "x": 120,
+  "y": 380,
+  "rotulo": "Mesa 3",
+  "lado": "cima"
+ },
+ "Mesa 4": {
+  "x": 470,
+  "y": 380,
+  "rotulo": "Mesa 4",
+  "lado": "cima"
+ },
+ "Sala dos Professores": {
+  "x": 535,
+  "y": 265,
+  "rotulo": "Sala Prof.",
+  "lado": "cima"
+ },
+ "Café Mania": {
+  "x": 530,
+  "y": 175,
+  "rotulo": "Café Mania",
+  "lado": "cima"
+ },
+ "Easy Smart": {
+  "x": 530,
+  "y": 95,
+  "rotulo": "Easy Smart",
+  "lado": "cima"
+ },
+ "WC Acessível Pátio": {
+  "x": 90,
+  "y": 230,
+  "rotulo": "WC Acess.",
+  "lado": "cima"
+ },
+ "WC Feminino Pátio": {
+  "x": 310,
+  "y": 235,
+  "rotulo": "WC Fem.",
+  "lado": "cima"
+ },
+ "Cinema": {
+  "x": 250,
+  "y": 590,
+  "rotulo": "Cinema",
+  "lado": "cima"
+ },
+ "WC Cinema": {
+  "x": 140,
+  "y": 670,
+  "rotulo": "WC Cinema",
+  "lado": "cima"
+ },
+ "Anexo Creche": {
+  "x": 320,
+  "y": 690,
+  "rotulo": "Anexo Creche",
+  "lado": "cima"
+ },
+ "Biblioteca": {
+  "x": 80,
+  "y": 580,
+  "rotulo": "Biblioteca",
+  "lado": "cima"
+ },
+ "Design": {
+  "x": 655,
+  "y": 415,
+  "rotulo": "Design",
+  "lado": "esq"
+ },
+ "Corredor Design": {
+  "x": 760,
+  "y": 390,
+  "rotulo": "Corr. Design",
+  "lado": "cima"
+ },
+ "D-01": {
+  "x": 680,
+  "y": 110,
+  "rotulo": "D-01",
+  "lado": "cima"
+ },
+ "D-02": {
+  "x": 680,
+  "y": 205,
+  "rotulo": "D-02",
+  "lado": "cima"
+ },
+ "D-03": {
+  "x": 680,
+  "y": 300,
+  "rotulo": "D-03",
+  "lado": "cima"
+ },
+ "D-04": {
+  "x": 840,
+  "y": 110,
+  "rotulo": "D-04",
+  "lado": "cima"
+ },
+ "D-05": {
+  "x": 840,
+  "y": 205,
+  "rotulo": "D-05",
+  "lado": "cima"
+ },
+ "D-06": {
+  "x": 840,
+  "y": 300,
+  "rotulo": "D-06",
+  "lado": "cima"
+ },
+ "WC Masculino Design": {
+  "x": 850,
+  "y": 395,
+  "rotulo": "WC M Design",
+  "lado": "dir"
+ },
+ "WC Feminino Design": {
+  "x": 850,
+  "y": 440,
+  "rotulo": "WC F Design",
+  "lado": "dir"
+ },
+ "Bloco C": {
+  "x": 935,
+  "y": 415,
+  "rotulo": "Bloco C",
+  "lado": "esq"
+ },
+ "Corredor Bloco C": {
+  "x": 1040,
+  "y": 390,
+  "rotulo": "Corr. C",
+  "lado": "cima"
+ },
+ "C-01": {
+  "x": 960,
+  "y": 110,
+  "rotulo": "C-01",
+  "lado": "cima"
+ },
+ "C-02": {
+  "x": 960,
+  "y": 205,
+  "rotulo": "C-02",
+  "lado": "cima"
+ },
+ "C-03": {
+  "x": 960,
+  "y": 300,
+  "rotulo": "C-03",
+  "lado": "cima"
+ },
+ "C-04": {
+  "x": 1120,
+  "y": 110,
+  "rotulo": "C-04",
+  "lado": "cima"
+ },
+ "C-05": {
+  "x": 1120,
+  "y": 205,
+  "rotulo": "C-05",
+  "lado": "cima"
+ },
+ "C-06": {
+  "x": 1120,
+  "y": 300,
+  "rotulo": "C-06",
+  "lado": "cima"
+ },
+ "WC Masculino C": {
+  "x": 1130,
+  "y": 395,
+  "rotulo": "WC M C",
+  "lado": "dir"
+ },
+ "WC Feminino C": {
+  "x": 1130,
+  "y": 440,
+  "rotulo": "WC F C",
+  "lado": "dir"
+ },
+ "Bloco B": {
+  "x": 1215,
+  "y": 415,
+  "rotulo": "Bloco B",
+  "lado": "esq"
+ },
+ "Corredor Bloco B": {
+  "x": 1320,
+  "y": 390,
+  "rotulo": "Corr. B",
+  "lado": "cima"
+ },
+ "B-01": {
+  "x": 1240,
+  "y": 110,
+  "rotulo": "B-01",
+  "lado": "cima"
+ },
+ "B-02": {
+  "x": 1240,
+  "y": 205,
+  "rotulo": "B-02",
+  "lado": "cima"
+ },
+ "B-03": {
+  "x": 1240,
+  "y": 300,
+  "rotulo": "B-03",
+  "lado": "cima"
+ },
+ "B-04": {
+  "x": 1400,
+  "y": 110,
+  "rotulo": "B-04",
+  "lado": "cima"
+ },
+ "B-05": {
+  "x": 1400,
+  "y": 205,
+  "rotulo": "B-05",
+  "lado": "cima"
+ },
+ "B-06": {
+  "x": 1400,
+  "y": 300,
+  "rotulo": "B-06",
+  "lado": "cima"
+ },
+ "WC Masculino B": {
+  "x": 1410,
+  "y": 395,
+  "rotulo": "WC M B",
+  "lado": "dir"
+ },
+ "WC Feminino B": {
+  "x": 1410,
+  "y": 440,
+  "rotulo": "WC F B",
+  "lado": "dir"
+ },
+ "Acesso Lateral I/J": {
+  "x": 1040,
+  "y": 560,
+  "rotulo": "Acesso I/J",
+  "lado": "cima"
+ },
+ "Corredor I/J": {
+  "x": 1040,
+  "y": 680,
+  "rotulo": "Corr. I/J",
+  "lado": "cima"
+ },
+ "Bloco I": {
+  "x": 1000,
+  "y": 820,
+  "rotulo": "Bloco I",
+  "lado": "cima"
+ },
+ "Bloco J": {
+  "x": 1085,
+  "y": 820,
+  "rotulo": "Bloco J",
+  "lado": "cima"
+ },
+ "I-01": {
+  "x": 550,
+  "y": 610,
+  "rotulo": "I-01",
+  "lado": "cima"
+ },
+ "I-02": {
+  "x": 690,
+  "y": 610,
+  "rotulo": "I-02",
+  "lado": "cima"
+ },
+ "I-03": {
+  "x": 830,
+  "y": 610,
+  "rotulo": "I-03",
+  "lado": "cima"
+ },
+ "I-04": {
+  "x": 550,
+  "y": 760,
+  "rotulo": "I-04",
+  "lado": "cima"
+ },
+ "I-05": {
+  "x": 690,
+  "y": 760,
+  "rotulo": "I-05",
+  "lado": "cima"
+ },
+ "I-06": {
+  "x": 830,
+  "y": 760,
+  "rotulo": "I-06",
+  "lado": "cima"
+ },
+ "J-01": {
+  "x": 1180,
+  "y": 610,
+  "rotulo": "J-01",
+  "lado": "cima"
+ },
+ "J-02": {
+  "x": 1320,
+  "y": 610,
+  "rotulo": "J-02",
+  "lado": "cima"
+ },
+ "J-03": {
+  "x": 1460,
+  "y": 610,
+  "rotulo": "J-03",
+  "lado": "cima"
+ },
+ "J-04": {
+  "x": 1180,
+  "y": 760,
+  "rotulo": "J-04",
+  "lado": "cima"
+ },
+ "J-05": {
+  "x": 1320,
+  "y": 760,
+  "rotulo": "J-05",
+  "lado": "cima"
+ },
+ "J-06": {
+  "x": 1460,
+  "y": 760,
+  "rotulo": "J-06",
+  "lado": "cima"
+ },
+ "WC Masculino I": {
+  "x": 970,
+  "y": 610,
+  "rotulo": "WC M I",
+  "lado": "cima"
+ },
+ "WC Feminino I": {
+  "x": 970,
+  "y": 760,
+  "rotulo": "WC F I",
+  "lado": "cima"
+ },
+ "WC Masculino J": {
+  "x": 1530,
+  "y": 610,
+  "rotulo": "WC M J",
+  "lado": "cima"
+ },
+ "WC Feminino J": {
+  "x": 1530,
+  "y": 760,
+  "rotulo": "WC F J",
+  "lado": "cima"
+ },
+ "Pátio - A": {
+  "x": 200,
+  "y": 140,
+  "rotulo": "Pátio - A",
+  "lado": "cima"
+ },
+ "Pátio - B": {
+  "x": 420,
+  "y": 140,
+  "rotulo": "Pátio - B",
+  "lado": "cima"
+ },
+ "Pátio - D": {
+  "x": 200,
+  "y": 330,
+  "rotulo": "Pátio - D",
+  "lado": "cima"
+ },
+ "Corredor Design - 03/06": {
+  "x": 760,
+  "y": 300,
+  "rotulo": "03/06",
+  "lado": "cima"
+ },
+ "Corredor Design - 02/05": {
+  "x": 760,
+  "y": 205,
+  "rotulo": "02/05",
+  "lado": "cima"
+ },
+ "Corredor Design - 01/04": {
+  "x": 760,
+  "y": 110,
+  "rotulo": "01/04",
+  "lado": "cima"
+ },
+ "Corredor Bloco C - 03/06": {
+  "x": 1040,
+  "y": 300,
+  "rotulo": "03/06",
+  "lado": "cima"
+ },
+ "Corredor Bloco C - 02/05": {
+  "x": 1040,
+  "y": 205,
+  "rotulo": "02/05",
+  "lado": "cima"
+ },
+ "Corredor Bloco C - 01/04": {
+  "x": 1040,
+  "y": 110,
+  "rotulo": "01/04",
+  "lado": "cima"
+ },
+ "Corredor Bloco B - 03/06": {
+  "x": 1320,
+  "y": 300,
+  "rotulo": "03/06",
+  "lado": "cima"
+ },
+ "Corredor Bloco B - 02/05": {
+  "x": 1320,
+  "y": 205,
+  "rotulo": "02/05",
+  "lado": "cima"
+ },
+ "Corredor Bloco B - 01/04": {
+  "x": 1320,
+  "y": 110,
+  "rotulo": "01/04",
+  "lado": "cima"
+ },
+ "Corredor I/J - I-01/04": {
+  "x": 550,
+  "y": 680,
+  "rotulo": "I-01/04",
+  "lado": "cima"
+ },
+ "Corredor I/J - I-02/05": {
+  "x": 690,
+  "y": 680,
+  "rotulo": "I-02/05",
+  "lado": "cima"
+ },
+ "Corredor I/J - I-03/06": {
+  "x": 830,
+  "y": 680,
+  "rotulo": "I-03/06",
+  "lado": "cima"
+ },
+ "Corredor I/J - WC I": {
+  "x": 970,
+  "y": 680,
+  "rotulo": "WC I",
+  "lado": "cima"
+ },
+ "Corredor I/J - J-01/04": {
+  "x": 1180,
+  "y": 680,
+  "rotulo": "J-01/04",
+  "lado": "cima"
+ },
+ "Corredor I/J - J-02/05": {
+  "x": 1320,
+  "y": 680,
+  "rotulo": "J-02/05",
+  "lado": "cima"
+ },
+ "Corredor I/J - J-03/06": {
+  "x": 1460,
+  "y": 680,
+  "rotulo": "J-03/06",
+  "lado": "cima"
+ },
+ "Corredor I/J - WC J": {
+  "x": 1530,
+  "y": 680,
+  "rotulo": "WC J",
+  "lado": "cima"
+ }
+}

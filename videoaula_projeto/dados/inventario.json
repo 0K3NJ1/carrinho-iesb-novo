@@ -1,0 +1,1270 @@
+{
+ "notebook": "carrinho_iesb_unificado.ipynb",
+ "celulas": [
+  {
+   "celula": 2,
+   "linhas": 4,
+   "primeira_linha": "ORIGEM = \"Entrada Principal\""
+  },
+  {
+   "celula": 5,
+   "linhas": 112,
+   "primeira_linha": "LOCAIS = ["
+  },
+  {
+   "celula": 7,
+   "linhas": 63,
+   "primeira_linha": "from time import perf_counter"
+  },
+  {
+   "celula": 9,
+   "linhas": 41,
+   "primeira_linha": "def calcular_rota(origem: str, destino: str) -> str:"
+  },
+  {
+   "celula": 11,
+   "linhas": 5,
+   "primeira_linha": "print(calcular_rota(ORIGEM, DESTINO))"
+  },
+  {
+   "celula": 13,
+   "linhas": 46,
+   "primeira_linha": "from statistics import median"
+  },
+  {
+   "celula": 15,
+   "linhas": 1,
+   "primeira_linha": "%pip -q install matplotlib"
+  },
+  {
+   "celula": 16,
+   "linhas": 42,
+   "primeira_linha": "import matplotlib.pyplot as plt"
+  },
+  {
+   "celula": 18,
+   "linhas": 1,
+   "primeira_linha": "%pip -q install numpy pandas scikit-learn"
+  },
+  {
+   "celula": 19,
+   "linhas": 191,
+   "primeira_linha": "# FASE_2_SINTETICA: executada também dentro do notebook unificado."
+  },
+  {
+   "celula": 21,
+   "linhas": 1,
+   "primeira_linha": "%pip -q install transformers"
+  },
+  {
+   "celula": 22,
+   "linhas": 41,
+   "primeira_linha": "import json"
+  },
+  {
+   "celula": 24,
+   "linhas": 272,
+   "primeira_linha": "# Agente: o Qwen pede a ferramenta, o código confere e executa, e o Qwen explica o resultado."
+  },
+  {
+   "celula": 26,
+   "linhas": 15,
+   "primeira_linha": "from transformers.utils import get_json_schema"
+  },
+  {
+   "celula": 28,
+   "linhas": 21,
+   "primeira_linha": "def conversa_interativa():"
+  },
+  {
+   "celula": 30,
+   "linhas": 10,
+   "primeira_linha": "#@title Faça sua pergunta ao agente"
+  },
+  {
+   "celula": 31,
+   "linhas": 9,
+   "primeira_linha": "#@title Conversa com o agente (chat)"
+  },
+  {
+   "celula": 33,
+   "linhas": 60,
+   "primeira_linha": "# Cada caso: (pergunta, o que o agente deve fazer, argumentos esperados)."
+  },
+  {
+   "celula": 35,
+   "linhas": 58,
+   "primeira_linha": "# Executar somente depois de carregar o Qwen real."
+  },
+  {
+   "celula": 39,
+   "linhas": 8,
+   "primeira_linha": "# Última célula: fica esperando a pergunta. Digite 'sair' para encerrar."
+  }
+ ],
+ "importacoes": [
+  {
+   "celula": 7,
+   "modulo": "time",
+   "nome": "perf_counter"
+  },
+  {
+   "celula": 13,
+   "modulo": "statistics",
+   "nome": "median"
+  },
+  {
+   "celula": 16,
+   "modulo": "matplotlib.pyplot",
+   "nome": "plt"
+  },
+  {
+   "celula": 19,
+   "modulo": "json",
+   "nome": "json"
+  },
+  {
+   "celula": 19,
+   "modulo": "random",
+   "nome": "random"
+  },
+  {
+   "celula": 19,
+   "modulo": "pathlib",
+   "nome": "Path"
+  },
+  {
+   "celula": 19,
+   "modulo": "numpy",
+   "nome": "np"
+  },
+  {
+   "celula": 19,
+   "modulo": "pandas",
+   "nome": "pd"
+  },
+  {
+   "celula": 19,
+   "modulo": "sklearn.compose",
+   "nome": "ColumnTransformer"
+  },
+  {
+   "celula": 19,
+   "modulo": "sklearn.pipeline",
+   "nome": "make_pipeline"
+  },
+  {
+   "celula": 19,
+   "modulo": "sklearn.impute",
+   "nome": "SimpleImputer"
+  },
+  {
+   "celula": 19,
+   "modulo": "sklearn.preprocessing",
+   "nome": "OneHotEncoder"
+  },
+  {
+   "celula": 19,
+   "modulo": "sklearn.preprocessing",
+   "nome": "StandardScaler"
+  },
+  {
+   "celula": 19,
+   "modulo": "sklearn.linear_model",
+   "nome": "LinearRegression"
+  },
+  {
+   "celula": 19,
+   "modulo": "sklearn.tree",
+   "nome": "DecisionTreeRegressor"
+  },
+  {
+   "celula": 19,
+   "modulo": "sklearn.model_selection",
+   "nome": "GroupKFold"
+  },
+  {
+   "celula": 19,
+   "modulo": "sklearn.model_selection",
+   "nome": "GroupShuffleSplit"
+  },
+  {
+   "celula": 19,
+   "modulo": "sklearn.model_selection",
+   "nome": "cross_val_predict"
+  },
+  {
+   "celula": 19,
+   "modulo": "sklearn.metrics",
+   "nome": "mean_absolute_error"
+  },
+  {
+   "celula": 19,
+   "modulo": "sklearn.metrics",
+   "nome": "mean_squared_error"
+  },
+  {
+   "celula": 19,
+   "modulo": "sklearn.metrics",
+   "nome": "r2_score"
+  },
+  {
+   "celula": 22,
+   "modulo": "json",
+   "nome": "json"
+  },
+  {
+   "celula": 22,
+   "modulo": "torch",
+   "nome": "torch"
+  },
+  {
+   "celula": 22,
+   "modulo": "transformers",
+   "nome": "AutoTokenizer"
+  },
+  {
+   "celula": 22,
+   "modulo": "transformers",
+   "nome": "AutoModelForCausalLM"
+  },
+  {
+   "celula": 24,
+   "modulo": "json",
+   "nome": "json"
+  },
+  {
+   "celula": 24,
+   "modulo": "re",
+   "nome": "re"
+  },
+  {
+   "celula": 24,
+   "modulo": "unicodedata",
+   "nome": "unicodedata"
+  },
+  {
+   "celula": 24,
+   "modulo": "difflib",
+   "nome": "get_close_matches"
+  },
+  {
+   "celula": 26,
+   "modulo": "transformers.utils",
+   "nome": "get_json_schema"
+  },
+  {
+   "celula": 35,
+   "modulo": "statistics",
+   "nome": "median"
+  }
+ ],
+ "funcoes": [
+  {
+   "nome": "h",
+   "celula": 7,
+   "linha_inicio": 7,
+   "linha_fim": 10,
+   "parametros": [
+    "local",
+    "destino"
+   ],
+   "padroes": [],
+   "docstring": "",
+   "chama": [
+    "abs"
+   ],
+   "tem_return": true,
+   "tem_while": false,
+   "tem_for": false,
+   "tem_try": false,
+   "chama_do_projeto": [],
+   "chamada_por": []
+  },
+  {
+   "nome": "buscar",
+   "celula": 7,
+   "linha_inicio": 13,
+   "linha_fim": 38,
+   "parametros": [
+    "origem",
+    "destino",
+    "grafo",
+    "usar_heuristica",
+    "referencia"
+   ],
+   "padroes": [
+    "None"
+   ],
+   "docstring": "",
+   "chama": [
+    ".append",
+    ".get",
+    ".remove",
+    "abs",
+    "len",
+    "min"
+   ],
+   "tem_return": true,
+   "tem_while": true,
+   "tem_for": true,
+   "tem_try": false,
+   "chama_do_projeto": [],
+   "chamada_por": [
+    "a_estrela",
+    "demonstrar_alternativa_patio",
+    "rota_tempo_previsto"
+   ]
+  },
+  {
+   "nome": "a_estrela",
+   "celula": 7,
+   "linha_inicio": 41,
+   "linha_fim": 43,
+   "parametros": [
+    "origem",
+    "destino"
+   ],
+   "padroes": [],
+   "docstring": "",
+   "chama": [
+    "buscar"
+   ],
+   "tem_return": true,
+   "tem_while": false,
+   "tem_for": false,
+   "tem_try": false,
+   "chama_do_projeto": [
+    "buscar"
+   ],
+   "chamada_por": [
+    "calcular_rota",
+    "demonstrar_alternativa_patio"
+   ]
+  },
+  {
+   "nome": "calcular_tempo",
+   "celula": 7,
+   "linha_inicio": 56,
+   "linha_fim": 63,
+   "parametros": [
+    "distancia_m",
+    "velocidade_kmh"
+   ],
+   "padroes": [],
+   "docstring": "",
+   "chama": [
+    "ValueError",
+    "float",
+    "isinstance"
+   ],
+   "tem_return": true,
+   "tem_while": false,
+   "tem_for": false,
+   "tem_try": false,
+   "chama_do_projeto": [],
+   "chamada_por": [
+    "calcular_rota"
+   ]
+  },
+  {
+   "nome": "calcular_rota",
+   "celula": 9,
+   "linha_inicio": 1,
+   "linha_fim": 22,
+   "parametros": [
+    "origem",
+    "destino"
+   ],
+   "padroes": [],
+   "docstring": "Calcula com A* a menor distância estimada no grafo e o tempo a velocidade constante.",
+   "chama": [
+    ".join",
+    "a_estrela",
+    "calcular_tempo",
+    "str"
+   ],
+   "tem_return": true,
+   "tem_while": false,
+   "tem_for": false,
+   "tem_try": true,
+   "chama_do_projeto": [
+    "a_estrela",
+    "calcular_tempo"
+   ],
+   "chamada_por": []
+  },
+  {
+   "nome": "listar_vizinhos",
+   "celula": 9,
+   "linha_inicio": 25,
+   "linha_fim": 37,
+   "parametros": [
+    "local"
+   ],
+   "padroes": [],
+   "docstring": "Lista os locais ligados diretamente a um local da planta do IESB.",
+   "chama": [
+    ".append",
+    ".join",
+    "str"
+   ],
+   "tem_return": true,
+   "tem_while": false,
+   "tem_for": true,
+   "tem_try": false,
+   "chama_do_projeto": [],
+   "chamada_por": [
+    "executar"
+   ]
+  },
+  {
+   "nome": "recortar_mapa",
+   "celula": 13,
+   "linha_inicio": 4,
+   "linha_fim": 20,
+   "parametros": [
+    "quantidade"
+   ],
+   "padroes": [],
+   "docstring": "",
+   "chama": [
+    ".append",
+    ".pop",
+    "len"
+   ],
+   "tem_return": true,
+   "tem_while": true,
+   "tem_for": true,
+   "tem_try": false,
+   "chama_do_projeto": [],
+   "chamada_por": []
+  },
+  {
+   "nome": "gerar_dados_sinteticos",
+   "celula": 19,
+   "linha_inicio": 21,
+   "linha_fim": 40,
+   "parametros": [],
+   "padroes": [],
+   "docstring": "",
+   "chama": [
+    ".DataFrame",
+    ".Random",
+    ".append",
+    ".choice",
+    ".gauss",
+    ".randint",
+    ".random",
+    "dict",
+    "enumerate",
+    "int",
+    "max",
+    "range"
+   ],
+   "tem_return": true,
+   "tem_while": false,
+   "tem_for": true,
+   "tem_try": false,
+   "chama_do_projeto": [],
+   "chamada_por": []
+  },
+  {
+   "nome": "preparar_modelo",
+   "celula": 19,
+   "linha_inicio": 48,
+   "linha_fim": 56,
+   "parametros": [
+    "nome"
+   ],
+   "padroes": [],
+   "docstring": "",
+   "chama": [
+    "ColumnTransformer",
+    "DecisionTreeRegressor",
+    "LinearRegression",
+    "OneHotEncoder",
+    "SimpleImputer",
+    "StandardScaler",
+    "make_pipeline"
+   ],
+   "tem_return": true,
+   "tem_while": false,
+   "tem_for": false,
+   "tem_try": false,
+   "chama_do_projeto": [],
+   "chamada_por": []
+  },
+  {
+   "nome": "metricas_tempo",
+   "celula": 19,
+   "linha_inicio": 59,
+   "linha_fim": 62,
+   "parametros": [
+    "real",
+    "previsto"
+   ],
+   "padroes": [],
+   "docstring": "",
+   "chama": [
+    ".sqrt",
+    "dict",
+    "float",
+    "mean_absolute_error",
+    "mean_squared_error",
+    "r2_score"
+   ],
+   "tem_return": true,
+   "tem_while": false,
+   "tem_for": false,
+   "tem_try": false,
+   "chama_do_projeto": [],
+   "chamada_por": []
+  },
+  {
+   "nome": "prever_grafo_tempo",
+   "celula": 19,
+   "linha_inicio": 113,
+   "linha_fim": 132,
+   "parametros": [
+    "cenario"
+   ],
+   "padroes": [],
+   "docstring": "",
+   "chama": [
+    ".append",
+    ".copy",
+    ".drop_duplicates",
+    ".maximum",
+    ".predict",
+    ".reset_index",
+    "ValueError",
+    "enumerate",
+    "float",
+    "len",
+    "zip"
+   ],
+   "tem_return": true,
+   "tem_while": false,
+   "tem_for": true,
+   "tem_try": false,
+   "chama_do_projeto": [],
+   "chamada_por": [
+    "demonstrar_alternativa_patio",
+    "rota_tempo_previsto"
+   ]
+  },
+  {
+   "nome": "rota_tempo_previsto",
+   "celula": 19,
+   "linha_inicio": 135,
+   "linha_fim": 163,
+   "parametros": [
+    "origem",
+    "destino",
+    "cenario"
+   ],
+   "padroes": [
+    "'tranquilo'"
+   ],
+   "docstring": "Consulta caminho, distância e menor tempo previsto, com base fixa de 15 km/h.",
+   "chama": [
+    ".join",
+    "buscar",
+    "dict",
+    "prever_grafo_tempo",
+    "sum",
+    "zip"
+   ],
+   "tem_return": true,
+   "tem_while": false,
+   "tem_for": false,
+   "tem_try": false,
+   "chama_do_projeto": [
+    "buscar",
+    "prever_grafo_tempo"
+   ],
+   "chamada_por": [
+    "executar"
+   ]
+  },
+  {
+   "nome": "demonstrar_alternativa_patio",
+   "celula": 19,
+   "linha_inicio": 170,
+   "linha_fim": 185,
+   "parametros": [],
+   "padroes": [],
+   "docstring": "",
+   "chama": [
+    ".dumps",
+    ".write_text",
+    "a_estrela",
+    "buscar",
+    "dict",
+    "prever_grafo_tempo",
+    "print",
+    "sum",
+    "zip"
+   ],
+   "tem_return": true,
+   "tem_while": false,
+   "tem_for": false,
+   "tem_try": false,
+   "chama_do_projeto": [
+    "a_estrela",
+    "buscar",
+    "prever_grafo_tempo"
+   ],
+   "chamada_por": []
+  },
+  {
+   "nome": "conversar",
+   "celula": 22,
+   "linha_inicio": 23,
+   "linha_fim": 38,
+   "parametros": [
+    "mensagens",
+    "ferramentas",
+    "max_tokens"
+   ],
+   "padroes": [
+    "None",
+    "200"
+   ],
+   "docstring": "",
+   "chama": [
+    ".apply_chat_template",
+    ".decode",
+    ".generate",
+    ".no_grad",
+    ".to",
+    "bool",
+    "dict",
+    "int",
+    "isinstance",
+    "len"
+   ],
+   "tem_return": true,
+   "tem_while": false,
+   "tem_for": false,
+   "tem_try": false,
+   "chama_do_projeto": [],
+   "chamada_por": [
+    "agente"
+   ]
+  },
+  {
+   "nome": "padronizar",
+   "celula": 24,
+   "linha_inicio": 12,
+   "linha_fim": 25,
+   "parametros": [
+    "texto"
+   ],
+   "padroes": [],
+   "docstring": "",
+   "chama": [
+    ".append",
+    ".category",
+    ".get",
+    ".isdigit",
+    ".join",
+    ".lower",
+    ".normalize",
+    ".split",
+    ".sub",
+    "int",
+    "str"
+   ],
+   "tem_return": true,
+   "tem_while": false,
+   "tem_for": true,
+   "tem_try": false,
+   "chama_do_projeto": [],
+   "chamada_por": [
+    "aparece_na_pergunta",
+    "fala_do_mapa",
+    "local_na_pergunta",
+    "resolver_cenario",
+    "resolver_local"
+   ]
+  },
+  {
+   "nome": "resolver_local",
+   "celula": 24,
+   "linha_inicio": 52,
+   "linha_fim": 64,
+   "parametros": [
+    "texto"
+   ],
+   "padroes": [],
+   "docstring": "",
+   "chama": [
+    ".search",
+    "get_close_matches",
+    "len",
+    "list",
+    "padronizar"
+   ],
+   "tem_return": true,
+   "tem_while": false,
+   "tem_for": false,
+   "tem_try": false,
+   "chama_do_projeto": [
+    "padronizar"
+   ],
+   "chamada_por": [
+    "local_na_pergunta",
+    "preparar_pedido"
+   ]
+  },
+  {
+   "nome": "resolver_cenario",
+   "celula": 24,
+   "linha_inicio": 67,
+   "linha_fim": 73,
+   "parametros": [
+    "texto"
+   ],
+   "padroes": [],
+   "docstring": "",
+   "chama": [
+    ".items",
+    "get_close_matches",
+    "list",
+    "padronizar"
+   ],
+   "tem_return": true,
+   "tem_while": false,
+   "tem_for": true,
+   "tem_try": false,
+   "chama_do_projeto": [
+    "padronizar"
+   ],
+   "chamada_por": [
+    "preparar_pedido"
+   ]
+  },
+  {
+   "nome": "aparece_na_pergunta",
+   "celula": 24,
+   "linha_inicio": 76,
+   "linha_fim": 78,
+   "parametros": [
+    "textos",
+    "pergunta"
+   ],
+   "padroes": [],
+   "docstring": "",
+   "chama": [
+    "any",
+    "padronizar"
+   ],
+   "tem_return": true,
+   "tem_while": false,
+   "tem_for": false,
+   "tem_try": false,
+   "chama_do_projeto": [
+    "padronizar"
+   ],
+   "chamada_por": [
+    "preparar_pedido"
+   ]
+  },
+  {
+   "nome": "local_na_pergunta",
+   "celula": 24,
+   "linha_inicio": 81,
+   "linha_fim": 90,
+   "parametros": [
+    "local",
+    "pergunta"
+   ],
+   "padroes": [],
+   "docstring": "",
+   "chama": [
+    ".join",
+    ".split",
+    "len",
+    "padronizar",
+    "range",
+    "resolver_local"
+   ],
+   "tem_return": true,
+   "tem_while": false,
+   "tem_for": true,
+   "tem_try": false,
+   "chama_do_projeto": [
+    "padronizar",
+    "resolver_local"
+   ],
+   "chamada_por": [
+    "preparar_pedido"
+   ]
+  },
+  {
+   "nome": "pergunta_ao_usuario",
+   "celula": 24,
+   "linha_inicio": 93,
+   "linha_fim": 97,
+   "parametros": [
+    "campo",
+    "opcoes"
+   ],
+   "padroes": [],
+   "docstring": "",
+   "chama": [
+    ".join"
+   ],
+   "tem_return": true,
+   "tem_while": false,
+   "tem_for": false,
+   "tem_try": false,
+   "chama_do_projeto": [],
+   "chamada_por": [
+    "preparar_pedido"
+   ]
+  },
+  {
+   "nome": "preparar_pedido",
+   "celula": 24,
+   "linha_inicio": 103,
+   "linha_fim": 130,
+   "parametros": [
+    "pedido",
+    "pergunta"
+   ],
+   "padroes": [
+    "''"
+   ],
+   "docstring": "",
+   "chama": [
+    ".get",
+    "aparece_na_pergunta",
+    "dict",
+    "isinstance",
+    "local_na_pergunta",
+    "pergunta_ao_usuario",
+    "resolver_cenario",
+    "resolver_local",
+    "set",
+    "str"
+   ],
+   "tem_return": true,
+   "tem_while": false,
+   "tem_for": true,
+   "tem_try": false,
+   "chama_do_projeto": [
+    "aparece_na_pergunta",
+    "local_na_pergunta",
+    "pergunta_ao_usuario",
+    "resolver_cenario",
+    "resolver_local"
+   ],
+   "chamada_por": [
+    "agente",
+    "executar"
+   ]
+  },
+  {
+   "nome": "executar",
+   "celula": 24,
+   "linha_inicio": 133,
+   "linha_fim": 141,
+   "parametros": [
+    "pedido"
+   ],
+   "padroes": [],
+   "docstring": "",
+   "chama": [
+    "listar_vizinhos",
+    "preparar_pedido",
+    "rota_tempo_previsto"
+   ],
+   "tem_return": true,
+   "tem_while": false,
+   "tem_for": false,
+   "tem_try": false,
+   "chama_do_projeto": [
+    "listar_vizinhos",
+    "preparar_pedido",
+    "rota_tempo_previsto"
+   ],
+   "chamada_por": [
+    "agente"
+   ]
+  },
+  {
+   "nome": "fala_do_mapa",
+   "celula": 24,
+   "linha_inicio": 176,
+   "linha_fim": 180,
+   "parametros": [
+    "pergunta"
+   ],
+   "padroes": [],
+   "docstring": "",
+   "chama": [
+    "any",
+    "list",
+    "padronizar"
+   ],
+   "tem_return": true,
+   "tem_while": false,
+   "tem_for": false,
+   "tem_try": false,
+   "chama_do_projeto": [
+    "padronizar"
+   ],
+   "chamada_por": [
+    "agente"
+   ]
+  },
+  {
+   "nome": "extrair_json",
+   "celula": 24,
+   "linha_inicio": 183,
+   "linha_fim": 191,
+   "parametros": [
+    "texto"
+   ],
+   "padroes": [],
+   "docstring": "",
+   "chama": [
+    ".find",
+    ".loads",
+    ".rfind"
+   ],
+   "tem_return": true,
+   "tem_while": false,
+   "tem_for": false,
+   "tem_try": true,
+   "chama_do_projeto": [],
+   "chamada_por": [
+    "ler_pedido_de_ferramenta"
+   ]
+  },
+  {
+   "nome": "ler_pedido_de_ferramenta",
+   "celula": 24,
+   "linha_inicio": 194,
+   "linha_fim": 198,
+   "parametros": [
+    "resposta"
+   ],
+   "padroes": [],
+   "docstring": "",
+   "chama": [
+    ".startswith",
+    ".strip",
+    "extrair_json"
+   ],
+   "tem_return": true,
+   "tem_while": false,
+   "tem_for": false,
+   "tem_try": false,
+   "chama_do_projeto": [
+    "extrair_json"
+   ],
+   "chamada_por": [
+    "agente"
+   ]
+  },
+  {
+   "nome": "numeros_fora_da_ferramenta",
+   "celula": 24,
+   "linha_inicio": 201,
+   "linha_fim": 208,
+   "parametros": [
+    "resposta",
+    "resultados"
+   ],
+   "padroes": [],
+   "docstring": "",
+   "chama": [
+    ".findall",
+    ".join",
+    ".replace",
+    ".sub",
+    "float",
+    "numeros",
+    "set",
+    "sorted"
+   ],
+   "tem_return": true,
+   "tem_while": false,
+   "tem_for": false,
+   "tem_try": false,
+   "chama_do_projeto": [],
+   "chamada_por": [
+    "agente"
+   ]
+  },
+  {
+   "nome": "agente",
+   "celula": 24,
+   "linha_inicio": 211,
+   "linha_fim": 271,
+   "parametros": [
+    "pergunta",
+    "mostrar",
+    "retornar_detalhes",
+    "historico"
+   ],
+   "padroes": [
+    "True",
+    "False",
+    "None"
+   ],
+   "docstring": "",
+   "chama": [
+    ".append",
+    ".copy",
+    ".get",
+    ".join",
+    ".update",
+    "conversar",
+    "dict",
+    "executar",
+    "fala_do_mapa",
+    "ler_pedido_de_ferramenta",
+    "numeros_fora_da_ferramenta",
+    "preparar_pedido",
+    "print",
+    "range"
+   ],
+   "tem_return": true,
+   "tem_while": false,
+   "tem_for": true,
+   "tem_try": false,
+   "chama_do_projeto": [
+    "conversar",
+    "executar",
+    "fala_do_mapa",
+    "ler_pedido_de_ferramenta",
+    "numeros_fora_da_ferramenta",
+    "preparar_pedido"
+   ],
+   "chamada_por": [
+    "conversa_interativa"
+   ]
+  },
+  {
+   "nome": "conversa_interativa",
+   "celula": 28,
+   "linha_inicio": 1,
+   "linha_fim": 20,
+   "parametros": [],
+   "padroes": [],
+   "docstring": "",
+   "chama": [
+    ".lower",
+    ".strip",
+    "agente",
+    "input",
+    "print"
+   ],
+   "tem_return": false,
+   "tem_while": true,
+   "tem_for": false,
+   "tem_try": false,
+   "chama_do_projeto": [
+    "agente"
+   ],
+   "chamada_por": []
+  },
+  {
+   "nome": "o_que_o_agente_fez",
+   "celula": 35,
+   "linha_inicio": 5,
+   "linha_fim": 11,
+   "parametros": [
+    "detalhes"
+   ],
+   "padroes": [],
+   "docstring": "",
+   "chama": [],
+   "tem_return": true,
+   "tem_while": false,
+   "tem_for": false,
+   "tem_try": false,
+   "chama_do_projeto": [],
+   "chamada_por": []
+  }
+ ],
+ "globais": {
+  "ORIGEM": [
+   2
+  ],
+  "DESTINO": [
+   2
+  ],
+  "VELOCIDADE_BASE_KMH": [
+   2
+  ],
+  "LOCAIS": [
+   5
+  ],
+  "LIGACOES": [
+   5
+  ],
+  "PONTOS_IJ": [
+   5
+  ],
+  "VIZINHOS": [
+   5
+  ],
+  "DISTANCIA_ENTRADA": [
+   7
+  ],
+  "inicio_preparo": [
+   7
+  ],
+  "TEMPO_PREPARO_MS": [
+   7
+  ],
+  "RESULTADOS": [
+   13
+  ],
+  "REPETICOES": [
+   13
+  ],
+  "caminho": [
+   16
+  ],
+  "distancia": [
+   16
+  ],
+  "SEMENTE_DADOS": [
+   19
+  ],
+  "PASTA_FASE2": [
+   19
+  ],
+  "NUMERICAS": [
+   19
+  ],
+  "CATEGORICAS": [
+   19
+  ],
+  "ENTRADAS": [
+   19
+  ],
+  "DADOS_TEMPO": [
+   19
+  ],
+  "separador": [
+   19
+  ],
+  "indices_treino": [
+   19
+  ],
+  "indices_teste": [
+   19
+  ],
+  "treino": [
+   19
+  ],
+  "teste": [
+   19
+  ],
+  "COMPARACAO_MODELOS": [
+   19
+  ],
+  "MELHOR_MODELO": [
+   19
+  ],
+  "modelo_avaliado": [
+   19
+  ],
+  "previsoes_teste": [
+   19
+  ],
+  "METRICAS_TESTE": [
+   19
+  ],
+  "erros": [
+   19,
+   19,
+   19,
+   35
+  ],
+  "MODELO_TEMPO": [
+   19
+  ],
+  "DEMONSTRACAO_PATIO": [
+   19
+  ],
+  "FERRAMENTAS": [
+   19
+  ],
+  "nome_qwen": [
+   22
+  ],
+  "tokenizador_qwen": [
+   22
+  ],
+  "ULTIMA_GERACAO": [
+   22
+  ],
+  "TROCAS": [
+   24
+  ],
+  "APELIDOS": [
+   24
+  ],
+  "GENERICOS": [
+   24,
+   24
+  ],
+  "NOMES": [
+   24
+  ],
+  "CENARIOS": [
+   24
+  ],
+  "CAMPOS": [
+   24
+  ],
+  "VERSAO_REGRAS": [
+   24
+  ],
+  "REGRAS": [
+   24
+  ],
+  "PALAVRAS_DE_ROTA": [
+   24
+  ],
+  "perguntas": [
+   26
+  ],
+  "MINHA_PERGUNTA": [
+   30
+  ],
+  "ABRIR_CONVERSA": [
+   31
+  ],
+  "R": [
+   33
+  ],
+  "V": [
+   33
+  ],
+  "CASOS": [
+   33
+  ],
+  "AVALIACAO": [
+   35
+  ],
+  "tabela": [
+   35
+  ],
+  "com_rota": [
+   35
+  ],
+  "pergunta": [
+   39
+  ]
+ }
+}
