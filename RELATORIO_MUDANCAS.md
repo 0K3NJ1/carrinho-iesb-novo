@@ -57,7 +57,20 @@ O código dessa parte caiu de 131 para 105 linhas não vazias. Um `assert` garan
 
 Uma célula nova, como no gabarito, preenchida com os resultados reais: escolha da ferramenta, argumentos, números inventados, custo e o caso de falha para o seminário.
 
-### 6. Textos
+### 6. Célula “Faça sua pergunta” (seção 8.2)
+
+Duas células para a demonstração:
+
+- **“Faça sua pergunta ao agente”**: no Colab, mostra uma caixa de texto (`#@param`) com a pergunta. Se a caixa estiver vazia, a célula abre um campo `input()` para digitar.
+- **“Conversa com o agente (chat)”**: uma caixa de marcar `ABRIR_CONVERSA` que inicia `conversa_interativa()`.
+
+Além delas, a **última célula do notebook** (seção 10) usa `input()` puro: fica esperando perguntas até alguém digitar `sair`. Por ser a última, tudo o que vem antes já terá rodado.
+
+As duas primeiras vêm preenchidas ou desmarcadas para que “Executar tudo” não pare no meio esperando digitação, já que o enunciado exige que o notebook rode do início ao fim. O texto acima delas sugere perguntas que funcionam, que pedem esclarecimento e que falham.
+
+**Por quê:** antes, a pergunta ao Qwen ficava dentro de funções ou de uma lista fixa, e a conversa interativa era só definida, sem ser chamada. A demonstração ao vivo precisa de um lugar óbvio para digitar uma pergunta nova.
+
+### 7. Textos
 
 - O título e a introdução falam das três fases, não mais de “Marcos 1 e 2”.
 - Foram removidas as referências a `O_QUE_FALTA.md` e `evidencias/`, que não existem mais.
